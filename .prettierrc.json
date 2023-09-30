@@ -1,8 +1,8 @@
 {
   "printWidth": 80,
   "tabWidth": 2,
-  "trailingComma": "all",
-  "singleQuote": false,
+  "trailingComma": "es5",
+  "singleQuote": true,
   "semi": true,
   "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
   "importOrderSeparation": true,
