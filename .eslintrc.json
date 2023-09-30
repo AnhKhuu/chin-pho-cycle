@@ -24,29 +24,69 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "brace-style": ["error", "stroustrup"],
     "object-curly-spacing": ["error", "always"],
-    "quotes": ["error", "single", { "avoidEscape": true }],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
     "comma-dangle": ["error", "always-multiline"],
-    "indent": ["error", "tab", { "SwitchCase": 1 }],
+    "indent": [
+      "error",
+      "tab",
+      {
+        "SwitchCase": 0
+      }
+    ],
     "no-tabs": "off",
     "space-infix-ops": ["error"],
     "eqeqeq": ["error", "smart"],
-
     "max-lines": ["error", 300],
-    "max-lines-per-function": ["error", { "max": 40 }],
+    "max-lines-per-function": [
+      "error",
+      {
+        "max": 40
+      }
+    ],
     "max-statements": ["off", 10],
     "max-depth": ["error", 2],
     "max-nested-callbacks": ["error", 3],
-    "complexity": ["error", { "max": 10 }],
+    "complexity": [
+      "error",
+      {
+        "max": 10
+      }
+    ],
     "max-params": ["error", 3],
-
     "import/first": "error",
-    "import/order": ["error", { "newlines-between": "always" }],
-    "import/newline-after-import": ["error", { "count": 2 }],
-    "import/no-cycle": ["error", { "maxDepth": 5 }],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    "import/newline-after-import": [
+      "error",
+      {
+        "count": 2
+      }
+    ],
+    "import/no-cycle": [
+      "error",
+      {
+        "maxDepth": 5
+      }
+    ],
     "import/no-self-import": "error",
-    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
     "arrow-parens": ["error", "always"],
     "no-shadow": "error",
     "no-console": "off",
@@ -107,15 +147,28 @@
           {
             "before": false,
             "after": true,
-            "overrides": { "arrow": { "before": true, "after": true } }
+            "overrides": {
+              "arrow": {
+                "before": true,
+                "after": true
+              }
+            }
           }
         ],
         "semi": ["error", "always"],
         "indent": "off",
-        "@typescript-eslint/indent": ["error", "tab", { "SwitchCase": 1 }],
+        "@typescript-eslint/indent": [
+          "error",
+          "tab",
+          {
+            "SwitchCase": 1
+          }
+        ],
         "@typescript-eslint/no-unused-vars": [
           "warn",
-          { "argsIgnorePattern": "^_" }
+          {
+            "argsIgnorePattern": "^_"
+          }
         ],
         "no-invalid-this": "off",
         "@typescript-eslint/no-invalid-this": ["error"],
@@ -171,7 +224,7 @@
           }
         ],
         "@typescript-eslint/member-delimiter-style": [
-          "error",
+          "off",
           {
             "multiline": {
               "delimiter": "comma",
