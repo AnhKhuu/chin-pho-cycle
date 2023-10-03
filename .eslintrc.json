@@ -33,13 +33,6 @@
       }
     ],
     "comma-dangle": ["error", "always-multiline"],
-    "indent": [
-      "error",
-      "tab",
-      {
-        "SwitchCase": 0
-      }
-    ],
     "no-tabs": "off",
     "space-infix-ops": ["error"],
     "eqeqeq": ["error", "smart"],
@@ -61,18 +54,6 @@
     ],
     "max-params": ["error", 3],
     "import/first": "error",
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "always"
-      }
-    ],
-    "import/newline-after-import": [
-      "error",
-      {
-        "count": 2
-      }
-    ],
     "import/no-cycle": [
       "error",
       {
@@ -157,13 +138,6 @@
         ],
         "semi": ["error", "always"],
         "indent": "off",
-        "@typescript-eslint/indent": [
-          "error",
-          "tab",
-          {
-            "SwitchCase": 1
-          }
-        ],
         "@typescript-eslint/no-unused-vars": [
           "warn",
           {
