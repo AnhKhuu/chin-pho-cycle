@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import UnauthorizedPage from '@/components/UnauthorizedPage';
 import { useOrganizationList } from '@clerk/nextjs';
-import Link from 'next/link';
 
 export default function AdminLayout({
   children,
@@ -23,16 +22,9 @@ export default function AdminLayout({
     (org) => org.organization.slug === 'admin'
   );
 
-  if (adminOrganization) {
-    return <main className='p-10'>{children}</main>;
+  if (!adminOrganization) {
+    return <UnauthorizedPage />;
   }
 
-  return (
-    <div>
-      <p className='mb-4'>Back off, you are not admin</p>
-      <Link href='/store'>
-        <Button>Back to Store</Button>
-      </Link>
-    </div>
-  );
+  return <main className='p-10'>{children}</main>;
 }

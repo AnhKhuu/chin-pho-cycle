@@ -1,6 +1,6 @@
 'use client';
 
-import Header from '@/components/Header';
+import StoreHeader from '@/components/StoreHeader';
 
 export default function StoreLayout({
   children,
@@ -9,7 +9,7 @@ export default function StoreLayout({
 }) {
   return (
     <>
-      <Header />
+      <StoreHeader />
       <main className='p-10'>{children}</main>
     </>
   );
