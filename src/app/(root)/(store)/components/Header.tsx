@@ -10,29 +10,29 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
 
   const routes = [
     {
-      href: '/store/bikes',
+      href: '/bikes',
       label: 'Bikes',
-      active: pathname === '/store/bikes',
+      active: pathname === '/bikes',
     },
     {
-      href: '/store/gear',
+      href: '/gear',
       label: 'Gear',
-      active: pathname === '/store/gear',
+      active: pathname === '/gear',
     },
     {
-      href: '/store/apparel',
+      href: '/apparel',
       label: 'Apparel',
-      active: pathname === '/store/apparel',
+      active: pathname === '/apparel',
     },
     {
-      href: '/store/news',
+      href: '/news',
       label: 'News',
-      active: pathname === '/store/news',
+      active: pathname === '/news',
     },
     {
-      href: '/store/contact',
+      href: '/contact',
       label: 'Contact',
-      active: pathname === '/store/contact',
+      active: pathname === '/contact',
     },
   ];
 
