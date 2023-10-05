@@ -11,11 +11,11 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url });
     }
 
-    if (req.nextUrl.pathname === '/') {
-      return NextResponse.redirect(new URL('/store', req.url));
-    }
+    // if (req.nextUrl.pathname === '/') {
+    //   return NextResponse.redirect(new URL('/store', req.url));
+    // }
   },
-  publicRoutes: ['/', '/store(.*)', '/api/products'], // TODO: remove test API route
+  publicRoutes: ['/', '/api/products'], // TODO: remove test API route
 });
 
 export const config = {
