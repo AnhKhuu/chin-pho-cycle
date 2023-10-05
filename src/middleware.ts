@@ -15,7 +15,7 @@ export default authMiddleware({
       return NextResponse.redirect(new URL('/store', req.url));
     }
   },
-  publicRoutes: ['/', '/store(.*)'],
+  publicRoutes: ['/', '/store(.*)', '/api/products'], // TODO: remove test API route
 });
 
 export const config = {
