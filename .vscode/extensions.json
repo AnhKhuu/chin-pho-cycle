@@ -1,3 +1,8 @@
 {
-  "recommendations": ["prisma.prisma"]
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "burkeholland.simple-react-snippets",
+    "bradlc.vscode-tailwindcss",
+    "prisma.prisma"
+  ]
 }

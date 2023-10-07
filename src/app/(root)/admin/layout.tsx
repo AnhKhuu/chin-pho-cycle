@@ -1,6 +1,6 @@
 'use client';
 
-import UnauthorizedPage from '@/components/UnauthorizedPage';
+import UnauthorizedPage from '@/components/unauthorized-page';
 import { useOrganizationList } from '@clerk/nextjs';
 
 export default function AdminLayout({

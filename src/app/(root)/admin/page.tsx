@@ -1,6 +1,6 @@
 import prismadb from '@/lib/prismadb';
 
-export default async function AdminPage() {
+export default async function Page() {
   // Get all products
   const products = await prismadb.product.findMany();
 
