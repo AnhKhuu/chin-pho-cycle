@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ProductCard } from '.';
-import { products } from '../(routes)/mockData';
+import { products } from '../mockData';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   return (
@@ -211,7 +211,7 @@ function LanguageOptions() {
       xmlns='http://www.w3.org/2000/svg'
       className='ml-6'
     >
-      <g clip-path='url(#clip0_108_262)'>
+      <g clipPath='url(#clip0_108_262)'>
         <path d='M0 0H40V30H0V0Z' fill='#012169' />
         <path
           d='M4.6875 0L19.9375 11.3125L35.125 0H40V3.875L25 15.0625L40 26.1875V30H35L20 18.8125L5.0625 30H0V26.25L14.9375 15.125L0 4V0H4.6875Z'

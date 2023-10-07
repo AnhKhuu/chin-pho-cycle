@@ -1,6 +1,6 @@
 'use client';
 
-import Header from '../components/header';
+import { Footer, Header, PreHeader } from '../components';
 
 export default function StoreLayout({
   children,
@@ -9,8 +9,10 @@ export default function StoreLayout({
 }) {
   return (
     <>
+      <PreHeader msg={'Free shipping for orders over 1,000,000 đ'} />
       <Header />
-      <main className='p-10'>{children}</main>
+      <main>{children}</main>
+      <Footer />
     </>
   );
 }

@@ -11,7 +11,7 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ProductCard } from '../components';
-import { brands, categories, images, products } from './mockData';
+import { brands, categories, images, products } from '../mockData';
 
 export default function Homepage() {
   return (
