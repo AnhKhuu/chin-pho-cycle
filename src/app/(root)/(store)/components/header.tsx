@@ -21,7 +21,7 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
             alt='logo'
           />
         </Link>
-        <CategoriesList />
+        <CategoryList />
         <div className='flex items-center'>
           <SearchBar />
           <LanguageOptions />
@@ -119,7 +119,7 @@ const pages = [
   { label: 'Bike Fit', link: '/bike-fit' },
 ];
 
-function CategoriesList() {
+function CategoryList() {
   return (
     <div className='flex self-stretch'>
       {categories.map(({ title, sessions }, index) => (
