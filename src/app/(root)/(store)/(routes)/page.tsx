@@ -1,5 +1,6 @@
 'use client';
 
+import { IProductItem } from '@/(root)/utils/types';
 import { Button } from '@/components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +10,6 @@ import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { IProductItem } from '../../utils/types';
 import { ProductCard } from '../components';
 import { brands, categories, images, products } from './mockData';
 

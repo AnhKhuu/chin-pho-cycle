@@ -1,8 +1,7 @@
+import { IProductItem } from '@/(root)/utils/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-
-import { IProductItem } from '../../utils/types';
 
 export default function ProductCard({ product }: { product: IProductItem }) {
   return (
