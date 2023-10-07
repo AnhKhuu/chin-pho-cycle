@@ -27,7 +27,7 @@ const pages = [
 
 export default function Footer() {
   return (
-    <div className='relative bg-black px-44 py-24'>
+    <footer className='relative bg-black px-44 py-24'>
       <div className='grid grid-cols-2 gap-24 text-white'>
         <div>
           <h1 className='text-2xl font-extrabold'>Chin Pho Cycle Vietnam</h1>
@@ -86,6 +86,6 @@ export default function Footer() {
           </p>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
