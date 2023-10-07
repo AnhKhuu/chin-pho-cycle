@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { ProductCard } from '.';
 import { products } from '../(routes)/mockData';
 
-export function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
+export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   return (
-    <header className='relative w-full border-b bg-white'>
-      <nav className='flex items-center justify-between px-6'>
+    <header className='sticky left-0 right-0 top-0 z-50'>
+      <nav className='relative flex w-full items-center justify-between border-b bg-white px-6'>
         <Link href={'/'}>
           <Image
             src='/images/logo.webp'

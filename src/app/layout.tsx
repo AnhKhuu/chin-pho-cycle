@@ -25,7 +25,7 @@ export default function RootLayout({
       }}
     >
       <html lang='en'>
-        <body className={`${inter.className} h-fit overflow-x-hidden`}>
+        <body className={`${inter.className} overflow-x-hidden`}>
           {children}
         </body>
       </html>

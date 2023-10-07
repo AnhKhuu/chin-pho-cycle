@@ -16,10 +16,10 @@ import { brands, categories, images, products } from './mockData';
 export default function Homepage() {
   return (
     <>
-      <Banner imagesList={images} />
-      <LatestProduct productsList={products} />
-      <BrandGallery brandsList={brands} />
-      <CategoryGallery categoriesList={categories} />
+      <Banner imageList={images} />
+      <LatestProducts productList={products} />
+      <BrandGallery brandList={brands} />
+      <CategoryGallery categoryList={categories} />
       <VideoPlayer url='https://file.hstatic.net/200000556385/file/_1__facebook_1993dc9260f5490096316d4220eb8a1e.mp4' />
     </>
   );
@@ -33,10 +33,10 @@ interface ImageItem {
   link: string;
 }
 
-function Banner({ imagesList }: { imagesList: ImageItem[] }) {
+function Banner({ imageList }: { imageList: ImageItem[] }) {
   return (
-    <Swiper pagination={true} modules={[Pagination]} className='mySwiper'>
-      {imagesList.map((item, index) => (
+    <Swiper pagination={true} modules={[Pagination]}>
+      {imageList.map((item, index) => (
         <SwiperSlide key={index}>
           <Link href={item.pageUrl} className='relative block h-screen w-full'>
             <Image
@@ -62,12 +62,12 @@ function Banner({ imagesList }: { imagesList: ImageItem[] }) {
   );
 }
 
-function LatestProduct({ productsList }: { productsList: IProductItem[] }) {
+function LatestProducts({ productList }: { productList: IProductItem[] }) {
   return (
     <div className='mx-6 my-12'>
       <h1 className='pb-8 text-xl font-semibold'>Latest Products</h1>
       <div className='grid grid-cols-4 gap-4'>
-        {productsList.map((product) => (
+        {productList.map((product) => (
           <ProductCard product={product} key={product.id} />
         ))}
       </div>
@@ -86,10 +86,10 @@ interface IBrandItem {
   imageUrl: string;
 }
 
-function BrandGallery({ brandsList }: { brandsList: IBrandItem[] }) {
+function BrandGallery({ brandList }: { brandList: IBrandItem[] }) {
   return (
     <div className='mb-12 grid grid-cols-2 gap-4'>
-      {brandsList.map((brand) => (
+      {brandList.map((brand) => (
         <BrandCard brand={brand} key={brand.id} />
       ))}
     </div>
@@ -121,16 +121,12 @@ interface ICategoryItem {
   title: string;
 }
 
-function CategoryGallery({
-  categoriesList,
-}: {
-  categoriesList: ICategoryItem[];
-}) {
+function CategoryGallery({ categoryList }: { categoryList: ICategoryItem[] }) {
   return (
     <div className='mb-12'>
       <h1 className='mx-6 pb-8 text-xl font-semibold'>Categories</h1>
       <div className='grid grid-cols-3 gap-4'>
-        {categoriesList.map((category) => (
+        {categoryList.map((category) => (
           <CategoryCard category={category} key={category.id} />
         ))}
       </div>
