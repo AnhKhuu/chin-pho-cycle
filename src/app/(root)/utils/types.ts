@@ -7,3 +7,9 @@ export interface IProductItem {
   color: string;
   sizes: string[];
 }
+
+export interface IProductImage {
+  idx: string;
+  url: string;
+  alt?: string;
+}

@@ -11,9 +11,117 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Product {
-  id        String   @id @default(uuid())
-  name      String
+// *** START OF PRODUCT SCHEMAS *** //
+
+// Individual product item - each corresponds to a ProductCard
+model ProductItem {
+  id String @id @default(uuid())
+
+  productSku String
+  product    Product @relation(fields: [productSku], references: [sku])
+
+  sizeId Int
+  size   ProductSize? @relation(fields: [sizeId], references: [id])
+
+  colorId String
+  color   ProductColor? @relation(fields: [colorId], references: [id])
+
+  gender Gender?
+  images String? // ProductImage[] as JSON string - { idx, url, alt? }
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([productSku])
+  @@index([sizeId])
+  @@index([colorId])
 }
+
+// Product model - contains Product attributes and stock data
+model Product {
+  sku         String @id @default(uuid())
+  name        String
+  description String
+
+  brandId String
+  brand   Brand  @relation(fields: [brandId], references: [id])
+
+  typeId String
+  type   ProductType @relation(fields: [typeId], references: [id])
+
+  price Float
+
+  sizes   ProductSize[] // product has sizes
+  colors  ProductColor[] // product has colors
+  genders String // product has Gender[] as JSON string
+
+  stocks ProductStock[] // product appears in stocks
+  items  ProductItem[] // product appears in items
+
+  @@index([brandId])
+  @@index([typeId])
+}
+
+// Brand
+model Brand {
+  id    String  @id @default(uuid())
+  name  String
+  image String?
+
+  products Product[]
+}
+
+// Product type: shirts, pants, etc.
+model ProductType {
+  id    String  @id @default(uuid())
+  value String  @unique
+  image String?
+
+  products Product[]
+}
+
+// Product sizes: S, M, L, etc.
+model ProductSize {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+
+  products Product[] // implicit many-to-many
+  stocks   ProductStock[] // implicit many-to-many
+  items    ProductItem[] // implicit many-to-many
+}
+
+// Product colors: red, green, blue, etc.
+model ProductColor {
+  id    String @id @default(uuid())
+  value String @unique
+
+  products Product[] // implicit many-to-many
+  stocks   ProductStock[] // implicit many-to-many
+  items    ProductItem[] // implicit many-to-many
+}
+
+// Product stock for single SKU - useful when checking out-of-stock products, etc.
+model ProductStock {
+  sku     String
+  product Product @relation(fields: [sku], references: [sku])
+
+  sizeId Int
+  size   ProductSize @relation(fields: [sizeId], references: [id])
+
+  colorId String
+  color   ProductColor @relation(fields: [colorId], references: [id])
+
+  quantity Int
+
+  @@id([sku, sizeId, colorId])
+  @@index([sku])
+  @@index([sizeId])
+  @@index([colorId])
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+// *** END OF PRODUCT SCHEMAS *** //
