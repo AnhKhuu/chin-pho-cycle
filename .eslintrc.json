@@ -32,7 +32,7 @@
         "avoidEscape": true
       }
     ],
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["off", "always-multiline"],
     "no-tabs": "off",
     "space-infix-ops": ["error"],
     "eqeqeq": ["error", "smart"],
@@ -54,12 +54,6 @@
     ],
     "max-params": ["error", 3],
     "import/first": "error",
-    "import/no-cycle": [
-      "error",
-      {
-        "maxDepth": 5
-      }
-    ],
     "import/no-self-import": "error",
     "arrow-spacing": [
       "error",

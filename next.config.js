@@ -1,4 +1,21 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'maap.cc',
+      },
+      {
+        hostname: 'cdn.shopify.com',
+      },
+      {
+        hostname: 'images.prismic.io',
+      },
+      {
+        hostname: 'file.hstatic.net',
+      },
+    ],
+  },
+};
 
 module.exports = nextConfig;
