@@ -10,9 +10,9 @@ export async function POST(req: Request) {
       return new NextResponse('Name is required', { status: 400 });
     }
 
-    const product = await prismadb.product.create({
+    const product = await prismadb.testObject.create({
       data: {
-        name,
+        msg: name,
       },
     });
 

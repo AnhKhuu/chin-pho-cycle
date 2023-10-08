@@ -2,13 +2,20 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
   relationMode = "prisma"
 }
 
 generator client {
   provider = "prisma-client-js"
+}
+
+// TODO: delete after creating seed data
+model TestObject {
+  id  String @id @default(uuid())
+  msg String
 }
 
 // *** START OF PRODUCT SCHEMAS *** //
@@ -27,7 +34,7 @@ model ProductItem {
   color   ProductColor? @relation(fields: [colorId], references: [id])
 
   gender Gender?
-  images String? // ProductImage[] as JSON string - { idx, url, alt? }
+  images String[] // url strings
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,6 +42,11 @@ model ProductItem {
   @@index([productSku])
   @@index([sizeId])
   @@index([colorId])
+}
+
+enum Gender {
+  Male
+  Female
 }
 
 // Product model - contains Product attributes and stock data
@@ -53,7 +65,7 @@ model Product {
 
   sizes   ProductSize[] // product has sizes
   colors  ProductColor[] // product has colors
-  genders String // product has Gender[] as JSON string
+  genders Gender[] // product has genders
 
   stocks ProductStock[] // product appears in stocks
   items  ProductItem[] // product appears in items
@@ -117,11 +129,6 @@ model ProductStock {
   @@index([sku])
   @@index([sizeId])
   @@index([colorId])
-}
-
-enum Gender {
-  Male
-  Female
 }
 
 // *** END OF PRODUCT SCHEMAS *** //
