@@ -12,7 +12,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// TODO: delete after creating seed data
+// TODO: delete after building API
 model TestObject {
   id  String @id @default(uuid())
   msg String
@@ -30,7 +30,7 @@ model ProductItem {
   sizeId Int
   size   ProductSize? @relation(fields: [sizeId], references: [id])
 
-  colorId String
+  colorId Int
   color   ProductColor? @relation(fields: [colorId], references: [id])
 
   gender Gender?
@@ -55,10 +55,10 @@ model Product {
   name        String
   description String
 
-  brandId String
-  brand   Brand  @relation(fields: [brandId], references: [id])
+  brandId Int
+  brand   Brand @relation(fields: [brandId], references: [id])
 
-  typeId String
+  typeId Int
   type   ProductType @relation(fields: [typeId], references: [id])
 
   price Float
@@ -76,7 +76,7 @@ model Product {
 
 // Brand
 model Brand {
-  id    String  @id @default(uuid())
+  id    Int     @id @default(autoincrement())
   name  String
   image String?
 
@@ -85,7 +85,7 @@ model Brand {
 
 // Product type: shirts, pants, etc.
 model ProductType {
-  id    String  @id @default(uuid())
+  id    Int     @id @default(autoincrement())
   value String  @unique
   image String?
 
@@ -104,7 +104,7 @@ model ProductSize {
 
 // Product colors: red, green, blue, etc.
 model ProductColor {
-  id    String @id @default(uuid())
+  id    Int    @id @default(autoincrement())
   value String @unique
 
   products Product[] // implicit many-to-many
@@ -120,7 +120,7 @@ model ProductStock {
   sizeId Int
   size   ProductSize @relation(fields: [sizeId], references: [id])
 
-  colorId String
+  colorId Int
   color   ProductColor @relation(fields: [colorId], references: [id])
 
   quantity Int

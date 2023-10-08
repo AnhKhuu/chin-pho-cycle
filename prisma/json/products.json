@@ -1,0 +1,42 @@
+[
+  {
+    "sku": "1",
+    "name": "Pie Shells 10",
+    "description": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.\n\nEtiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\n\nPraesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
+    "brandId": 1,
+    "typeId": 1,
+    "price": 28
+  },
+  {
+    "sku": "2",
+    "name": "Salad Dressing",
+    "description": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\n\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.",
+    "brandId": 2,
+    "typeId": 2,
+    "price": 84
+  },
+  {
+    "sku": "3",
+    "name": "Beans - Butter Lrg Lima",
+    "description": "Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.",
+    "brandId": 3,
+    "typeId": 3,
+    "price": 29
+  },
+  {
+    "sku": "4",
+    "name": "Sole - Fillet",
+    "description": "Phasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.",
+    "brandId": 4,
+    "typeId": 4,
+    "price": 84
+  },
+  {
+    "sku": "5",
+    "name": "Cinnamon - Stick",
+    "description": "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.",
+    "brandId": 5,
+    "typeId": 5,
+    "price": 29
+  }
+]
