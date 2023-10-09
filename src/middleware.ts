@@ -1,5 +1,4 @@
 import { authMiddleware, redirectToSignIn } from '@clerk/nextjs';
-import { NextResponse } from 'next/server';
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
@@ -10,12 +9,8 @@ export default authMiddleware({
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }
-
-    // if (req.nextUrl.pathname === '/') {
-    //   return NextResponse.redirect(new URL('/store', req.url));
-    // }
   },
-  publicRoutes: ['/', '/api/products'], // TODO: remove test API route
+  publicRoutes: ['/', '/api/(.*)'], // TODO: remove test API route
 });
 
 export const config = {
