@@ -25,8 +25,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -35,8 +34,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -45,8 +43,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -55,8 +52,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -65,8 +61,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -75,8 +70,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -85,8 +79,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -95,8 +88,7 @@ export const products = [
     productName: 'Factor Bike',
     colors: ['Blue', 'White', 'Black'],
     color: 'Blue',
-    imageUrl:
-      'https://cdn.shopify.com/s/files/1/2180/3833/products/MAP-MAJ411_GLW.System_20Pro_20Air_20Jersey_Glow_PRODUCT_CARD_ALT.jpg?v=1695700098&width=384&quality=65',
+    imageUrl: '/images/bike.png',
     price: '100,000,000',
     sizes: ['S', 'M', 'L'],
   },
@@ -171,5 +163,76 @@ export const categories = [
     title: 'Bikes',
     imageUrl:
       'https://images.prismic.io/maap/541acdd1-d189-4e19-a54e-a8a10c53517e_New+Season+Road_Collection_Ads_Evolve+3D+Woman.jpg?auto=compress,format',
+  },
+];
+
+export const filters = [
+  {
+    filterType: 'Type',
+    fields: [
+      {
+        value: 'bikes',
+        label: 'Bikes',
+      },
+      {
+        value: 'shirt',
+        label: 'Shirts',
+      },
+      {
+        value: 'pants',
+        label: 'Pants',
+      },
+    ],
+  },
+  {
+    filterType: 'Size',
+    fields: [
+      {
+        value: 'S',
+        label: 'S',
+      },
+      {
+        value: 'M',
+        label: 'M',
+      },
+      {
+        value: 'L',
+        label: 'L',
+      },
+    ],
+  },
+  {
+    filterType: 'Gender',
+    fields: [
+      {
+        value: 'male',
+        label: 'Male',
+      },
+      {
+        value: 'female',
+        label: 'Female',
+      },
+      {
+        value: 'unisex',
+        label: 'Unisex',
+      },
+    ],
+  },
+  {
+    filterType: 'Brand',
+    fields: [
+      {
+        value: 'factor',
+        label: 'Factor',
+      },
+      {
+        value: 'sram',
+        label: 'Sram',
+      },
+      {
+        value: 'cervelo',
+        label: 'Cervelo',
+      },
+    ],
   },
 ];
