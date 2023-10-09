@@ -13,7 +13,7 @@ export default function ProductCard({ product }: { product: IProductItem }) {
           width={354}
           height={500}
           sizes='(max-width: 768px), 50vw, 25vw'
-          className='h-96 w-full bg-white_1 object-contain object-center'
+          className='h-96 w-full object-cover object-center'
         />
         <div className='absolute bottom-0 right-0 flex w-full justify-end bg-white opacity-0 transition duration-300 ease-in-out group-hover:opacity-100'>
           {product.sizes.map((size, index) => (

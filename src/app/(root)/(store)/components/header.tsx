@@ -201,7 +201,7 @@ function ProductImage({ product }: { product: IProductItem }) {
           width={500}
           height={510}
           sizes='(max-width: 768px), 50vw, 25vw'
-          className='h-64 w-full bg-white_1 object-contain object-center'
+          className='h-64 w-full object-cover object-center'
         />
         <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
           {product.productName}
