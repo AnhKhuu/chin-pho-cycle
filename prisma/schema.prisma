@@ -20,36 +20,7 @@ model TestObject {
 
 // *** START OF PRODUCT SCHEMAS *** //
 
-// Individual product item - each corresponds to a ProductCard
-model ProductItem {
-  id String @id @default(uuid())
-
-  productSku String
-  product    Product @relation(fields: [productSku], references: [sku])
-
-  sizeId Int
-  size   ProductSize? @relation(fields: [sizeId], references: [id])
-
-  colorId Int
-  color   ProductColor? @relation(fields: [colorId], references: [id])
-
-  gender    Gender?
-  imageUrls String[] // url strings
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([productSku])
-  @@index([sizeId])
-  @@index([colorId])
-}
-
-enum Gender {
-  Male
-  Female
-}
-
-// Product model - contains Product attributes and stock data
+// Product model contains general attributes
 model Product {
   sku         String @id @default(uuid())
   name        String
@@ -63,18 +34,41 @@ model Product {
 
   price Float
 
-  sizes   ProductSize[] // product has sizes
-  colors  ProductColor[] // product has colors
-  genders Gender[] // product has genders
-
-  stocks ProductStock[] // product appears in stocks
-  items  ProductItem[] // product appears in items
+  sizes   Size[] // available sizes
+  colors  String[] // available colors
+  genders Gender[] // available genders
+  items   ProductItem[] // all variants
 
   @@index([brandId])
   @@index([typeId])
 }
 
-// Brand
+// Product Item contains variant data (color, size)
+model ProductItem {
+  id String @id @default(uuid())
+
+  productSku String
+  product    Product @relation(fields: [productSku], references: [sku])
+
+  size      Size?
+  color     String?
+  gender    Gender?
+  stock     Int // how many left of this variant
+  imageUrls String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productSku])
+}
+
+model ProductType {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+
+  products Product[]
+}
+
 model Brand {
   id       Int     @id @default(autoincrement())
   name     String
@@ -83,52 +77,19 @@ model Brand {
   products Product[]
 }
 
-// Product type: shirts, pants, etc.
-model ProductType {
-  id       Int     @id @default(autoincrement())
-  value    String  @unique
-  imageUrl String?
-
-  products Product[]
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
 }
 
-// Product sizes: S, M, L, etc.
-model ProductSize {
-  id    Int    @id @default(autoincrement())
-  value String @unique
-
-  products Product[] // implicit many-to-many
-  stocks   ProductStock[] // implicit many-to-many
-  items    ProductItem[] // implicit many-to-many
-}
-
-// Product colors: red, green, blue, etc.
-model ProductColor {
-  id    Int    @id @default(autoincrement())
-  value String @unique
-
-  products Product[] // implicit many-to-many
-  stocks   ProductStock[] // implicit many-to-many
-  items    ProductItem[] // implicit many-to-many
-}
-
-// Product stock for single SKU - useful when checking out-of-stock products, etc.
-model ProductStock {
-  sku     String
-  product Product @relation(fields: [sku], references: [sku])
-
-  sizeId Int
-  size   ProductSize @relation(fields: [sizeId], references: [id])
-
-  colorId Int
-  color   ProductColor @relation(fields: [colorId], references: [id])
-
-  quantity Int
-
-  @@id([sku, sizeId, colorId])
-  @@index([sku])
-  @@index([sizeId])
-  @@index([colorId])
+enum Gender {
+  Male
+  Female
+  Unisex
 }
 
 // *** END OF PRODUCT SCHEMAS *** //
