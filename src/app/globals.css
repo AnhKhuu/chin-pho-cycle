@@ -9,6 +9,14 @@ body,
 }
 
 @layer base {
+  h1 {
+    @apply mb-6 text-4xl font-bold;
+  }
+
+  h2 {
+    @apply mb-4 text-2xl font-medium;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

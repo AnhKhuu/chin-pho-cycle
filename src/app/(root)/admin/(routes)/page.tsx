@@ -7,7 +7,7 @@ export default async function Page() {
 
   return (
     <>
-      <h2>Welcome to Admin!</h2>
+      <h1>Welcome to Admin!</h1>
       <ul>
         <li>
           <Link href={'/admin/brands'}>Brands</Link>

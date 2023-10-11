@@ -1,4 +1,5 @@
 export { Button } from './button';
+
 export {
   Form,
   FormControl,
@@ -8,12 +9,14 @@ export {
   FormLabel,
   FormMessage,
 } from './form';
+
 export {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from './accordion';
+
 export {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,3 +29,17 @@ export {
 } from './dropdown-menu';
 
 export { Input } from './input';
+
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './dialog';
+
+export { Label } from './label';

@@ -1,7 +1,7 @@
 'use client';
 
 import UnauthorizedPage from '@/components/unauthorized-page';
-import { useUser } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 
 export default function AdminLayout({
   children,
@@ -18,5 +18,12 @@ export default function AdminLayout({
     return <UnauthorizedPage />;
   }
 
-  return <main className='p-10'>{children}</main>;
+  return (
+    <>
+      <header className='flex h-16 items-center bg-white px-4 shadow'>
+        <UserButton afterSignOutUrl='/' />
+      </header>
+      <main className='p-10'>{children}</main>
+    </>
+  );
 }
