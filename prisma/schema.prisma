@@ -12,12 +12,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// TODO: delete after building API
-model TestObject {
-  id  String @id @default(uuid())
-  msg String
-}
-
 // *** START OF PRODUCT SCHEMAS *** //
 
 // Product model contains general attributes
@@ -26,11 +20,11 @@ model Product {
   name        String
   description String
 
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
   brandId Int
   brand   Brand @relation(fields: [brandId], references: [id])
-
-  typeId Int
-  type   ProductType @relation(fields: [typeId], references: [id])
 
   price Float
 
@@ -40,7 +34,7 @@ model Product {
   items   ProductItem[] // all variants
 
   @@index([brandId])
-  @@index([typeId])
+  @@index([categoryId])
 }
 
 // Product Item contains variant data (color, size)
@@ -62,7 +56,7 @@ model ProductItem {
   @@index([productSku])
 }
 
-model ProductType {
+model Category {
   id    Int    @id @default(autoincrement())
   value String @unique
 
