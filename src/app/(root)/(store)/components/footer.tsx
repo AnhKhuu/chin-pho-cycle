@@ -34,12 +34,15 @@ export default function Footer() {
           <p className='mb-20 max-w-xs'>
             933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City
           </p>
-          <Link href='tel: 0905188344' className='mb-6 block text-sm underline'>
+          <Link
+            href='tel: 0905188344'
+            className='mb-6 block text-sm underline-offset-4 hover:underline'
+          >
             0905188344
           </Link>
           <Link
             href='mailto:chinphocyclevietnam@gmail.com'
-            className='block text-sm underline'
+            className='block text-sm underline-offset-4 hover:underline'
           >
             chinphocyclevietnam@gmail.com
           </Link>
@@ -51,18 +54,24 @@ export default function Footer() {
                 <Link
                   href={page.link}
                   key={index}
-                  className='mb-5 block text-xs font-light'
+                  className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
                 >
                   {page.label}
                 </Link>
               ))}
             </div>
             <div>
-              <Link href={'/'} className='mb-5 flex items-center text-xs'>
+              <Link
+                href={'/'}
+                className='mb-5 flex items-center text-xs underline-offset-4 hover:underline'
+              >
                 <Facebook />
                 <span className='ml-2 font-light'>Facebook</span>
               </Link>
-              <Link href={'/'} className='flex items-center text-xs'>
+              <Link
+                href={'/'}
+                className='flex items-center text-xs underline-offset-4 hover:underline'
+              >
                 <Youtube />
                 <span className='ml-2 font-light'>Youtube</span>
               </Link>

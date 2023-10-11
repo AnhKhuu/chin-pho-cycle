@@ -1,16 +1,34 @@
-import { Button, Input } from '@/components/ui';
+import { RouteTypes } from '@/(root)/utils/constant';
+import { IProductItem } from '@/(root)/utils/types';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  Input,
+} from '@/components/ui';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { ProductCard } from '.';
 import { products } from '../mockData';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   return (
     <header className='sticky left-0 right-0 top-0 z-50'>
-      <nav className='relative flex w-full items-center justify-between border-b bg-white px-6'>
+      <nav className='relative flex w-full items-center justify-between bg-white px-6'>
         <Link href={'/'}>
           <Image
             src='/images/logo.webp'
@@ -123,11 +141,11 @@ function CategoryList() {
   return (
     <div className='flex self-stretch'>
       {categories.map(({ title, sessions }, index) => (
-        <div key={index}>
-          <div className='peer/brand flex h-16 cursor-pointer items-center px-6 text-sm underline-offset-4 transition duration-100 ease-in-out hover:underline'>
+        <div key={index} className='group/nav'>
+          <div className='peer/nav flex h-16 cursor-pointer items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out group-hover/nav:border-black'>
             {title}
           </div>
-          <div className='invisible absolute left-0 top-16 h-auto w-screen bg-white_2 hover:visible peer-hover/brand:visible'>
+          <div className='peer/menu invisible absolute left-0 top-16 h-[50vh] w-screen bg-white_2 hover:visible peer-hover/nav:visible'>
             <div className='flex text-sm'>
               <div
                 className={`grid w-3/5 gap-4 py-10 pl-10 grid-cols-${Object.keys(
@@ -152,10 +170,8 @@ function CategoryList() {
                 ))}
               </div>
               <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-                <div className='h-[370px]'>
-                  <ProductCard product={products[0]} />
-                </div>
-                <ProductCard product={products[0]} />
+                <ProductImage product={products[0]} />
+                <ProductImage product={products[0]} />
               </div>
             </div>
           </div>
@@ -165,7 +181,7 @@ function CategoryList() {
       {pages.map(({ label, link }, index) => (
         <Link
           href={link}
-          className='flex h-16 items-center px-6 text-sm underline-offset-4 transition duration-100 ease-in-out hover:underline'
+          className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
           key={index}
         >
           {label}
@@ -175,33 +191,128 @@ function CategoryList() {
   );
 }
 
-function SearchBar() {
+function ProductImage({ product }: { product: IProductItem }) {
   return (
-    <div className='relative w-60'>
-      <svg
-        xmlns='http://www.w3.org/2000/svg'
-        className='absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-gray-500'
-        fill='none'
-        viewBox='0 0 24 24'
-        stroke='currentColor'
-      >
-        <path
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          strokeWidth={2}
-          d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+    <Link href={'/'} className='mb-4'>
+      <div className='relative'>
+        <Image
+          src={product.imageUrl}
+          alt='test'
+          width={500}
+          height={510}
+          sizes='(max-width: 768px), 50vw, 25vw'
+          className='h-64 w-full object-cover object-center'
         />
-      </svg>
-      <Input
-        type='text'
-        placeholder='Search'
-        className='rounded-[100px] border-none bg-white_1 pl-12 pr-4'
-      />
-    </div>
+        <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
+          {product.productName}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function SearchBar() {
+  const { push } = useRouter();
+
+  const formSchema = z.object({
+    productName: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      productName: '',
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    push(`${RouteTypes.SEARCH_PAGE}?name=${values.productName}`);
+  };
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        <FormField
+          control={form.control}
+          name='productName'
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className='relative w-60'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-gray-500'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+                    />
+                  </svg>
+                  <Input
+                    type='text'
+                    placeholder='Search'
+                    className='rounded-[100px] border-none bg-white_1 pl-12 pr-4'
+                    {...field}
+                  />
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 }
 
 function LanguageOptions() {
+  const [language, setLanguage] = useState('uk');
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className='ml-6'>
+        {language === 'uk' ? <UKFlag /> : <VNFlag />}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
+          <DropdownMenuRadioItem
+            value='uk'
+            className='flex cursor-pointer items-center'
+          >
+            <UKFlag />
+            <p className='ml-3'>English</p>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value='vn'
+            className='flex cursor-pointer items-center'
+          >
+            <VNFlag />
+            <p className='ml-3'>Vietnamese</p>
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function AuthButton() {
+  return (
+    <span className='ml-2'>
+      <SignedIn>
+        <UserButton afterSignOutUrl='/' />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton>
+          <Button className='rounded-md'>Sign In</Button>
+        </SignInButton>
+      </SignedOut>
+    </span>
+  );
+}
+
+function UKFlag() {
   return (
     <svg
       width='40'
@@ -209,7 +320,6 @@ function LanguageOptions() {
       viewBox='0 0 40 30'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
-      className='ml-6'
     >
       <g clipPath='url(#clip0_108_262)'>
         <path d='M0 0H40V30H0V0Z' fill='#012169' />
@@ -239,17 +349,20 @@ function LanguageOptions() {
   );
 }
 
-function AuthButton() {
+function VNFlag() {
   return (
-    <span className='ml-2'>
-      <SignedIn>
-        <UserButton afterSignOutUrl='/' />
-      </SignedIn>
-      <SignedOut>
-        <SignInButton>
-          <Button className='rounded-md'>Sign In</Button>
-        </SignInButton>
-      </SignedOut>
-    </span>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width='40'
+      height='30'
+      viewBox='0 0 40 30'
+      fill='none'
+    >
+      <path d='M15.3626 0H0V30H40V0H15.3626Z' fill='#D80027' />
+      <path
+        d='M20 6L22.1247 12.8753H29L23.4376 17.1245L25.5624 24L20 19.7507L14.4376 24L16.5624 17.1245L11 12.8753H17.8753L20 6Z'
+        fill='#FFDA44'
+      />
+    </svg>
   );
 }
