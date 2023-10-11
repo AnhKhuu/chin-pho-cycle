@@ -44,7 +44,7 @@ export default function Page() {
 
   return (
     <>
-      <h1>Brands</h1>
+      <h1 className='mb-6'>Brands</h1>
 
       <Dialog>
         <DialogTrigger asChild>

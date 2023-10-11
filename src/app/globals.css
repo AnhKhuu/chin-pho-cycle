@@ -10,11 +10,11 @@ body,
 
 @layer base {
   h1 {
-    @apply mb-6 text-4xl font-bold;
+    @apply text-4xl font-bold;
   }
 
   h2 {
-    @apply mb-4 text-2xl font-medium;
+    @apply text-2xl font-medium;
   }
 
   :root {
