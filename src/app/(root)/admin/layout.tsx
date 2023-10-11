@@ -1,30 +1,22 @@
 'use client';
 
-// import UnauthorizedPage from '@/components/unauthorized-page';
-// import { useOrganizationList } from '@clerk/nextjs';
+import UnauthorizedPage from '@/components/unauthorized-page';
+import { useUser } from '@clerk/nextjs';
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const { isLoaded, userMemberships } = useOrganizationList({
-  //   userMemberships: {
-  //     infinite: true,
-  //   },
-  // });
+  const { isLoaded, user } = useUser();
+  if (!isLoaded) {
+    return <>Loading...</>;
+  }
 
-  // if (!isLoaded) {
-  //   return <>Loading...</>;
-  // }
-
-  // const adminOrganization = userMemberships.data?.find(
-  //   (org) => org.organization.slug === 'admin'
-  // );
-
-  // if (!adminOrganization) {
-  //   return <UnauthorizedPage />;
-  // }
+  const isAdmin = user?.publicMetadata?.isAdmin;
+  if (!isAdmin) {
+    return <UnauthorizedPage />;
+  }
 
   return <main className='p-10'>{children}</main>;
 }
