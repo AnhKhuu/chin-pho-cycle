@@ -73,7 +73,7 @@ function LatestProducts({ productList }: { productList: IProductItem[] }) {
       </div>
       <div className='flex justify-center'>
         <Link href={''}>
-          <Button className='font-light text-white'>View More</Button>
+          <Button className='text-white'>View More</Button>
         </Link>
       </div>
     </div>

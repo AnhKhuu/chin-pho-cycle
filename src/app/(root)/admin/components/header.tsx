@@ -15,15 +15,15 @@ export const Header = () => {
   ];
 
   return (
-    <header className='flex items-center border-b bg-white px-6'>
+    <header className='flex items-center border-b px-6'>
       <nav className='flex items-center'>
         {routes.map((route) => (
           <div key={route.href} className={cn('')}>
             <Link
               href={route.href}
               className={cn(
-                'flex h-16 items-center border-b-2 border-white px-4 text-sm transition duration-100 ease-in-out hover:border-black',
-                route.active ? 'font-bold' : ''
+                'flex h-16 items-center px-4 text-sm font-medium text-muted-foreground transition duration-100 ease-in-out hover:text-black',
+                route.active ? 'text-black' : ''
               )}
             >
               {route.label}
