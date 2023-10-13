@@ -50,6 +50,9 @@ export const columns: ColumnDef<BrandColumn>[] = [
   },
   {
     id: 'actions',
+    header: () => {
+      return <div className='text-center'>Actions</div>;
+    },
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
