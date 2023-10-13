@@ -1,4 +1,4 @@
-import prismadb from '@/lib/prismadb';
+// import prismadb from '@/lib/prismadb';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -10,13 +10,13 @@ export async function POST(req: Request) {
       return new NextResponse('Name is required', { status: 400 });
     }
 
-    const product = await prismadb.product.create({
-      data: {
-        name,
-      },
-    });
+    // const product = await prismadb.testObject.create({
+    //   data: {
+    //     msg: name,
+    //   },
+    // });
 
-    return NextResponse.json(product);
+    return NextResponse.json({});
   } catch (error) {
     console.log('[PRODUCTS_POST]', error);
     return new NextResponse('Internal Server Error', { status: 500 });

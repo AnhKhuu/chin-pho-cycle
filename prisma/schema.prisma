@@ -2,8 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
   relationMode = "prisma"
 }
 
@@ -11,9 +12,78 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// *** START OF PRODUCT SCHEMAS *** //
+
+// Product model contains general attributes
 model Product {
-  id        String   @id @default(uuid())
-  name      String
+  sku         String @id @default(uuid())
+  name        String
+  description String
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  brandId Int
+  brand   Brand @relation(fields: [brandId], references: [id])
+
+  price Float
+
+  sizes   Size[] // available sizes
+  colors  String[] // available colors
+  genders Gender[] // available genders
+  items   ProductItem[] // all variants
+
+  @@index([brandId])
+  @@index([categoryId])
+}
+
+// Product Item contains variant data (color, size)
+model ProductItem {
+  id String @id @default(uuid())
+
+  productSku String
+  product    Product @relation(fields: [productSku], references: [sku])
+
+  size      Size?
+  color     String?
+  gender    Gender?
+  stock     Int // how many left of this variant
+  imageUrls String[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([productSku])
 }
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  value String @unique
+
+  products Product[]
+}
+
+model Brand {
+  id       Int     @id @default(autoincrement())
+  name     String
+  imageUrl String?
+
+  products Product[]
+}
+
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+enum Gender {
+  Male
+  Female
+  Unisex
+}
+
+// *** END OF PRODUCT SCHEMAS *** //
