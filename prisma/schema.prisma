@@ -20,7 +20,7 @@ model Product {
   name        String
   description String
 
-  categoryId Int
+  categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
   brandId String
@@ -69,7 +69,7 @@ model ProductImage {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   value String @unique
 
   products Product[]
