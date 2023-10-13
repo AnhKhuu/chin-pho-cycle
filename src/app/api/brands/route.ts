@@ -1,4 +1,4 @@
-import prismadb from '@/lib/prismadb';
+import prismadb from '@/utils/prismadb';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, imageUrl } = body;
+    const { name, description, imageUrl } = body;
 
     if (!name) {
       return new NextResponse('Name is required', { status: 400 });
@@ -27,7 +27,8 @@ export async function POST(req: Request) {
     const res = await prismadb.brand.create({
       data: {
         name: name,
-        imageUrl: imageUrl,
+        description: description || '',
+        imageUrl: imageUrl || '',
       },
     });
 

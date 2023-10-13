@@ -1,4 +1,4 @@
-import { IProductItem } from '@/(root)/utils/types';
+import { IProductItem } from '@/utils/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';

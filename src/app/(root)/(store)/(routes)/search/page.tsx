@@ -1,20 +1,20 @@
 'use client';
 
 import { ProductCard } from '@/(root)/(store)/components';
-import { filters, products } from '@/(root)/(store)/mockData';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@/components/ui';
+} from '@/components';
+import { filters, products } from '@/utils/mockData';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Pagination } from 'react-headless-pagination';
 
-import { FilterList } from './component/filter-list';
+import { FilterList } from './components/filter-list';
 
 type Sort = {
   value: string;

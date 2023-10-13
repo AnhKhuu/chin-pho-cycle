@@ -1,13 +1,11 @@
 'use client';
 
-import UnauthorizedPage from '@/components/unauthorized-page';
+import { UnauthorizedPage } from '@/components';
 import { useUser } from '@clerk/nextjs';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { Header } from './components/header';
+
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLoaded, user } = useUser();
   if (!isLoaded) {
     return <>Loading...</>;
@@ -18,5 +16,12 @@ export default function AdminLayout({
     return <UnauthorizedPage />;
   }
 
-  return <main className='p-10'>{children}</main>;
-}
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
+};
+
+export default AdminLayout;

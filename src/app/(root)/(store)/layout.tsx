@@ -1,6 +1,6 @@
 'use client';
 
-import { Footer, Header, PreHeader } from '../components';
+import { Footer, Header, PreHeader } from './components';
 
 export default function StoreLayout({
   children,

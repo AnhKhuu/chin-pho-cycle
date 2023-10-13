@@ -1,21 +1,14 @@
-import prismadb from '@/lib/prismadb';
+import prismadb from '@/utils/prismadb';
 import { NextRequest, NextResponse } from 'next/server';
 
-// TODO: refactor to AXIOS requests, implement handlers
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = Number(params.id);
-
-  if (isNaN(id)) {
-    return new NextResponse('Invalid input', { status: 400 });
-  }
-
   try {
     const res = await prismadb.brand.findFirst({
       where: {
-        id: id,
+        id: params.id,
       },
     });
     return NextResponse.json(res);
@@ -25,29 +18,26 @@ export async function GET(
   }
 }
 
-export async function PUT(
+export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = Number(params.id);
-
-  if (isNaN(id)) {
-    return new NextResponse('Invalid input', { status: 400 });
-  }
-
   try {
     const body = await req.json();
+    const { name, description, imageUrl } = body;
     const res = await prismadb.brand.update({
       where: {
-        id: id,
+        id: params.id,
       },
       data: {
-        ...body,
+        name,
+        description,
+        imageUrl,
       },
     });
     return NextResponse.json(res);
   } catch (error) {
-    console.log('[BRANDS_ID_PUT]', error);
+    console.log('[BRANDS_ID_PATCH]', error);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
@@ -56,16 +46,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = Number(params.id);
-
-  if (isNaN(id)) {
-    return new NextResponse('Invalid input', { status: 400 });
-  }
-
   try {
     const res = await prismadb.brand.delete({
       where: {
-        id: id,
+        id: params.id,
       },
     });
     return NextResponse.json(res);

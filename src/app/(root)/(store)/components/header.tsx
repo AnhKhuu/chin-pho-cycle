@@ -1,5 +1,3 @@
-import { RouteTypes } from '@/(root)/utils/constant';
-import { IProductItem } from '@/(root)/utils/types';
 import {
   Button,
   DropdownMenu,
@@ -12,7 +10,10 @@ import {
   FormField,
   FormItem,
   Input,
-} from '@/components/ui';
+} from '@/components';
+import { RouteTypes } from '@/utils/constant';
+import { products } from '@/utils/mockData';
+import { IProductItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ShoppingCart } from 'lucide-react';
@@ -22,8 +23,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { products } from '../mockData';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   return (
@@ -145,7 +144,7 @@ function CategoryList() {
           <div className='peer/nav flex h-16 cursor-pointer items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out group-hover/nav:border-black'>
             {title}
           </div>
-          <div className='peer/menu invisible absolute left-0 top-16 h-[50vh] w-screen bg-white_2 hover:visible peer-hover/nav:visible'>
+          <div className='peer/menu invisible absolute left-0 top-16 h-min w-screen bg-white_2 hover:visible peer-hover/nav:visible'>
             <div className='flex text-sm'>
               <div
                 className={`grid w-3/5 gap-4 py-10 pl-10 grid-cols-${Object.keys(

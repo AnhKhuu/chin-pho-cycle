@@ -10,7 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from '@/components/ui';
+} from '@/components';
 import { Checkbox } from '@/components/ui/checkbox';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';

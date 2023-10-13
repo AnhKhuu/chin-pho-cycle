@@ -1,7 +1,7 @@
 'use client';
 
-import { IProductItem } from '@/(root)/utils/types';
-import { Button } from '@/components/ui';
+import { Button } from '@/components';
+import { IProductItem } from '@/utils/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -10,8 +10,8 @@ import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ProductCard } from '../components';
-import { brands, categories, images, products } from '../mockData';
+import { brands, categories, images, products } from '../../../utils/mockData';
+import { ProductCard } from './components';
 
 export default function Page() {
   return (
@@ -73,7 +73,7 @@ function LatestProducts({ productList }: { productList: IProductItem[] }) {
       </div>
       <div className='flex justify-center'>
         <Link href={''}>
-          <Button className='font-light text-white'>View More</Button>
+          <Button className='text-white'>View More</Button>
         </Link>
       </div>
     </div>

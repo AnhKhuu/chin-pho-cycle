@@ -10,7 +10,7 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url });
     }
   },
-  publicRoutes: ['/', '/api/(.*)'], // TODO: remove test API route
+  publicRoutes: ['/'],
 });
 
 export const config = {
