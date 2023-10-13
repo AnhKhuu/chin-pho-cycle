@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/fn';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import * as React from 'react';
@@ -8,6 +8,8 @@ import * as React from 'react';
 const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
+
+const DialogClose = DialogPrimitive.Close;
 
 const DialogPortal = DialogPrimitive.Portal;
 
@@ -107,6 +109,7 @@ export {
   DialogPortal,
   DialogOverlay,
   DialogTrigger,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogFooter,

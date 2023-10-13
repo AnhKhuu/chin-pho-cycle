@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function UnauthorizedPage() {
+const UnauthorizedPage = () => {
   return (
     <main className='p-10'>
       <div className='text-center'>
@@ -13,4 +13,6 @@ export default function UnauthorizedPage() {
       </div>
     </main>
   );
-}
+};
+
+export { UnauthorizedPage };

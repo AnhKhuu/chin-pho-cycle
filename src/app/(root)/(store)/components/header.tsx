@@ -1,5 +1,3 @@
-import { RouteTypes } from '@/(root)/utils/constant';
-import { IProductItem } from '@/(root)/utils/types';
 import {
   Button,
   DropdownMenu,
@@ -12,7 +10,9 @@ import {
   FormField,
   FormItem,
   Input,
-} from '@/components/ui';
+} from '@/components';
+import { RouteTypes } from '@/utils/constant';
+import { IProductItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ShoppingCart } from 'lucide-react';
@@ -23,7 +23,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { products } from '../mockData';
+import { products } from '../../../../utils/mockData';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   return (
