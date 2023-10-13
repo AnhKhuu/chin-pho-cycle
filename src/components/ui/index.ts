@@ -24,5 +24,6 @@ export {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from './dropdown-menu';
+export { RadioGroup, RadioGroupItem } from './radio-group';
 
 export { Input } from './input';
