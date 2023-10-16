@@ -2,6 +2,7 @@
 
 import { UnauthorizedPage } from '@/components';
 import { useUser } from '@clerk/nextjs';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { Header } from './components/header';
 
@@ -16,11 +17,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     return <UnauthorizedPage />;
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Header />
       {children}
-    </>
+    </QueryClientProvider>
   );
 };
 

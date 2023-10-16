@@ -1,8 +1,9 @@
 'use client';
 
 import { Button, DataTable, Heading, Separator } from '@/components';
+import { AdminRouteTypes } from '@/utils/constant';
 import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { BrandColumn, columns } from './columns';
 
@@ -11,8 +12,6 @@ interface BrandsClientProps {
 }
 
 export const BrandClient: React.FC<BrandsClientProps> = ({ data }) => {
-  const router = useRouter();
-
   return (
     <>
       <div className='flex items-center justify-between'>
@@ -20,10 +19,12 @@ export const BrandClient: React.FC<BrandsClientProps> = ({ data }) => {
           title={`Brands (${data.length})`}
           description='Manage brands for your store'
         />
-        <Button onClick={() => router.push('/admin/brands/new')}>
-          <Plus className='mr-2 h-4 w-4' />
-          Add New
-        </Button>
+        <Link href={`${AdminRouteTypes.BRAND_PAGE}/new`}>
+          <Button>
+            <Plus className='mr-2 h-4 w-4' />
+            Add New
+          </Button>
+        </Link>
       </div>
       <Separator />
       <DataTable columns={columns} data={data} />

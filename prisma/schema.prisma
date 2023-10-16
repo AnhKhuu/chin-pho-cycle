@@ -23,6 +23,9 @@ model Product {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
+  subCategoryId String
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+
   brandId String
   brand   Brand  @relation(fields: [brandId], references: [id])
 
@@ -35,6 +38,7 @@ model Product {
 
   @@index([brandId])
   @@index([categoryId])
+  @@index([subCategoryId])
 }
 
 // Product Item contains variant data (color, size)
@@ -71,6 +75,18 @@ model ProductImage {
 model Category {
   id    String @id @default(uuid())
   value String @unique
+
+  products Product[]
+  subCategories SubCategory[]
+}
+
+model SubCategory {
+  id    String @id @default(uuid())
+  value String
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  @@index([categoryId])
 
   products Product[]
 }
