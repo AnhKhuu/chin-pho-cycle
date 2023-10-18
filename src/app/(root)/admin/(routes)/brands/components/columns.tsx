@@ -2,7 +2,7 @@
 
 import { Button } from '@/components';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, MoveDown, MoveUp } from 'lucide-react';
 
 import { CellAction } from './cell-action';
 
@@ -37,7 +37,11 @@ export const columns: ColumnDef<BrandColumn>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Products
-            <ArrowUpDown className='ml-2 h-4 w-4' />
+            {column.getIsSorted() === 'asc' ? (
+              <MoveDown className='ml-2 h-4 w-4' />
+            ) : (
+              <MoveUp className='ml-2 h-4 w-4' />
+            )}
           </Button>
         </div>
       );

@@ -19,7 +19,7 @@ export const BrandClient: React.FC<BrandsClientProps> = ({ data }) => {
           title={`Brands (${data.length})`}
           description='Manage brands for your store'
         />
-        <Link href={`${AdminRouteTypes.BRAND_PAGE}/new`}>
+        <Link href={`${AdminRouteTypes.BRAND}/new`}>
           <Button>
             <Plus className='mr-2 h-4 w-4' />
             Add New

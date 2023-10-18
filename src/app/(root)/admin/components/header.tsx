@@ -9,14 +9,14 @@ export const Header = () => {
 
   const routes = [
     {
-      href: AdminRouteTypes.BRAND_PAGE,
+      href: AdminRouteTypes.BRAND,
       label: 'Brands',
-      active: pathname.startsWith(AdminRouteTypes.BRAND_PAGE),
+      active: pathname.startsWith(AdminRouteTypes.BRAND),
     },
     {
-      href: AdminRouteTypes.CATEGORY_PAGE,
+      href: AdminRouteTypes.CATEGORY,
       label: 'Categories',
-      active: pathname.startsWith(AdminRouteTypes.CATEGORY_PAGE),
+      active: pathname.startsWith(AdminRouteTypes.CATEGORY),
     },
   ];
 

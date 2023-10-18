@@ -7,17 +7,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components';
-import { AdminRouteTypes } from '@/utils/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
-import Link from 'next/link';
 
-export type CategoryColumn = {
+type SubCategory = {
   id: string;
   value: string;
 };
 
-export const Columns: ColumnDef<CategoryColumn>[] = [
+export type SubCategoryColumn = SubCategory & {
+  showEditForm: () => void;
+  showConfirmModal: () => void;
+};
+
+export const Columns: ColumnDef<SubCategoryColumn>[] = [
   {
     id: 'order',
     header: () => {
@@ -32,9 +35,12 @@ export const Columns: ColumnDef<CategoryColumn>[] = [
         <div className='flex justify-start'>
           <Button
             variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            onClick={(e) => {
+              e.preventDefault();
+              column.toggleSorting(column.getIsSorted() === 'asc');
+            }}
           >
-            Categories
+            Sub Categories
             {column.getIsSorted() === 'asc' ? (
               <MoveDown className='ml-2 h-4 w-4' />
             ) : (
@@ -53,11 +59,25 @@ export const Columns: ColumnDef<CategoryColumn>[] = [
     header: () => {
       return <div>Actions</div>;
     },
-    cell: ({ row }) => <CellAction id={row.original.id} />,
+    cell: ({ row }) => (
+      <CellAction
+        data={row.original}
+        showEditForm={row.original.showEditForm}
+        showConfirmModal={row.original.showConfirmModal}
+      />
+    ),
   },
 ];
 
-function CellAction({ id }: { id: string }) {
+function CellAction({
+  data,
+  showEditForm,
+  showConfirmModal,
+}: {
+  data: SubCategory;
+  showEditForm: () => void;
+  showConfirmModal: () => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -68,12 +88,15 @@ function CellAction({ id }: { id: string }) {
       <DropdownMenuContent align='end'>
         <DropdownMenuItem
           className='cursor-pointer'
-          onClick={() => navigator.clipboard.writeText(id)}
+          onClick={() => navigator.clipboard.writeText(data.id)}
         >
-          Copy category ID
+          Copy sub category ID
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href={`${AdminRouteTypes.CATEGORY}/${id}`}>Edit category</Link>
+        <DropdownMenuItem onClick={() => showEditForm()}>
+          Edit sub category
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => showConfirmModal()}>
+          Delete sub category
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -30,7 +30,7 @@ export default function Page() {
             title={`Categories ${data ? `(${data.data.length})` : ''}`}
             description='Manage categories for your store'
           />
-          <Link href={`${AdminRouteTypes.CATEGORY_PAGE}/create`}>
+          <Link href={`${AdminRouteTypes.CATEGORY}/create`}>
             <Button>
               <Plus className='mr-2 h-4 w-4' />
               Add New

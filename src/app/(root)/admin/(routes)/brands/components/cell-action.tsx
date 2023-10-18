@@ -14,7 +14,7 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   return (
     <div className='flex justify-center'>
-      <Link href={`${AdminRouteTypes.BRAND_PAGE}/${data.id}`}>
+      <Link href={`${AdminRouteTypes.BRAND}/${data.id}`}>
         <Button variant='ghost' className='h-8 w-8 p-0'>
           <span className='sr-only'>View details</span>
           <MoreHorizontal className='h-4 w-4' />

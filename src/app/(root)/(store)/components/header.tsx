@@ -225,7 +225,7 @@ function SearchBar() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    push(`${RouteTypes.SEARCH_PAGE}?name=${values.productName}`);
+    push(`${RouteTypes.SEARCH}?name=${values.productName}`);
   };
   return (
     <Form {...form}>
