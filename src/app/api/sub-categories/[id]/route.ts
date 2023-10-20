@@ -13,7 +13,7 @@ export async function PATCH(
         id: params.id,
       },
       data: {
-        value,
+        value: value,
       },
     });
     return NextResponse.json(res);

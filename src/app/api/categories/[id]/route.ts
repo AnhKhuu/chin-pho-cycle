@@ -1,8 +1,9 @@
 import prismadb from '@/utils/prismadb';
+import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  req: NextRequest,
+  req: NextApiRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -33,7 +34,7 @@ export async function PATCH(
         id: params.id,
       },
       data: {
-        value,
+        value: value,
       },
     });
     return NextResponse.json(res);

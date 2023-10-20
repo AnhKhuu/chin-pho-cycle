@@ -10,6 +10,7 @@ export enum AdminRouteTypes {
 }
 
 export enum QueryKeys {
+  BRANDS = 'brands',
   CATEGORIES = 'categories',
   CATEGORY = 'category',
   SUB_CATEGORIES = 'sub-categories',
@@ -17,6 +18,7 @@ export enum QueryKeys {
 }
 
 export enum BaseUrl {
+  BRANDS = '/api/brands',
   CATEGORIES = '/api/categories',
   SUB_CATEGORIES = '/api/sub-categories',
 }
