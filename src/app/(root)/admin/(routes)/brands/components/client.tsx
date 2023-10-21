@@ -27,7 +27,13 @@ export const BrandClient: React.FC<IBrandsClientProps> = ({ data }) => {
         </Link>
       </div>
       <Separator />
-      {data && <DataTable columns={columns} data={data} />}
+      {data && (
+        <DataTable
+          columns={columns}
+          data={data}
+          sortingState={[{ id: 'name', desc: false }]}
+        />
+      )}
     </>
   );
 };

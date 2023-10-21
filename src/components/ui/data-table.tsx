@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   searchData?: (searchValue: string) => void;
   isSearchEnabled?: boolean;
+  sortingState?: TSortingState[];
 }
 
 const ROWS_PER_PAGE = 8;
@@ -44,14 +45,21 @@ const formSchema = z.object({
 
 type TSearchFormValue = z.infer<typeof formSchema>;
 
+type TSortingState = {
+  id: string;
+  desc: boolean;
+};
+
 function DataTable<TData, TValue>({
   columns,
   data,
   searchData,
   isSearchEnabled = true,
+  sortingState = [],
 }: DataTableProps<TData, TValue>) {
   const [filtering, setFiltering] = React.useState('');
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>(sortingState);
+
   const [usingFilter, setUsingFilter] = React.useState('');
 
   const table = useReactTable({

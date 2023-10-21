@@ -31,9 +31,9 @@ export async function POST(req: NextRequest) {
       timestamp: timestamp,
     };
 
-    console.log('[CLOUDINARY_DELETE_IMAGE_POST]', url);
+    console.log('[START_CLOUDINARY_DELETE_IMAGE_POST]', url);
     const res = await axios.post(url, data);
-    console.log('[CLOUDINARY_DELETE_IMAGE_POST]', res.data);
+    console.log('[FINISH_CLOUDINARY_DELETE_IMAGE_POST]', res.data);
     return NextResponse.json(res.data);
   } catch (error) {
     console.log('[CLOUDINARY_DELETE_IMAGE_POST]', error);
