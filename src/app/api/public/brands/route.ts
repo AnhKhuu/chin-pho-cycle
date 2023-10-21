@@ -4,11 +4,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     console.log('[START_BRANDS_GET]');
-    const res = await prismadb.brand.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    });
+    const res = await prismadb.brand.findMany();
     console.log('[FINISH_BRANDS_GET]');
     return NextResponse.json(res);
   } catch (error) {

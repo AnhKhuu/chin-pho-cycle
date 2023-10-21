@@ -1,27 +1,30 @@
-import prismadb from '@/utils/prismadb';
+'use client';
+
+import { PublicApi, QueryKeys } from '@/utils/constant';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useQuery } from 'react-query';
 
 import { BrandClient } from './components/client';
 import { TBrandColumn } from './components/columns';
 
-export default async function BrandsPage() {
-  const brands = await prismadb.brand.findMany({
-    include: {
-      products: {
-        select: {
-          sku: true,
-        },
-      },
-    },
-    orderBy: {
-      name: 'asc',
-    },
-  });
+export default function BrandsPage() {
+  const { data, error } = useQuery(QueryKeys.BRANDS, getBrands);
 
-  const formattedBrands: TBrandColumn[] = brands.map((item) => ({
-    id: item.id,
-    name: item.name,
-    numberOfProducts: item.products.length,
-  }));
+  async function getBrands() {
+    return await axios.get(PublicApi.BRANDS);
+  }
+
+  if (error) {
+    toast.error('Something went wrong!');
+  }
+
+  const formattedBrands: TBrandColumn[] = data?.data?.map(
+    (item: TBrandColumn) => ({
+      id: item.id,
+      name: item.name,
+    })
+  );
 
   return (
     <main className='flex-col'>

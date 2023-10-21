@@ -9,6 +9,7 @@ import {
 } from '@/components';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 type TSubCategory = {
   id: string;
@@ -20,7 +21,7 @@ export type TSubCategoryColumn = TSubCategory & {
   showConfirmModal: () => void;
 };
 
-export const Columns: ColumnDef<TSubCategoryColumn>[] = [
+export const columns: ColumnDef<TSubCategoryColumn>[] = [
   {
     id: 'no',
     header: () => {
@@ -88,7 +89,10 @@ function CellAction({
       <DropdownMenuContent align='end'>
         <DropdownMenuItem
           className='cursor-pointer'
-          onClick={() => navigator.clipboard.writeText(data.id)}
+          onClick={() => {
+            toast.success('Sub-category ID copied to clipboard!');
+            navigator.clipboard.writeText(data.id);
+          }}
         >
           Copy ID
         </DropdownMenuItem>

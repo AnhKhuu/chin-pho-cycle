@@ -16,10 +16,10 @@ export const BrandClient: React.FC<IBrandsClientProps> = ({ data }) => {
     <>
       <div className='flex items-center justify-between'>
         <Heading
-          title={`Brands (${data.length})`}
+          title={`Brands ${data ? `(${data.length})` : ''}`}
           description='Manage brands for your store'
         />
-        <Link href={`${AdminRoutes.BRAND}/new`}>
+        <Link href={`${AdminRoutes.BRANDS}/create`}>
           <Button>
             <Plus className='mr-2 h-4 w-4' />
             Add New
@@ -27,7 +27,13 @@ export const BrandClient: React.FC<IBrandsClientProps> = ({ data }) => {
         </Link>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} />
+      {data && (
+        <DataTable
+          columns={columns}
+          data={data}
+          sortingState={[{ id: 'name', desc: false }]}
+        />
+      )}
     </>
   );
 };

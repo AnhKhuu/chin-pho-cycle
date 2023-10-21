@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   searchData?: (searchValue: string) => void;
   isSearchEnabled?: boolean;
+  sortingState?: TSortingState[];
 }
 
 const ROWS_PER_PAGE = 8;
@@ -44,14 +45,22 @@ const formSchema = z.object({
 
 type TSearchFormValue = z.infer<typeof formSchema>;
 
+type TSortingState = {
+  id: string;
+  desc: boolean;
+};
+
 function DataTable<TData, TValue>({
   columns,
   data,
   searchData,
   isSearchEnabled = true,
+  sortingState = [],
 }: DataTableProps<TData, TValue>) {
   const [filtering, setFiltering] = React.useState('');
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>(sortingState);
+
+  const [usingFilter, setUsingFilter] = React.useState('');
 
   const table = useReactTable({
     data,
@@ -82,34 +91,43 @@ function DataTable<TData, TValue>({
     } else {
       setFiltering(value);
     }
+    setUsingFilter(value);
   };
 
   return (
     <div>
       {isSearchEnabled && (
-        <div className='flex items-center py-4'>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSearch)}
-              className='flex w-full items-end'
-            >
-              <div className='mr-4 w-1/4'>
-                <FormField
-                  control={form.control}
-                  name='value'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder='Search' {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button type='submit'>Search</Button>
-            </form>
-          </Form>
-        </div>
+        <>
+          <div className='flex items-center py-4'>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSearch)}
+                className='flex w-full items-end'
+              >
+                <div className='mr-4 w-1/4'>
+                  <FormField
+                    control={form.control}
+                    name='value'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder='Search' {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button type='submit'>Search</Button>
+              </form>
+            </Form>
+          </div>
+          {usingFilter && (
+            <p className='my-2 text-sm'>
+              Showing results for filter:{' '}
+              <span className='font-bold'>{usingFilter}</span>
+            </p>
+          )}
+        </>
       )}
       <div className='mb-4 rounded-md border'>
         <Table>

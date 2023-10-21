@@ -9,7 +9,7 @@ import React from 'react';
 import toast from 'react-hot-toast';
 import { useQuery } from 'react-query';
 
-import { Columns } from './components/columns';
+import { columns } from './components/columns';
 
 export default function Page() {
   const { data, error } = useQuery(QueryKeys.CATEGORIES, getCategories);
@@ -30,7 +30,7 @@ export default function Page() {
             title={`Categories ${data ? `(${data.data.length})` : ''}`}
             description='Manage categories for your store'
           />
-          <Link href={`${AdminRoutes.CATEGORY}/create`}>
+          <Link href={`${AdminRoutes.CATEGORIES}/create`}>
             <Button>
               <Plus className='mr-2 h-4 w-4' />
               Add New
@@ -38,7 +38,7 @@ export default function Page() {
           </Link>
         </div>
         <Separator />
-        {data && <DataTable columns={Columns} data={data?.data} />}
+        {data && <DataTable columns={columns} data={data?.data} />}
       </div>
     </main>
   );

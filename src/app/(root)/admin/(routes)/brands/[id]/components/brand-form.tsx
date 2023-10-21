@@ -15,15 +15,11 @@ import {
   Separator,
   Textarea,
 } from '@/components';
-import { AdminRoutes, PrivateApi } from '@/utils/constant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Brand } from '@prisma/client';
-import axios from 'axios';
 import { Trash } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
 import * as z from 'zod';
 
 const formSchema = z.object({
@@ -34,24 +30,27 @@ const formSchema = z.object({
   imageUrl: z.string(),
 });
 
-type TBrandFormValues = z.infer<typeof formSchema>;
+export type TBrandFormValues = z.infer<typeof formSchema>;
 
 interface IBrandFormProps {
   initialData: Brand | null;
+  createBrand: (data: TBrandFormValues) => void;
+  updateBrand: (data: TBrandFormValues) => void;
+  deleteBrand: () => void;
 }
 
-export function BrandForm({ initialData }: IBrandFormProps) {
-  const params = useParams();
-  const router = useRouter();
-
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+export function BrandForm({
+  initialData,
+  createBrand,
+  updateBrand,
+  deleteBrand,
+}: IBrandFormProps) {
+  const [openModal, setOpenModal] = useState(false);
 
   const title = initialData ? 'Edit Brand' : 'Create Brand';
   const description = initialData
     ? 'Make changes to this brand'
     : 'Add a new brand';
-  const toastMessage = initialData ? 'Brand updated!' : 'Brand created!';
   const action = initialData ? 'Save Changes' : 'Create';
 
   const form = useForm<TBrandFormValues>({
@@ -64,54 +63,28 @@ export function BrandForm({ initialData }: IBrandFormProps) {
   });
 
   const onSubmit = async (data: TBrandFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        await axios.patch(`${PrivateApi.BRANDS}/${params.id}`, data);
-      } else {
-        await axios.post(`${PrivateApi.BRANDS}`, data);
-      }
-      router.refresh();
-      router.push(`${AdminRoutes.BRAND}`);
-      toast.success(toastMessage);
-    } catch (error) {
-      toast.error('Something went wrong');
-    } finally {
-      setLoading(false);
+    if (initialData) {
+      updateBrand(data);
+    } else {
+      createBrand(data);
     }
   };
 
   const onDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`${PrivateApi.BRANDS}/${params.id}`);
-      router.refresh();
-      router.push(`${AdminRoutes.BRAND}`);
-      toast.success('Brand deleted');
-    } catch (error) {
-      toast.error('Make sure you removed all products of this brand!');
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
+    deleteBrand();
   };
 
   return (
     <>
       <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
         onConfirm={onDelete}
-        loading={loading}
       />
       <div className='flex items-center justify-between'>
         <Heading title={title} description={description} />
         {initialData && (
-          <Button
-            disabled={loading}
-            variant='destructive'
-            onClick={() => setOpen(true)}
-          >
+          <Button variant='destructive' onClick={() => setOpenModal(true)}>
             <Trash className='mr-2 h-4 w-4' />
             Delete Brand
           </Button>
@@ -132,7 +105,6 @@ export function BrandForm({ initialData }: IBrandFormProps) {
                 <FormControl>
                   <ImageUpload
                     value={field.value ? [field.value] : []}
-                    disabled={loading}
                     onChange={(url) => field.onChange(url)}
                     onRemove={() => field.onChange('')}
                   />
@@ -149,11 +121,7 @@ export function BrandForm({ initialData }: IBrandFormProps) {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder='Brand Name'
-                      {...field}
-                    />
+                    <Input placeholder='Brand Name' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +137,6 @@ export function BrandForm({ initialData }: IBrandFormProps) {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      disabled={loading}
                       placeholder='Brand description here.'
                       {...field}
                     />
@@ -179,7 +146,7 @@ export function BrandForm({ initialData }: IBrandFormProps) {
               )}
             />
           </div>
-          <Button disabled={loading} className='ml-auto' type='submit'>
+          <Button className='ml-auto' type='submit'>
             {action}
           </Button>
         </form>

@@ -11,13 +11,14 @@ import { AdminRoutes } from '@/utils/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export type TCategoryColumn = {
   id: string;
   value: string;
 };
 
-export const Columns: ColumnDef<TCategoryColumn>[] = [
+export const columns: ColumnDef<TCategoryColumn>[] = [
   {
     id: 'no',
     header: () => {
@@ -68,12 +69,15 @@ function CellAction({ id }: { id: string }) {
       <DropdownMenuContent align='end'>
         <DropdownMenuItem
           className='cursor-pointer'
-          onClick={() => navigator.clipboard.writeText(id)}
+          onClick={() => {
+            toast.success('Category ID copied to clipboard!');
+            navigator.clipboard.writeText(id);
+          }}
         >
           Copy ID
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={`${AdminRoutes.CATEGORY}/${id}`}>Edit</Link>
+          <Link href={`${AdminRoutes.CATEGORIES}/${id}`}>Edit</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
