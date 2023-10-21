@@ -1,9 +1,8 @@
 import prismadb from '@/utils/prismadb';
-import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  req: NextApiRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
