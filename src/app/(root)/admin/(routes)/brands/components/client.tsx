@@ -1,17 +1,17 @@
 'use client';
 
 import { Button, DataTable, Heading, Separator } from '@/components';
-import { AdminRouteTypes } from '@/utils/constant';
+import { AdminRoutes } from '@/utils/constant';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
-import { BrandColumn, columns } from './columns';
+import { TBrandColumn, columns } from './columns';
 
-interface BrandsClientProps {
-  data: BrandColumn[];
+interface IBrandsClientProps {
+  data: TBrandColumn[];
 }
 
-export const BrandClient: React.FC<BrandsClientProps> = ({ data }) => {
+export const BrandClient: React.FC<IBrandsClientProps> = ({ data }) => {
   return (
     <>
       <div className='flex items-center justify-between'>
@@ -19,7 +19,7 @@ export const BrandClient: React.FC<BrandsClientProps> = ({ data }) => {
           title={`Brands (${data.length})`}
           description='Manage brands for your store'
         />
-        <Link href={`${AdminRouteTypes.BRAND}/new`}>
+        <Link href={`${AdminRoutes.BRAND}/new`}>
           <Button>
             <Plus className='mr-2 h-4 w-4' />
             Add New

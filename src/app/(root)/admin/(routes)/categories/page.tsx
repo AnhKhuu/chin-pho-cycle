@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, DataTable, Heading, Separator } from '@/components';
-import { AdminRouteTypes, PublicApi, QueryKeys } from '@/utils/constant';
+import { AdminRoutes, PublicApi, QueryKeys } from '@/utils/constant';
 import axios from 'axios';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -30,7 +30,7 @@ export default function Page() {
             title={`Categories ${data ? `(${data.data.length})` : ''}`}
             description='Manage categories for your store'
           />
-          <Link href={`${AdminRouteTypes.CATEGORY}/create`}>
+          <Link href={`${AdminRoutes.CATEGORY}/create`}>
             <Button>
               <Plus className='mr-2 h-4 w-4' />
               Add New

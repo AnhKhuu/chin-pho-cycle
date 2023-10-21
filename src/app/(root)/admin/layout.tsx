@@ -6,7 +6,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { Header } from './components/header';
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { isLoaded, user } = useUser();
   if (!isLoaded) {
     return <>Loading...</>;
@@ -25,6 +29,4 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
     </QueryClientProvider>
   );
-};
-
-export default AdminLayout;
+}

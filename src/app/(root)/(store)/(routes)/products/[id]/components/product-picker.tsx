@@ -9,7 +9,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/components';
-import { RouteTypes } from '@/utils/constant';
+import { Routes } from '@/utils/constant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -52,7 +52,7 @@ export default function ProductPicker({
           {colorList.map((color) => (
             <Link
               key={color.productId}
-              href={`${RouteTypes.PRODUCT}/${color.productId}`}
+              href={`${Routes.PRODUCT}/${color.productId}`}
               className='group relative'
             >
               <Image

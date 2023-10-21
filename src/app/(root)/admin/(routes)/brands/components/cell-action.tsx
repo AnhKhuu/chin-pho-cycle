@@ -1,20 +1,20 @@
 'use client';
 
 import { Button } from '@/components';
-import { AdminRouteTypes } from '@/utils/constant';
+import { AdminRoutes } from '@/utils/constant';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
-import { BrandColumn } from './columns';
+import { TBrandColumn } from './columns';
 
-interface CellActionProps {
-  data: BrandColumn;
+interface ICellActionProps {
+  data: TBrandColumn;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+export const CellAction: React.FC<ICellActionProps> = ({ data }) => {
   return (
     <div className='flex justify-center'>
-      <Link href={`${AdminRouteTypes.BRAND}/${data.id}`}>
+      <Link href={`${AdminRoutes.BRAND}/${data.id}`}>
         <Button variant='ghost' className='h-8 w-8 p-0'>
           <span className='sr-only'>View details</span>
           <MoreHorizontal className='h-4 w-4' />

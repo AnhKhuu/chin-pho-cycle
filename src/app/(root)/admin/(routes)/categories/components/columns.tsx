@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components';
-import { AdminRouteTypes } from '@/utils/constant';
+import { AdminRoutes } from '@/utils/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
 import Link from 'next/link';
@@ -19,9 +19,9 @@ export type CategoryColumn = {
 
 export const Columns: ColumnDef<CategoryColumn>[] = [
   {
-    id: 'order',
+    id: 'no',
     header: () => {
-      return <div>Order</div>;
+      return <div>No.</div>;
     },
     cell: ({ row }) => <p>{row.index + 1}</p>,
   },
@@ -34,7 +34,7 @@ export const Columns: ColumnDef<CategoryColumn>[] = [
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Categories
+            Value
             {column.getIsSorted() === 'asc' ? (
               <MoveDown className='ml-2 h-4 w-4' />
             ) : (
@@ -70,10 +70,10 @@ function CellAction({ id }: { id: string }) {
           className='cursor-pointer'
           onClick={() => navigator.clipboard.writeText(id)}
         >
-          Copy category ID
+          Copy ID
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={`${AdminRouteTypes.CATEGORY}/${id}`}>Edit category</Link>
+          <Link href={`${AdminRoutes.CATEGORY}/${id}`}>Edit</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

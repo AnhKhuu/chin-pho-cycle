@@ -17,20 +17,20 @@ const formSchema = z.object({
   value: z.string().nonempty(),
 });
 
-type SubCategory = {
+type TSubCategory = {
   id: string;
   value: string;
 };
 
-type FormValue = z.infer<typeof formSchema>;
+type TFormValue = z.infer<typeof formSchema>;
 
 interface ISubCategoryFormProps {
-  initialData: SubCategory;
+  initialData: TSubCategory;
   updateSubCategory: (options: {
     subCategoryId: string;
-    data: FormValue;
+    data: TFormValue;
   }) => void;
-  createSubCategory: (data: FormValue) => void;
+  createSubCategory: (data: TFormValue) => void;
   resetEditForm: () => void;
 }
 
@@ -40,14 +40,14 @@ export default function SubCategoryForm({
   createSubCategory,
   resetEditForm,
 }: ISubCategoryFormProps) {
-  const form = useForm<FormValue>({
+  const form = useForm<TFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       value: '',
     },
   });
 
-  const onSubmit = async (data: FormValue) => {
+  const onSubmit = async (data: TFormValue) => {
     if (initialData?.value !== '') {
       updateSubCategory({ subCategoryId: initialData.id, data });
     } else {
