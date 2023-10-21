@@ -1,7 +1,9 @@
 'use client';
 
-import { Button } from '@/components';
-import { cn } from '@/utils/fn';
+import { AlertModal, Button } from '@/components';
+import { PrivateApi } from '@/utils/constant';
+import { cn, getPublicIdFromUrl } from '@/utils/fn';
+import axios from 'axios';
 import { ImagePlus, Trash, ZoomIn } from 'lucide-react';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
@@ -21,6 +23,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   onRemove,
   value,
 }) => {
+  const [openModal, setOpenModal] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -30,6 +33,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const onUpload = (result: any) => {
     onChange(result.info.secure_url);
+  };
+
+  const onDelete = async (url: string) => {
+    // Remove URL from object
+    onRemove(url);
+
+    // Clean up on Cloudinary
+    const publicId = getPublicIdFromUrl(url);
+    if (publicId) {
+      await axios.post(`${PrivateApi.DELETE_CLOUDINARY_IMAGE}?id=${publicId}`);
+    }
   };
 
   if (!isMounted) {
@@ -59,13 +73,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 </Button>
                 <Button
                   type='button'
-                  onClick={() => onRemove(url)}
+                  onClick={() => setOpenModal(true)}
                   variant='destructive'
                   size='sm'
                   className={cn('rounded-md')}
                 >
                   <Trash className='h-4 w-4' />
                 </Button>
+                <AlertModal
+                  isOpen={openModal}
+                  onClose={() => setOpenModal(false)}
+                  onConfirm={() => onDelete(url)}
+                />
               </div>
             </div>
 

@@ -5,12 +5,13 @@ export enum Routes {
 }
 
 export enum AdminRoutes {
-  BRAND = '/admin/brands',
-  CATEGORY = '/admin/categories',
+  BRANDS = '/admin/brands',
+  CATEGORIES = '/admin/categories',
 }
 
 export enum QueryKeys {
   BRANDS = 'brands',
+  BRAND = 'brand',
   CATEGORIES = 'categories',
   CATEGORY = 'category',
   SUB_CATEGORIES = 'sub-categories',
@@ -21,6 +22,7 @@ export enum PrivateApi {
   BRANDS = '/api/brands',
   CATEGORIES = '/api/categories',
   SUB_CATEGORIES = '/api/sub-categories',
+  DELETE_CLOUDINARY_IMAGE = '/api/cloudinary',
 }
 
 export enum PublicApi {

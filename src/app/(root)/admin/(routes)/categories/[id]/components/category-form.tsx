@@ -21,7 +21,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { Columns } from './columns';
+import { columns } from './columns';
 import SubCategoryForm from './sub-category-form';
 
 const formSchema = z.object({
@@ -177,7 +177,7 @@ export default function CategoryForm({
                 </Button>
               </p>
               <DataTable
-                columns={Columns}
+                columns={columns}
                 data={initialData?.subCategories?.map((item) => ({
                   ...item,
                   showEditForm: () => setEditForm(item),

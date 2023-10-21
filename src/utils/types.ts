@@ -15,13 +15,13 @@ export type TBrandItem = {
   imageUrl: string;
 };
 
-export type TSubCategoryItem = {
-  id: string;
-  value: string;
-};
-
 export type TCategoryItem = {
   id: string;
   value: string;
   subCategories: TSubCategoryItem[];
+};
+
+export type TSubCategoryItem = {
+  id: string;
+  value: string;
 };

@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         toast.success('Category created!');
-        router.push(AdminRoutes.CATEGORY);
+        router.push(AdminRoutes.CATEGORIES);
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -44,7 +44,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         toast.success('Category updated!');
-        router.push(AdminRoutes.CATEGORY);
+        router.push(AdminRoutes.CATEGORIES);
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -57,7 +57,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         toast.success('Category deleted!');
-        router.push(AdminRoutes.CATEGORY);
+        router.push(AdminRoutes.CATEGORIES);
       },
       onError: () => {
         toast.error(
