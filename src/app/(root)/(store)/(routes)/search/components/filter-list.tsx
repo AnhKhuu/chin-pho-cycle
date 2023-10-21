@@ -20,7 +20,7 @@ const FormSchema = z.object({
   items: z.array(z.string()),
 });
 
-type FilterItem = {
+type TFilterItem = {
   filterType: string;
   fields: {
     value: string;
@@ -30,7 +30,7 @@ type FilterItem = {
 
 interface ICheckboxListProps {
   handleSubmit: (data: z.infer<typeof FormSchema>) => void;
-  filterList: FilterItem[];
+  filterList: TFilterItem[];
 }
 
 export function FilterList({ handleSubmit, filterList }: ICheckboxListProps) {

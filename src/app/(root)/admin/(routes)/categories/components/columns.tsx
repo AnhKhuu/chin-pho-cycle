@@ -12,12 +12,12 @@ import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
 import Link from 'next/link';
 
-export type CategoryColumn = {
+export type TCategoryColumn = {
   id: string;
   value: string;
 };
 
-export const Columns: ColumnDef<CategoryColumn>[] = [
+export const Columns: ColumnDef<TCategoryColumn>[] = [
   {
     id: 'no',
     header: () => {

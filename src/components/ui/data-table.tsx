@@ -42,7 +42,7 @@ const formSchema = z.object({
   value: z.string(),
 });
 
-type SearchFormValue = z.infer<typeof formSchema>;
+type TSearchFormValue = z.infer<typeof formSchema>;
 
 function DataTable<TData, TValue>({
   columns,
@@ -68,14 +68,14 @@ function DataTable<TData, TValue>({
     },
   });
 
-  const form = useForm<SearchFormValue>({
+  const form = useForm<TSearchFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       value: '',
     },
   });
 
-  const onSearch = async (searchValue: SearchFormValue) => {
+  const onSearch = async (searchValue: TSearchFormValue) => {
     const value = searchValue?.value ?? '';
     if (Boolean(searchData)) {
       searchData?.(value);

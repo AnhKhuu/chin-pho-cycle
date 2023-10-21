@@ -6,6 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('[START_CATEGORIES_ID_GET]');
     const res = await prismadb.category.findFirst({
       where: {
         id: params.id,
@@ -14,6 +15,8 @@ export async function GET(
         subCategories: true,
       },
     });
+    console.log('[FINISH_CATEGORIES_ID_GET]');
+
     return NextResponse.json(res);
   } catch (error) {
     console.log('[CATEGORIES_ID_GET]', error);
@@ -28,6 +31,8 @@ export async function PATCH(
   try {
     const body = await req.json();
     const { value } = body;
+
+    console.log('[START_CATEGORIES_ID_PATCH]');
     const res = await prismadb.category.update({
       where: {
         id: params.id,
@@ -36,6 +41,8 @@ export async function PATCH(
         value: value,
       },
     });
+    console.log('[FINISH_CATEGORIES_ID_PATCH]');
+
     return NextResponse.json(res);
   } catch (error) {
     console.log('[CATEGORIES_ID_PATCH]', error);
@@ -48,11 +55,14 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('[START_CATEGORIES_ID_DELETE]');
     const res = await prismadb.category.delete({
       where: {
         id: params.id,
       },
     });
+    console.log('[FINISH_CATEGORIES_ID_DELETE]');
+
     return NextResponse.json(res);
   } catch (error) {
     console.log('[CATEGORIES_ID_DELETE]', error);
