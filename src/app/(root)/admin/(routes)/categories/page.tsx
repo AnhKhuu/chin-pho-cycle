@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, DataTable, Heading, Separator } from '@/components';
-import { AdminRouteTypes, BaseUrl, QueryKeys } from '@/utils/constant';
+import { AdminRouteTypes, PublicApi, QueryKeys } from '@/utils/constant';
 import axios from 'axios';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ export default function Page() {
   const { data, error } = useQuery(QueryKeys.CATEGORIES, getCategories);
 
   async function getCategories() {
-    return await axios.get(BaseUrl.CATEGORIES);
+    return await axios.get(PublicApi.CATEGORIES);
   }
 
   if (error) {

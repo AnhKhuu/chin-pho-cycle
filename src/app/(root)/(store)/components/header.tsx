@@ -11,7 +11,7 @@ import {
   FormItem,
   Input,
 } from '@/components';
-import { BaseUrl, QueryKeys, RouteTypes } from '@/utils/constant';
+import { PublicApi, QueryKeys, RouteTypes } from '@/utils/constant';
 import { products } from '@/utils/mockData';
 import { BrandItem, IProductItem, CategoryItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
@@ -35,23 +35,23 @@ import {
   SubCategoryTitle,
 } from './category';
 
-export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
+export default function Header({ }: React.HtmlHTMLAttributes<HTMLElement>) {
   const [bike, men, women, brand] = useQueries([
     {
       queryKey: [QueryKeys.CATEGORY, 'bike'],
-      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=bike`),
+      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=bike`),
     },
     {
       queryKey: [QueryKeys.CATEGORY, 'men'],
-      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=men`),
+      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=men`),
     },
     {
       queryKey: [QueryKeys.CATEGORY, 'women'],
-      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=women`),
+      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=women`),
     },
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${BaseUrl.BRANDS}`),
+      queryFn: async () => await axios.get(`${PublicApi.BRANDS}`),
     },
   ]);
 
@@ -145,7 +145,7 @@ function CategoryItem({
           </div>
           <div>
             <SubCategoryTitle>Products</SubCategoryTitle>
-            {category?.subCategories.map(({ id, value }) => (
+            {category?.subCategories?.map(({ id, value }) => (
               <SubCategoryItem
                 url={`${RouteTypes.SEARCH}?category=${title}&subCategory=${id}`}
                 key={id}
@@ -172,7 +172,7 @@ function CategoryItem({
   );
 }
 
-function BrandList({ title, brandList }: {title: string, brandList: BrandItem[]}) {
+function BrandList({ title, brandList }: { title: string, brandList: BrandItem[] }) {
   return (
     <CategoryWrapper>
       <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>

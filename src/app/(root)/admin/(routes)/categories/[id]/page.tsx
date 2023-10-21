@@ -1,6 +1,6 @@
 'use client';
 
-import { AdminRouteTypes, BaseUrl, QueryKeys } from '@/utils/constant';
+import { AdminRouteTypes, PrivateApi, QueryKeys } from '@/utils/constant';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -21,11 +21,11 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const { data: category, refetch } = useQuery(
     [QueryKeys.CATEGORY, params.id],
-    async () => await axios.get(`${BaseUrl.CATEGORIES}/${params.id}`)
+    async () => await axios.get(`${PrivateApi.CATEGORIES}/${params.id}`)
   );
 
   const createCategory = useMutation(
-    async (data: CategoryData) => await axios.post(BaseUrl.CATEGORIES, data),
+    async (data: CategoryData) => await axios.post(PrivateApi.CATEGORIES, data),
     {
       onSuccess: () => {
         toast.success('Category created!');
@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const updateCategory = useMutation(
     async (data: CategoryData) =>
-      await axios.patch(`${BaseUrl.CATEGORIES}/${params.id}`, data),
+      await axios.patch(`${PrivateApi.CATEGORIES}/${params.id}`, data),
     {
       onSuccess: () => {
         toast.success('Category updated!');
@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 
   const deleteCategory = useMutation(
-    async () => await axios.delete(`${BaseUrl.CATEGORIES}/${params.id}`),
+    async () => await axios.delete(`${PrivateApi.CATEGORIES}/${params.id}`),
     {
       onSuccess: () => {
         toast.success('Category deleted!');
@@ -68,7 +68,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const createSubCategory = useMutation(
     async (data: SubCategory) =>
-      await axios.post(BaseUrl.SUB_CATEGORIES, {
+      await axios.post(PrivateApi.SUB_CATEGORIES, {
         ...data,
         categoryId: params.id,
       }),
@@ -86,7 +86,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const updateSubCategory = useMutation(
     async (options: { subCategoryId: string; data: SubCategory }) =>
       await axios.patch(
-        `${BaseUrl.SUB_CATEGORIES}/${options.subCategoryId}`,
+        `${PrivateApi.SUB_CATEGORIES}/${options.subCategoryId}`,
         options.data
       ),
     {
@@ -102,7 +102,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const deleteSubCategory = useMutation(
     async (subCategoryId: string) =>
-      await axios.delete(`${BaseUrl.SUB_CATEGORIES}/${subCategoryId}`),
+      await axios.delete(`${PrivateApi.SUB_CATEGORIES}/${subCategoryId}`),
     {
       onSuccess: () => {
         refetch();
