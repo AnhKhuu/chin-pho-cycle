@@ -10,6 +10,7 @@ export async function POST(req: Request) {
       return new NextResponse('Name is required', { status: 400 });
     }
 
+    console.log('[START_BRANDS_POST]');
     const res = await prismadb.brand.create({
       data: {
         name: name,
@@ -17,6 +18,7 @@ export async function POST(req: Request) {
         imageUrl: imageUrl || '',
       },
     });
+    console.log('[FINISH_BRANDS_POST]');
 
     return NextResponse.json(res);
   } catch (error) {

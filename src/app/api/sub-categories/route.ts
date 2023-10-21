@@ -10,6 +10,7 @@ export async function POST(req: Request) {
       return new NextResponse('Value is required', { status: 400 });
     }
 
+    console.log('[START_SUB_CATEGORIES_POST]');
     const res = await prismadb.subCategory.create({
       data: {
         value: value,
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
         },
       },
     });
+    console.log('[FINISH_SUB_CATEGORIES_POST]');
 
     return NextResponse.json(res);
   } catch (error) {

@@ -5,6 +5,7 @@ export async function GET(req: NextRequest) {
   try {
     const value = req.nextUrl.searchParams.get('name');
     if (value) {
+      console.log('[START_CATEGORIES_GET]');
       const res = await prismadb.category.findFirst({
         where: {
           value: {
@@ -16,6 +17,8 @@ export async function GET(req: NextRequest) {
           subCategories: true,
         },
       });
+      console.log('[FINISH_CATEGORIES_GET]');
+
       return NextResponse.json(res);
     } else {
       const res = await prismadb.category.findMany({
