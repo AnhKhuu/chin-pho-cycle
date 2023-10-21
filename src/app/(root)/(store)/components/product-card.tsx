@@ -1,9 +1,9 @@
-import { IProductItem } from '@/utils/types';
+import { TProductItem } from '@/utils/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-export default function ProductCard({ product }: { product: IProductItem }) {
+export default function ProductCard({ product }: { product: TProductItem }) {
   return (
     <Link href={'/'} className='group mb-4'>
       <div className='relative'>

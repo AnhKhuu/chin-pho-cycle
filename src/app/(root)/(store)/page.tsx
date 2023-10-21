@@ -1,12 +1,15 @@
 'use client';
 
 import { Button } from '@/components';
-import { brands, categories, images, products } from '@/utils/mockData';
-import { IProductItem } from '@/utils/types';
+import { BaseUrl, QueryKeys } from '@/utils/constant';
+import { categories, images, products } from '@/utils/mockData';
+import { TBrandItem, TProductItem } from '@/utils/types';
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
+import { useQueries } from 'react-query';
 import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,11 +17,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ProductCard } from './components';
 
 export default function Page() {
+  const [brand] = useQueries([
+    {
+      queryKey: [QueryKeys.BRANDS],
+      queryFn: async () => await axios.get(`${BaseUrl.BRANDS}`),
+    },
+  ]);
   return (
     <>
       <Banner imageList={images} />
       <LatestProducts productList={products} />
-      <BrandGallery brandList={brands} />
+      <BrandGallery brandList={brand.data?.data} />
       <CategoryGallery categoryList={categories} />
       <VideoPlayer url='https://file.hstatic.net/200000556385/file/_1__facebook_1993dc9260f5490096316d4220eb8a1e.mp4' />
     </>
@@ -62,7 +71,7 @@ function Banner({ imageList }: { imageList: ImageItem[] }) {
   );
 }
 
-function LatestProducts({ productList }: { productList: IProductItem[] }) {
+function LatestProducts({ productList }: { productList: TProductItem[] }) {
   return (
     <div className='mx-6 my-12'>
       <h1 className='pb-8 text-xl font-semibold'>Latest Products</h1>
@@ -80,28 +89,20 @@ function LatestProducts({ productList }: { productList: IProductItem[] }) {
   );
 }
 
-interface IBrandItem {
-  id: string;
-  brandName: string;
-  imageUrl: string;
-}
-
-function BrandGallery({ brandList }: { brandList: IBrandItem[] }) {
+function BrandGallery({ brandList }: { brandList: TBrandItem[] }) {
   return (
     <div className='mb-12 grid grid-cols-2 gap-4'>
-      {brandList.map((brand) => (
-        <BrandCard brand={brand} key={brand.id} />
-      ))}
+      {brandList?.map((brand) => <BrandCard brand={brand} key={brand.id} />)}
     </div>
   );
 }
 
-function BrandCard({ brand }: { brand: IBrandItem }) {
+function BrandCard({ brand }: { brand: TBrandItem }) {
   return (
     <Link href={'/'} className='group relative block h-96 w-full'>
       <Image
         src={brand.imageUrl}
-        alt='test'
+        alt={brand.name}
         fill
         style={{
           objectFit: 'cover',
@@ -109,7 +110,7 @@ function BrandCard({ brand }: { brand: IBrandItem }) {
         }}
       />
       <p className='absolute bottom-6 left-6 text-xl font-bold text-white underline opacity-0 transition duration-300 ease-in-out group-hover:opacity-100'>
-        {brand.brandName}
+        {brand.name}
       </p>
     </Link>
   );

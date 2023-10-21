@@ -12,7 +12,8 @@
   "lint-staged": {
     "*.{json,md,html,css}": "prettier --write",
     "*.{js,jsx,ts,tsx}": [
-      "eslint -c .eslintrc.json --fix"
+      "eslint -c .eslintrc.json --fix",
+      "prettier --write"
     ]
   },
   "prisma": {

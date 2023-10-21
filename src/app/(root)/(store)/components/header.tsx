@@ -12,8 +12,9 @@ import {
   Input,
 } from '@/components';
 import { PublicApi, QueryKeys, RouteTypes } from '@/utils/constant';
+import { capitalizeFirstLetter } from '@/utils/fn';
 import { products } from '@/utils/mockData';
-import { BrandItem, IProductItem, CategoryItem } from '@/utils/types';
+import { TBrandItem, TCategoryItem, TProductItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -26,7 +27,6 @@ import { useForm } from 'react-hook-form';
 import { useQueries } from 'react-query';
 import { z } from 'zod';
 
-import { capitalizeFirstLetter } from '@/utils/fn';
 import {
   CategoryMenu,
   CategoryTitle,
@@ -68,7 +68,7 @@ export default function Header({ }: React.HtmlHTMLAttributes<HTMLElement>) {
             alt='logo'
           />
         </Link>
-        <CategoryList
+        <Categories
           categoryList={{
             bike: bike.data?.data,
             men: men.data?.data,
@@ -92,24 +92,22 @@ const pages = [
   { label: 'Bike Fit', link: '/bike-fit' },
 ];
 
-
-
-interface CategoryListProps {
+interface ICategoriesProps {
   categoryList: {
-    bike: CategoryItem;
-    men: CategoryItem;
-    women: CategoryItem;
-    brand: BrandItem[];
+    bike: TCategoryItem;
+    men: TCategoryItem;
+    women: TCategoryItem;
+    brand: TBrandItem[];
   };
 }
 
-function CategoryList({ categoryList }: CategoryListProps) {
+function Categories({ categoryList }: ICategoriesProps) {
   return (
     <div className='flex self-stretch'>
       <CategoryItem category={categoryList.bike} title={'bike'} />
       <CategoryItem category={categoryList.men} title={'men'} />
       <CategoryItem category={categoryList.women} title={'women'} />
-      <BrandList brandList={categoryList.brand} title={'brand'} />
+      <Brands brandList={categoryList.brand} title={'brand'} />
       {pages.map(({ label, link }, index) => (
         <Link
           href={link}
@@ -128,7 +126,7 @@ function CategoryItem({
   category,
 }: {
   title: string;
-  category: CategoryItem;
+  category: TCategoryItem;
 }) {
   return (
     <CategoryWrapper>
@@ -172,7 +170,13 @@ function CategoryItem({
   );
 }
 
-function BrandList({ title, brandList }: { title: string, brandList: BrandItem[] }) {
+function Brands({
+  title,
+  brandList,
+}: {
+  title: string;
+  brandList: TBrandItem[];
+}) {
   return (
     <CategoryWrapper>
       <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>
@@ -196,10 +200,10 @@ function BrandList({ title, brandList }: { title: string, brandList: BrandItem[]
         </div>
       </CategoryMenu>
     </CategoryWrapper>
-  )
+  );
 }
 
-function ProductImage({ product }: { product: IProductItem }) {
+function ProductImage({ product }: { product: TProductItem }) {
   return (
     <Link href={'/'} className='mb-4'>
       <div className='relative'>
