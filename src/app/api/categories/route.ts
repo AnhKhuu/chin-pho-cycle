@@ -10,11 +10,13 @@ export async function POST(req: Request) {
       return new NextResponse('Value is required', { status: 400 });
     }
 
+    console.log('[START_CATEGORIES_POST]');
     const res = await prismadb.category.create({
       data: {
         value: value,
       },
     });
+    console.log('[FINISH_CATEGORIES_POST]');
 
     return NextResponse.json(res);
   } catch (error) {

@@ -6,11 +6,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('[START_BRANDS_ID_GET]');
     const res = await prismadb.brand.findFirst({
       where: {
         id: params.id,
       },
     });
+    console.log('[FINISH_BRANDS_ID_GET]');
+
     return NextResponse.json(res);
   } catch (error) {
     console.log('[BRANDS_ID_GET]', error);
@@ -25,6 +28,8 @@ export async function PATCH(
   try {
     const body = await req.json();
     const { name, description, imageUrl } = body;
+
+    console.log('[START_BRANDS_ID_PATCH]');
     const res = await prismadb.brand.update({
       where: {
         id: params.id,
@@ -35,6 +40,8 @@ export async function PATCH(
         imageUrl,
       },
     });
+    console.log('[FINISH_BRANDS_ID_PATCH]');
+
     return NextResponse.json(res);
   } catch (error) {
     console.log('[BRANDS_ID_PATCH]', error);
@@ -47,11 +54,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('[START_BRANDS_ID_DELETE]');
     const res = await prismadb.brand.delete({
       where: {
         id: params.id,
       },
     });
+    console.log('[FINISH_BRANDS_ID_DELETE]');
     return NextResponse.json(res);
   } catch (error) {
     console.log('[BRANDS_ID_DELETE]', error);
