@@ -180,7 +180,7 @@ function BrandList({ title, brandList }: {title: string, brandList: BrandItem[]}
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
             <SubCategoryTitle>Brands</SubCategoryTitle>
-            {brandList && brandList.map(({ id, name }) => (
+            {brandList?.map(({ id, name }) => (
               <SubCategoryItem
                 url={`${RouteTypes.SEARCH}?brand=${name}`}
                 key={id}
