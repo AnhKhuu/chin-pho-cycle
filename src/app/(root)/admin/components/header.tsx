@@ -1,3 +1,4 @@
+import { AdminRouteTypes } from '@/utils/constant';
 import { cn } from '@/utils/fn';
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
@@ -8,9 +9,14 @@ export const Header = () => {
 
   const routes = [
     {
-      href: '/admin/brands',
+      href: AdminRouteTypes.BRAND,
       label: 'Brands',
-      active: pathname.startsWith('/admin/brands'),
+      active: pathname.startsWith(AdminRouteTypes.BRAND),
+    },
+    {
+      href: AdminRouteTypes.CATEGORY,
+      label: 'Categories',
+      active: pathname.startsWith(AdminRouteTypes.CATEGORY),
     },
   ];
 
@@ -22,8 +28,10 @@ export const Header = () => {
             <Link
               href={route.href}
               className={cn(
-                'flex h-16 items-center px-4 text-sm font-medium text-muted-foreground transition duration-100 ease-in-out hover:text-black',
-                route.active ? 'text-black' : ''
+                'flex h-16 items-center border-b-2 border-white px-4 text-sm font-medium text-muted-foreground transition duration-100 ease-in-out',
+                route.active
+                  ? 'border-b-2 border-black text-black'
+                  : 'hover:border-b-2 hover:border-black hover:text-black'
               )}
             >
               {route.label}

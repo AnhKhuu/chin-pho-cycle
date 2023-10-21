@@ -52,7 +52,7 @@ export default function ProductPicker({
           {colorList.map((color) => (
             <Link
               key={color.productId}
-              href={`${RouteTypes.PRODUCT_PAGE}/${color.productId}`}
+              href={`${RouteTypes.PRODUCT}/${color.productId}`}
               className='group relative'
             >
               <Image

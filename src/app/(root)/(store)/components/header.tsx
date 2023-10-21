@@ -11,20 +11,52 @@ import {
   FormItem,
   Input,
 } from '@/components';
-import { RouteTypes } from '@/utils/constant';
+import { BaseUrl, QueryKeys, RouteTypes } from '@/utils/constant';
 import { products } from '@/utils/mockData';
 import { IProductItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useQueries } from 'react-query';
 import { z } from 'zod';
 
+import { capitalizeFirstLetter } from '../../../../utils/fn';
+import {
+  CategoryMenu,
+  CategoryTitle,
+  CategoryWrapper,
+  SubCategoryItem,
+  SubCategoryTitle,
+} from './category';
+
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
+  const [bike, men, women, brand] = useQueries([
+    {
+      queryKey: [QueryKeys.CATEGORY, 'bike'],
+      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=bike`),
+    },
+    {
+      queryKey: [QueryKeys.CATEGORY, 'men'],
+      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=men`),
+    },
+    {
+      queryKey: [QueryKeys.CATEGORY, 'women'],
+      queryFn: async () => await axios.get(`${BaseUrl.CATEGORIES}?name=women`),
+    },
+    {
+      queryKey: [QueryKeys.BRANDS],
+      queryFn: async () => await axios.get(`${BaseUrl.BRANDS}`),
+    },
+  ]);
+
+  console.log({ brand });
+
   return (
     <header className='sticky left-0 right-0 top-0 z-50'>
       <nav className='relative flex w-full items-center justify-between bg-white px-6'>
@@ -38,7 +70,13 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
             alt='logo'
           />
         </Link>
-        <CategoryList />
+        <CategoryList
+          categoryList={{
+            bike: bike.data?.data,
+            men: men.data?.data,
+            women: women.data?.data,
+          }}
+        />
         <div className='flex items-center'>
           <SearchBar />
           <LanguageOptions />
@@ -50,133 +88,37 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   );
 }
 
-const categories = [
-  {
-    title: 'Bikes',
-    sessions: [
-      {
-        label: 'Featured',
-        items: ['New Arrivals'],
-      },
-      {
-        label: 'Products',
-        items: [
-          'Jerseys',
-          'Longsleeve Jerseys',
-          'Bib Shorts',
-          'Long Bibs',
-          'Gilets & Jackets',
-        ],
-      },
-      {
-        label: 'Collections',
-        items: ['MAAP Spring/Summer'],
-      },
-    ],
-  },
-  {
-    title: 'Men',
-    sessions: [
-      {
-        label: 'Featured',
-        items: ['New Arrivals'],
-      },
-      {
-        label: 'Products',
-        items: [
-          'Jerseys',
-          'Longsleeve Jerseys',
-          'Bib Shorts',
-          'Long Bibs',
-          'Gilets & Jackets',
-        ],
-      },
-      {
-        label: 'Collections',
-        items: ['MAAP Spring/Summer'],
-      },
-    ],
-  },
-  {
-    title: 'Women',
-    sessions: [
-      {
-        label: 'Featured',
-        items: ['New Arrivals'],
-      },
-      {
-        label: 'Products',
-        items: [
-          'Jerseys',
-          'Longsleeve Jerseys',
-          'Bib Shorts',
-          'Long Bibs',
-          'Gilets & Jackets',
-        ],
-      },
-      {
-        label: 'Collections',
-        items: ['MAAP Spring/Summer'],
-      },
-    ],
-  },
-  {
-    title: 'Brands',
-    sessions: [
-      {
-        label: 'Premium Brands',
-        items: ['Pas Normal Studios', 'Factor', 'MAAP'],
-      },
-    ],
-  },
-];
-
 const pages = [
   { label: 'Events', link: '/events' },
   { label: 'Bike Fit', link: '/bike-fit' },
 ];
 
-function CategoryList() {
+type SubCategoryItem = {
+  id: string;
+  value: string;
+};
+
+type CategoryItem = {
+  id: string;
+  value: string;
+  subCategories: SubCategoryItem[];
+};
+
+interface CategoryListProps {
+  categoryList: {
+    bike: CategoryItem;
+    men: CategoryItem;
+    women: CategoryItem;
+  };
+}
+
+function CategoryList({ categoryList }: CategoryListProps) {
   return (
     <div className='flex self-stretch'>
-      {categories.map(({ title, sessions }, index) => (
-        <div key={index} className='group/nav'>
-          <div className='peer/nav flex h-16 cursor-pointer items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out group-hover/nav:border-black'>
-            {title}
-          </div>
-          <div className='peer/menu invisible absolute left-0 top-16 h-min w-screen bg-white_2 hover:visible peer-hover/nav:visible'>
-            <div className='flex text-sm'>
-              <div
-                className={`grid w-3/5 gap-4 py-10 pl-10 grid-cols-${Object.keys(
-                  sessions
-                )?.length}`}
-              >
-                {sessions.map((session, sessionIndex) => (
-                  <div key={sessionIndex}>
-                    <p className='mb-2 font-semibold underline underline-offset-4'>
-                      {session.label}
-                    </p>
-                    {session.items.map((item) => (
-                      <Link
-                        key={item}
-                        href={'/'}
-                        className='mb-1 block indent-4 underline-offset-4 hover:underline'
-                      >
-                        {item}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-                <ProductImage product={products[0]} />
-                <ProductImage product={products[0]} />
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-
+      <CategoryItem category={categoryList.bike} title={'bike'} />
+      <CategoryItem category={categoryList.men} title={'men'} />
+      <CategoryItem category={categoryList.women} title={'women'} />
+      <CategoryItem category={categoryList.women} title={'brand'} />
       {pages.map(({ label, link }, index) => (
         <Link
           href={link}
@@ -187,6 +129,55 @@ function CategoryList() {
         </Link>
       ))}
     </div>
+  );
+}
+
+function CategoryItem({
+  title,
+  category,
+}: {
+  title: string;
+  category: CategoryItem;
+}) {
+  return (
+    <CategoryWrapper>
+      <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>
+      <CategoryMenu>
+        <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
+          <div>
+            <SubCategoryTitle>Featured</SubCategoryTitle>
+            <SubCategoryItem
+              url={`${RouteTypes.SEARCH}?category=${category?.id}`}
+            >
+              New Arrivals
+            </SubCategoryItem>
+          </div>
+          <div>
+            <SubCategoryTitle>Products</SubCategoryTitle>
+            {category?.subCategories.map(({ id, value }) => (
+              <SubCategoryItem
+                url={`${RouteTypes.SEARCH}?category=${title}&subCategory=${id}`}
+                key={id}
+              >
+                {capitalizeFirstLetter(value)}
+              </SubCategoryItem>
+            ))}
+          </div>
+          <div>
+            <SubCategoryTitle>Collections</SubCategoryTitle>
+            <SubCategoryItem
+              url={`${RouteTypes.SEARCH}?category=${title}&collection=MAAP`}
+            >
+              New Arrivals
+            </SubCategoryItem>
+          </div>
+        </div>
+        <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
+          <ProductImage product={products[0]} />
+          <ProductImage product={products[0]} />
+        </div>
+      </CategoryMenu>
+    </CategoryWrapper>
   );
 }
 
@@ -225,7 +216,7 @@ function SearchBar() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    push(`${RouteTypes.SEARCH_PAGE}?name=${values.productName}`);
+    push(`${RouteTypes.SEARCH}?name=${values.productName}`);
   };
   return (
     <Form {...form}>

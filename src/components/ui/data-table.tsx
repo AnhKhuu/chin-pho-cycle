@@ -2,6 +2,10 @@
 
 import {
   Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
   Input,
   Table,
   TableBody,
@@ -10,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ColumnDef,
   SortingState,
@@ -21,15 +26,29 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchData?: (searchValue: string) => void;
+  isSearchEnabled?: boolean;
 }
+
+const ROWS_PER_PAGE = 8;
+
+const formSchema = z.object({
+  value: z.string(),
+});
+
+type SearchFormValue = z.infer<typeof formSchema>;
 
 function DataTable<TData, TValue>({
   columns,
   data,
+  searchData,
+  isSearchEnabled = true,
 }: DataTableProps<TData, TValue>) {
   const [filtering, setFiltering] = React.useState('');
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -49,17 +68,50 @@ function DataTable<TData, TValue>({
     },
   });
 
+  const form = useForm<SearchFormValue>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      value: '',
+    },
+  });
+
+  const onSearch = async (searchValue: SearchFormValue) => {
+    const value = searchValue?.value ?? '';
+    if (Boolean(searchData)) {
+      searchData?.(value);
+    } else {
+      setFiltering(value);
+    }
+  };
+
   return (
     <div>
-      <div className='flex items-center py-4'>
-        <Input
-          placeholder='Search...'
-          value={filtering}
-          onChange={(event) => setFiltering(event.target.value)}
-          className='max-w-sm'
-        />
-      </div>
-      <div className='rounded-md border'>
+      {isSearchEnabled && (
+        <div className='flex items-center py-4'>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSearch)}
+              className='flex w-full items-end'
+            >
+              <div className='mr-4 w-1/4'>
+                <FormField
+                  control={form.control}
+                  name='value'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder='Search' {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button type='submit'>Search</Button>
+            </form>
+          </Form>
+        </div>
+      )}
+      <div className='mb-4 rounded-md border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -109,24 +161,26 @@ function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      {data.length > ROWS_PER_PAGE && (
+        <div className='flex items-center justify-end space-x-2 pb-4'>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

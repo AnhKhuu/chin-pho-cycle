@@ -9,7 +9,7 @@ interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const AlertModal: React.FC<AlertModalProps> = ({
@@ -36,10 +36,25 @@ const AlertModal: React.FC<AlertModalProps> = ({
       onClose={onClose}
     >
       <div className='flex w-full items-center justify-end space-x-2 pt-6'>
-        <Button disabled={loading} variant='outline' onClick={onClose}>
+        <Button
+          disabled={loading}
+          variant='outline'
+          onClick={(e) => {
+            e.preventDefault();
+            onClose();
+          }}
+        >
           Cancel
         </Button>
-        <Button disabled={loading} variant='destructive' onClick={onConfirm}>
+        <Button
+          disabled={loading}
+          variant='destructive'
+          onClick={(e) => {
+            e.preventDefault();
+            onConfirm();
+            onClose();
+          }}
+        >
           Continue
         </Button>
       </div>
