@@ -22,13 +22,13 @@ const FormSchema = z.object({
   }),
 });
 
-type ColorItem = {
+type TColorItem = {
   imageUrl: string;
   productId: string;
 };
 
 interface IProductPickerProps {
-  colorList: ColorItem[];
+  colorList: TColorItem[];
   id: string;
   sizeList: string[];
 }

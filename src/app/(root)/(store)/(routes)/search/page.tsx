@@ -16,7 +16,7 @@ import { Pagination } from 'react-headless-pagination';
 
 import { FilterList } from './components/filter-list';
 
-type Sort = {
+type TSort = {
   value: string;
   label: string;
 };
@@ -45,7 +45,7 @@ const sortList = [
 ];
 
 export default function Page() {
-  const [sortBy, setSortBy] = useState<Sort | undefined>({
+  const [sortBy, setSortBy] = useState<TSort | undefined>({
     value: 'newest',
     label: 'Newest',
   });
