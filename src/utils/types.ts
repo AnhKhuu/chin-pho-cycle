@@ -7,3 +7,21 @@ export interface IProductItem {
   color: string;
   sizes: string[];
 }
+
+export type BrandItem = {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+};
+
+export type SubCategoryItem = {
+  id: string;
+  value: string;
+};
+
+export type CategoryItem = {
+  id: string;
+  value: string;
+  subCategories: SubCategoryItem[];
+};

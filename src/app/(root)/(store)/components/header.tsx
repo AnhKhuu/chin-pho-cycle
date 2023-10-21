@@ -13,7 +13,7 @@ import {
 } from '@/components';
 import { BaseUrl, QueryKeys, RouteTypes } from '@/utils/constant';
 import { products } from '@/utils/mockData';
-import { IProductItem } from '@/utils/types';
+import { BrandItem, IProductItem, CategoryItem } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -26,7 +26,7 @@ import { useForm } from 'react-hook-form';
 import { useQueries } from 'react-query';
 import { z } from 'zod';
 
-import { capitalizeFirstLetter } from '../../../../utils/fn';
+import { capitalizeFirstLetter } from '@/utils/fn';
 import {
   CategoryMenu,
   CategoryTitle,
@@ -55,8 +55,6 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
     },
   ]);
 
-  console.log({ brand });
-
   return (
     <header className='sticky left-0 right-0 top-0 z-50'>
       <nav className='relative flex w-full items-center justify-between bg-white px-6'>
@@ -75,6 +73,7 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
             bike: bike.data?.data,
             men: men.data?.data,
             women: women.data?.data,
+            brand: brand.data?.data,
           }}
         />
         <div className='flex items-center'>
@@ -93,22 +92,14 @@ const pages = [
   { label: 'Bike Fit', link: '/bike-fit' },
 ];
 
-type SubCategoryItem = {
-  id: string;
-  value: string;
-};
 
-type CategoryItem = {
-  id: string;
-  value: string;
-  subCategories: SubCategoryItem[];
-};
 
 interface CategoryListProps {
   categoryList: {
     bike: CategoryItem;
     men: CategoryItem;
     women: CategoryItem;
+    brand: BrandItem[];
   };
 }
 
@@ -118,7 +109,7 @@ function CategoryList({ categoryList }: CategoryListProps) {
       <CategoryItem category={categoryList.bike} title={'bike'} />
       <CategoryItem category={categoryList.men} title={'men'} />
       <CategoryItem category={categoryList.women} title={'women'} />
-      <CategoryItem category={categoryList.women} title={'brand'} />
+      <BrandList brandList={categoryList.brand} title={'brand'} />
       {pages.map(({ label, link }, index) => (
         <Link
           href={link}
@@ -179,6 +170,33 @@ function CategoryItem({
       </CategoryMenu>
     </CategoryWrapper>
   );
+}
+
+function BrandList({ title, brandList }: {title: string, brandList: BrandItem[]}) {
+  return (
+    <CategoryWrapper>
+      <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>
+      <CategoryMenu>
+        <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
+          <div>
+            <SubCategoryTitle>Brands</SubCategoryTitle>
+            {brandList && brandList.map(({ id, name }) => (
+              <SubCategoryItem
+                url={`${RouteTypes.SEARCH}?brand=${name}`}
+                key={id}
+              >
+                {capitalizeFirstLetter(name)}
+              </SubCategoryItem>
+            ))}
+          </div>
+        </div>
+        <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
+          <ProductImage product={products[0]} />
+          <ProductImage product={products[0]} />
+        </div>
+      </CategoryMenu>
+    </CategoryWrapper>
+  )
 }
 
 function ProductImage({ product }: { product: IProductItem }) {
