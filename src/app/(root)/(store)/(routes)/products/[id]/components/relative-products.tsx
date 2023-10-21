@@ -1,5 +1,5 @@
 import { ProductCard } from '@/(root)/(store)/components';
-import { IProductItem } from '@/utils/types';
+import { TProductItem } from '@/utils/types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import 'swiper/css';
@@ -9,7 +9,7 @@ import { Swiper as SwiperClass } from 'swiper/types';
 export default function RelativeProducts({
   productList,
 }: {
-  productList: IProductItem[];
+  productList: TProductItem[];
 }) {
   const [swiperRef, setSwiperRef] = useState<SwiperClass>();
 

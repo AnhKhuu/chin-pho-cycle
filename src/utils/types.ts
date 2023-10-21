@@ -1,4 +1,4 @@
-export interface IProductItem {
+export type TProductItem = {
   id: string;
   productName: string;
   imageUrl: string;
@@ -6,22 +6,22 @@ export interface IProductItem {
   colors: string[];
   color: string;
   sizes: string[];
-}
+};
 
-export type BrandItem = {
+export type TBrandItem = {
   id: string;
   name: string;
   description: string;
   imageUrl: string;
 };
 
-export type SubCategoryItem = {
+export type TSubCategoryItem = {
   id: string;
   value: string;
 };
 
-export type CategoryItem = {
+export type TCategoryItem = {
   id: string;
   value: string;
-  subCategories: SubCategoryItem[];
+  subCategories: TSubCategoryItem[];
 };
