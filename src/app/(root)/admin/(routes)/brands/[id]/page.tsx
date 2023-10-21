@@ -2,7 +2,11 @@ import prismadb from '@/utils/prismadb';
 
 import { BrandForm } from './components/brand-form';
 
-const BrandPage = async ({ params }: { params: { id: string } }) => {
+export default async function BrandPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const brand = await prismadb.brand.findUnique({
     where: {
       id: params.id,
@@ -16,6 +20,4 @@ const BrandPage = async ({ params }: { params: { id: string } }) => {
       </div>
     </main>
   );
-};
-
-export default BrandPage;
+}

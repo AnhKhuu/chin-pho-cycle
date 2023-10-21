@@ -1,12 +1,12 @@
-export enum RouteTypes {
+export enum Routes {
   HOME = '/',
   SEARCH = '/search',
   PRODUCT = '/products',
 }
 
-export enum AdminRouteTypes {
-  CATEGORY = '/admin/categories',
+export enum AdminRoutes {
   BRAND = '/admin/brands',
+  CATEGORY = '/admin/categories',
 }
 
 export enum QueryKeys {

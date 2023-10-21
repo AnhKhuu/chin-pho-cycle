@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components';
-import { BaseUrl, QueryKeys } from '@/utils/constant';
+import { PublicApi, QueryKeys } from '@/utils/constant';
 import { categories, images, products } from '@/utils/mockData';
 import { TBrandItem, TProductItem } from '@/utils/types';
 import axios from 'axios';
@@ -20,7 +20,7 @@ export default function Page() {
   const [brand] = useQueries([
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${BaseUrl.BRANDS}`),
+      queryFn: async () => await axios.get(`${PublicApi.BRANDS}`),
     },
   ]);
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { AdminRouteTypes, PrivateApi, QueryKeys } from '@/utils/constant';
+import { AdminRoutes, PrivateApi, QueryKeys } from '@/utils/constant';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -8,11 +8,11 @@ import { useMutation, useQuery } from 'react-query';
 
 import CategoryForm from './components/category-form';
 
-type CategoryData = {
+type TCategoryData = {
   value: string;
 };
 
-type SubCategory = {
+type TSubCategory = {
   value: string;
 };
 
@@ -25,11 +25,12 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 
   const createCategory = useMutation(
-    async (data: CategoryData) => await axios.post(PrivateApi.CATEGORIES, data),
+    async (data: TCategoryData) =>
+      await axios.post(PrivateApi.CATEGORIES, data),
     {
       onSuccess: () => {
         toast.success('Category created!');
-        router.push(AdminRouteTypes.CATEGORY);
+        router.push(AdminRoutes.CATEGORY);
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -38,12 +39,12 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 
   const updateCategory = useMutation(
-    async (data: CategoryData) =>
+    async (data: TCategoryData) =>
       await axios.patch(`${PrivateApi.CATEGORIES}/${params.id}`, data),
     {
       onSuccess: () => {
         toast.success('Category updated!');
-        router.push(AdminRouteTypes.CATEGORY);
+        router.push(AdminRoutes.CATEGORY);
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -56,18 +57,18 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         toast.success('Category deleted!');
-        router.push(AdminRouteTypes.CATEGORY);
+        router.push(AdminRoutes.CATEGORY);
       },
       onError: () => {
         toast.error(
-          'Make sure you removed all sub categories of this category!'
+          'Make sure you removed all sub-categories of this category!'
         );
       },
     }
   );
 
   const createSubCategory = useMutation(
-    async (data: SubCategory) =>
+    async (data: TSubCategory) =>
       await axios.post(PrivateApi.SUB_CATEGORIES, {
         ...data,
         categoryId: params.id,
@@ -75,7 +76,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         refetch();
-        toast.success('Sub category created!');
+        toast.success('Sub-category created!');
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -84,7 +85,7 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 
   const updateSubCategory = useMutation(
-    async (options: { subCategoryId: string; data: SubCategory }) =>
+    async (options: { subCategoryId: string; data: TSubCategory }) =>
       await axios.patch(
         `${PrivateApi.SUB_CATEGORIES}/${options.subCategoryId}`,
         options.data
@@ -92,7 +93,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         refetch();
-        toast.success('Sub category updated!');
+        toast.success('Sub-category updated!');
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -106,7 +107,7 @@ export default function Page({ params }: { params: { id: string } }) {
     {
       onSuccess: () => {
         refetch();
-        toast.success('Sub category deleted!');
+        toast.success('Sub-category deleted!');
       },
       onError: () => {
         toast.error('Something went wrong');
@@ -114,11 +115,11 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   );
 
-  const handleCreateCategory = (data: CategoryData) => {
+  const handleCreateCategory = (data: TCategoryData) => {
     createCategory.mutate(data);
   };
 
-  const handleUpdateCategory = (data: CategoryData) => {
+  const handleUpdateCategory = (data: TCategoryData) => {
     updateCategory.mutate(data);
   };
 
@@ -126,13 +127,13 @@ export default function Page({ params }: { params: { id: string } }) {
     deleteCategory.mutate();
   };
 
-  const handleCreateSubCategory = (data: SubCategory) => {
+  const handleCreateSubCategory = (data: TSubCategory) => {
     createSubCategory.mutate(data);
   };
 
   const handleUpdateSubCategory = (options: {
     subCategoryId: string;
-    data: SubCategory;
+    data: TSubCategory;
   }) => {
     updateSubCategory.mutate(options);
   };

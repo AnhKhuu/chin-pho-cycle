@@ -15,6 +15,7 @@ import {
   Separator,
   Textarea,
 } from '@/components';
+import { AdminRoutes, PrivateApi } from '@/utils/constant';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Brand } from '@prisma/client';
 import axios from 'axios';
@@ -33,13 +34,13 @@ const formSchema = z.object({
   imageUrl: z.string(),
 });
 
-type BrandFormValues = z.infer<typeof formSchema>;
+type TBrandFormValues = z.infer<typeof formSchema>;
 
-interface BrandFormProps {
+interface IBrandFormProps {
   initialData: Brand | null;
 }
 
-export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
+export function BrandForm({ initialData }: IBrandFormProps) {
   const params = useParams();
   const router = useRouter();
 
@@ -53,7 +54,7 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
   const toastMessage = initialData ? 'Brand updated!' : 'Brand created!';
   const action = initialData ? 'Save Changes' : 'Create';
 
-  const form = useForm<BrandFormValues>({
+  const form = useForm<TBrandFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: '',
@@ -62,16 +63,16 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
     },
   });
 
-  const onSubmit = async (data: BrandFormValues) => {
+  const onSubmit = async (data: TBrandFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/brands/${params.id}`, data);
+        await axios.patch(`${PrivateApi.BRANDS}/${params.id}`, data);
       } else {
-        await axios.post('/api/brands', data);
+        await axios.post(`${PrivateApi.BRANDS}`, data);
       }
       router.refresh();
-      router.push('/admin/brands');
+      router.push(`${AdminRoutes.BRAND}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error('Something went wrong');
@@ -83,9 +84,9 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/brands/${params.id}`);
+      await axios.delete(`${PrivateApi.BRANDS}/${params.id}`);
       router.refresh();
-      router.push('/admin/brands');
+      router.push(`${AdminRoutes.BRAND}`);
       toast.success('Brand deleted');
     } catch (error) {
       toast.error('Make sure you removed all products of this brand!');
@@ -185,4 +186,4 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
       </Form>
     </>
   );
-};
+}

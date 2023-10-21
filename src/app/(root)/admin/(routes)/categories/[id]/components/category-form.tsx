@@ -28,40 +28,41 @@ const formSchema = z.object({
   value: z.string().nonempty(),
 });
 
-type FormValue = z.infer<typeof formSchema>;
+type TFormValue = z.infer<typeof formSchema>;
 
-type SubCategory = {
+type TCategory = {
+  id: string;
+  value: string;
+  subCategories: TSubCategory[];
+};
+
+type TSubCategory = {
   id: string;
   value: string;
 };
 
-type Category = {
-  id: string;
-  value: string;
-  subCategories: SubCategory[];
-};
-
-type ConfirmModal = {
-  isDeleteSubcategory: boolean;
+type TConfirmModal = {
+  isDeleteSubCategory: boolean;
   subCategoryId?: string;
 };
 
-export type SubCategoryColumn = SubCategory & {
-  showEditForm: Dispatch<SetStateAction<SubCategory | undefined>>;
+export type TSubCategoryColumn = TSubCategory & {
+  showEditForm: Dispatch<SetStateAction<TSubCategory | undefined>>;
 };
 
 interface ICategoryFormProps {
-  initialData: Category | null;
-  createCategory: (data: FormValue) => void;
-  updateCategory: (data: FormValue) => void;
+  initialData: TCategory | null;
+  createCategory: (data: TFormValue) => void;
+  updateCategory: (data: TFormValue) => void;
   deleteCategory: () => void;
-  createSubCategory: (data: FormValue) => void;
+  createSubCategory: (data: TFormValue) => void;
   updateSubCategory: (options: {
     subCategoryId: string;
-    data: FormValue;
+    data: TFormValue;
   }) => void;
   deleteSubCategory: (subCategoryId: string) => void;
 }
+
 export default function CategoryForm({
   initialData,
   createCategory,
@@ -71,8 +72,8 @@ export default function CategoryForm({
   updateSubCategory,
   deleteSubCategory,
 }: ICategoryFormProps) {
-  const [confirmModal, setConfirmModal] = useState<ConfirmModal | null>(null);
-  const [editForm, setEditForm] = useState<SubCategory | undefined>(undefined);
+  const [confirmModal, setConfirmModal] = useState<TConfirmModal | null>(null);
+  const [editForm, setEditForm] = useState<TSubCategory | undefined>(undefined);
 
   const title = initialData ? 'Edit Category' : 'Create Category';
   const description = initialData
@@ -80,14 +81,14 @@ export default function CategoryForm({
     : 'Add a new category';
   const action = initialData ? 'Save Changes' : 'Create';
 
-  const form = useForm<FormValue>({
+  const form = useForm<TFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       value: '',
     },
   });
 
-  const onSubmit = async (data: FormValue) => {
+  const onSubmit = async (data: TFormValue) => {
     if (initialData) {
       updateCategory(data);
     } else {
@@ -108,18 +109,18 @@ export default function CategoryForm({
       />
       <Modal
         title={
-          editForm?.value !== '' ? 'Edit Sub Category' : 'Create Sub Category'
+          editForm?.value !== '' ? 'Edit Sub-Category' : 'Create Sub-Category'
         }
         description={
           editForm?.value !== ''
-            ? 'Make changes to this sub category'
-            : 'Add a new sub category'
+            ? 'Make changes to this sub-category'
+            : 'Add a new sub-category'
         }
         isOpen={editForm !== undefined}
         onClose={() => setEditForm(undefined)}
       >
         <SubCategoryForm
-          initialData={editForm as SubCategory}
+          initialData={editForm as TSubCategory}
           updateSubCategory={updateSubCategory}
           createSubCategory={createSubCategory}
           resetEditForm={() => setEditForm(undefined)}
@@ -130,7 +131,7 @@ export default function CategoryForm({
         {initialData && (
           <Button
             variant='destructive'
-            onClick={() => setConfirmModal({ isDeleteSubcategory: false })}
+            onClick={() => setConfirmModal({ isDeleteSubCategory: false })}
           >
             <Trash className='mr-2 h-4 w-4' />
             Delete Category
@@ -159,7 +160,7 @@ export default function CategoryForm({
             <>
               <p className='mb-3 flex w-full items-center'>
                 <FormLabel>
-                  Sub Categories ({initialData.subCategories.length})
+                  Sub-Categories ({initialData.subCategories.length})
                 </FormLabel>
                 <Button
                   className='ml-5'
@@ -177,12 +178,12 @@ export default function CategoryForm({
               </p>
               <DataTable
                 columns={Columns}
-                data={initialData?.subCategories.map((item) => ({
+                data={initialData?.subCategories?.map((item) => ({
                   ...item,
                   showEditForm: () => setEditForm(item),
                   showConfirmModal: () =>
                     setConfirmModal({
-                      isDeleteSubcategory: true,
+                      isDeleteSubCategory: true,
                       subCategoryId: item.id,
                     }),
                 }))}

@@ -6,13 +6,13 @@ import { ArrowUpDown, MoveDown, MoveUp } from 'lucide-react';
 
 import { CellAction } from './cell-action';
 
-export type BrandColumn = {
+export type TBrandColumn = {
   id: string;
   name: string;
   numberOfProducts: number;
 };
 
-export const columns: ColumnDef<BrandColumn>[] = [
+export const columns: ColumnDef<TBrandColumn>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

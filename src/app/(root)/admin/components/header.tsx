@@ -1,22 +1,22 @@
-import { AdminRouteTypes } from '@/utils/constant';
+import { AdminRoutes } from '@/utils/constant';
 import { cn } from '@/utils/fn';
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export const Header = () => {
+export function Header() {
   const pathname = usePathname();
 
   const routes = [
     {
-      href: AdminRouteTypes.BRAND,
+      href: AdminRoutes.BRAND,
       label: 'Brands',
-      active: pathname.startsWith(AdminRouteTypes.BRAND),
+      active: pathname.startsWith(AdminRoutes.BRAND),
     },
     {
-      href: AdminRouteTypes.CATEGORY,
+      href: AdminRoutes.CATEGORY,
       label: 'Categories',
-      active: pathname.startsWith(AdminRouteTypes.CATEGORY),
+      active: pathname.startsWith(AdminRoutes.CATEGORY),
     },
   ];
 
@@ -44,4 +44,4 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+}

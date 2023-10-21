@@ -1,9 +1,9 @@
 import prismadb from '@/utils/prismadb';
 
 import { BrandClient } from './components/client';
-import { BrandColumn } from './components/columns';
+import { TBrandColumn } from './components/columns';
 
-const BrandsPage = async () => {
+export default async function BrandsPage() {
   const brands = await prismadb.brand.findMany({
     include: {
       products: {
@@ -17,7 +17,7 @@ const BrandsPage = async () => {
     },
   });
 
-  const formattedBrands: BrandColumn[] = brands.map((item) => ({
+  const formattedBrands: TBrandColumn[] = brands.map((item) => ({
     id: item.id,
     name: item.name,
     numberOfProducts: item.products.length,
@@ -30,6 +30,4 @@ const BrandsPage = async () => {
       </div>
     </main>
   );
-};
-
-export default BrandsPage;
+}

@@ -11,7 +11,7 @@ import {
   FormItem,
   Input,
 } from '@/components';
-import { PublicApi, QueryKeys, RouteTypes } from '@/utils/constant';
+import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
 import { products } from '@/utils/mockData';
 import { TBrandItem, TCategoryItem, TProductItem } from '@/utils/types';
@@ -35,7 +35,7 @@ import {
   SubCategoryTitle,
 } from './category';
 
-export default function Header({ }: React.HtmlHTMLAttributes<HTMLElement>) {
+export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   const [bike, men, women, brand] = useQueries([
     {
       queryKey: [QueryKeys.CATEGORY, 'bike'],
@@ -47,7 +47,8 @@ export default function Header({ }: React.HtmlHTMLAttributes<HTMLElement>) {
     },
     {
       queryKey: [QueryKeys.CATEGORY, 'women'],
-      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=women`),
+      queryFn: async () =>
+        await axios.get(`${PublicApi.CATEGORIES}?name=women`),
     },
     {
       queryKey: [QueryKeys.BRANDS],
@@ -135,9 +136,7 @@ function CategoryItem({
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
             <SubCategoryTitle>Featured</SubCategoryTitle>
-            <SubCategoryItem
-              url={`${RouteTypes.SEARCH}?category=${category?.id}`}
-            >
+            <SubCategoryItem url={`${Routes.SEARCH}?category=${category?.id}`}>
               New Arrivals
             </SubCategoryItem>
           </div>
@@ -145,7 +144,7 @@ function CategoryItem({
             <SubCategoryTitle>Products</SubCategoryTitle>
             {category?.subCategories?.map(({ id, value }) => (
               <SubCategoryItem
-                url={`${RouteTypes.SEARCH}?category=${title}&subCategory=${id}`}
+                url={`${Routes.SEARCH}?category=${title}&subCategory=${id}`}
                 key={id}
               >
                 {capitalizeFirstLetter(value)}
@@ -155,7 +154,7 @@ function CategoryItem({
           <div>
             <SubCategoryTitle>Collections</SubCategoryTitle>
             <SubCategoryItem
-              url={`${RouteTypes.SEARCH}?category=${title}&collection=MAAP`}
+              url={`${Routes.SEARCH}?category=${title}&collection=MAAP`}
             >
               New Arrivals
             </SubCategoryItem>
@@ -185,10 +184,7 @@ function Brands({
           <div>
             <SubCategoryTitle>Brands</SubCategoryTitle>
             {brandList?.map(({ id, name }) => (
-              <SubCategoryItem
-                url={`${RouteTypes.SEARCH}?brand=${name}`}
-                key={id}
-              >
+              <SubCategoryItem url={`${Routes.SEARCH}?brand=${name}`} key={id}>
                 {capitalizeFirstLetter(name)}
               </SubCategoryItem>
             ))}
@@ -238,7 +234,7 @@ function SearchBar() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    push(`${RouteTypes.SEARCH}?name=${values.productName}`);
+    push(`${Routes.SEARCH}?name=${values.productName}`);
   };
   return (
     <Form {...form}>

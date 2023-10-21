@@ -10,21 +10,21 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
 
-type SubCategory = {
+type TSubCategory = {
   id: string;
   value: string;
 };
 
-export type SubCategoryColumn = SubCategory & {
+export type TSubCategoryColumn = TSubCategory & {
   showEditForm: () => void;
   showConfirmModal: () => void;
 };
 
-export const Columns: ColumnDef<SubCategoryColumn>[] = [
+export const Columns: ColumnDef<TSubCategoryColumn>[] = [
   {
-    id: 'order',
+    id: 'no',
     header: () => {
-      return <div>Order</div>;
+      return <div>No.</div>;
     },
     cell: ({ row }) => <p>{row.index + 1}</p>,
   },
@@ -40,7 +40,7 @@ export const Columns: ColumnDef<SubCategoryColumn>[] = [
               column.toggleSorting(column.getIsSorted() === 'asc');
             }}
           >
-            Sub Categories
+            Value
             {column.getIsSorted() === 'asc' ? (
               <MoveDown className='ml-2 h-4 w-4' />
             ) : (
@@ -74,7 +74,7 @@ function CellAction({
   showEditForm,
   showConfirmModal,
 }: {
-  data: SubCategory;
+  data: TSubCategory;
   showEditForm: () => void;
   showConfirmModal: () => void;
 }) {
@@ -90,13 +90,11 @@ function CellAction({
           className='cursor-pointer'
           onClick={() => navigator.clipboard.writeText(data.id)}
         >
-          Copy sub category ID
+          Copy ID
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => showEditForm()}>
-          Edit sub category
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => showEditForm()}>Edit</DropdownMenuItem>
         <DropdownMenuItem onClick={() => showConfirmModal()}>
-          Delete sub category
+          Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
