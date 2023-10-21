@@ -35,6 +35,7 @@ model Product {
   colors  String[] // available colors
   genders Gender[] // available genders
   items   ProductItem[] // all variants
+  collections Collections_Products[]
 
   @@index([brandId])
   @@index([categoryId])
@@ -73,22 +74,22 @@ model ProductImage {
 }
 
 model Category {
-  id    String @id @default(uuid())
-  value String @unique
+  id            String @id @default(uuid())
+  value         String @unique
 
-  products Product[]
+  products      Product[]
   subCategories SubCategory[]
 }
 
 model SubCategory {
-  id    String @id @default(uuid())
-  value String
+  id          String @id @default(uuid())
+  value       String
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  products    Product[]
+
   @@index([categoryId])
-
-  products Product[]
 }
 
 model Brand {
@@ -98,6 +99,26 @@ model Brand {
   imageUrl    String
 
   products Product[]
+}
+
+model Collection {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  imageUrl    String
+  products    Collections_Products[]
+  
+}
+
+model Collections_Products {
+  productSku    String
+  product       Product    @relation(fields: [productSku], references: [sku])
+  collectionId  String
+  collection    Collection @relation(fields: [collectionId], references: [id])
+  
+  @@index([productSku])
+  @@index([collectionId])
+  @@id([productSku, collectionId])
 }
 
 enum Size {
