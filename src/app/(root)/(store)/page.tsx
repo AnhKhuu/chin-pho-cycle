@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components';
-import { PublicApi, QueryKeys } from '@/utils/constant';
+import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
 import { categories, images, products } from '@/utils/mockData';
 import { TBrandItem, TProductItem } from '@/utils/types';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import 'swiper/css';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { capitalizeFirstLetter } from '../../../utils/fn';
 import { ProductCard } from './components';
 
 export default function Page() {
@@ -99,7 +100,10 @@ function BrandGallery({ brandList }: { brandList: TBrandItem[] }) {
 
 function BrandCard({ brand }: { brand: TBrandItem }) {
   return (
-    <Link href={'/'} className='group relative block h-96 w-full'>
+    <Link
+      href={`${Routes.SEARCH}?brand=${brand.name}`}
+      className='group relative block h-96 w-full'
+    >
       <Image
         src={brand.imageUrl}
         alt={brand.name}
@@ -109,8 +113,9 @@ function BrandCard({ brand }: { brand: TBrandItem }) {
           objectPosition: 'center',
         }}
       />
+      <div className='h-full w-full transition duration-300 ease-in-out group-hover:bg-slate-300 group-hover:opacity-30'></div>
       <p className='absolute bottom-6 left-6 text-xl font-bold text-white underline opacity-0 transition duration-300 ease-in-out group-hover:opacity-100'>
-        {brand.name}
+        {capitalizeFirstLetter(brand.name)}
       </p>
     </Link>
   );
