@@ -2,8 +2,8 @@
 
 import { Button } from '@/components';
 import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
-import { categories, images, products } from '@/utils/mockData';
-import { TBrandItem, TProductItem } from '@/utils/types';
+import { categories, products } from '@/utils/mockData';
+import { TBrandItem, TCollectionItem, TProductItem } from '@/utils/types';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,15 +18,19 @@ import { capitalizeFirstLetter } from '../../../utils/fn';
 import { ProductCard } from './components';
 
 export default function Page() {
-  const [brand] = useQueries([
+  const [brand, collection] = useQueries([
     {
       queryKey: [QueryKeys.BRANDS],
       queryFn: async () => await axios.get(`${PublicApi.BRANDS}`),
     },
+    {
+      queryKey: [QueryKeys.COLLECTIONS],
+      queryFn: async () => await axios.get(`${PublicApi.COLLECTIONS}`),
+    },
   ]);
   return (
     <>
-      <Banner imageList={images} />
+      <Banner collectionList={collection.data?.data} />
       <LatestProducts productList={products} />
       <BrandGallery brandList={brand.data?.data} />
       <CategoryGallery categoryList={categories} />
@@ -35,35 +39,30 @@ export default function Page() {
   );
 }
 
-interface ImageItem {
-  title: string;
-  description: string;
-  imageUrl: string;
-  pageUrl: string;
-  link: string;
-}
-
-function Banner({ imageList }: { imageList: ImageItem[] }) {
+function Banner({ collectionList }: { collectionList: TCollectionItem[] }) {
   return (
     <Swiper pagination={true} modules={[Pagination]}>
-      {imageList.map((item, index) => (
-        <SwiperSlide key={index}>
-          <Link href={item.pageUrl} className='relative block h-screen w-full'>
+      {collectionList?.map((item) => (
+        <SwiperSlide key={item.id}>
+          <Link
+            href={`${Routes.SEARCH}?collection=${item.id}`}
+            className='relative block h-screen w-full'
+          >
             <Image
               src={item.imageUrl}
-              alt={item.title}
+              alt={item.name}
               fill
               sizes='100vw'
               style={{ objectFit: 'cover' }}
             />
           </Link>
           <div className='absolute bottom-6 left-6'>
-            <h1 className='mb-3 text-3xl font-bold text-white'>{item.title}</h1>
+            <h1 className='mb-3 text-3xl font-bold text-white'>{item.name}</h1>
             <p className='mb-6 max-w-screen-md text-xl text-white'>
               {item.description}
             </p>
-            <p className='font-light text-white underline'>
-              {item.link} &gt;&gt;
+            <p className='cursor-pointer font-light text-white underline'>
+              Explore collection &gt;&gt;
             </p>
           </div>
         </SwiperSlide>
@@ -101,7 +100,7 @@ function BrandGallery({ brandList }: { brandList: TBrandItem[] }) {
 function BrandCard({ brand }: { brand: TBrandItem }) {
   return (
     <Link
-      href={`${Routes.SEARCH}?brand=${brand.name}`}
+      href={`${Routes.SEARCH}?brand=${brand.id}`}
       className='group relative block h-96 w-full'
     >
       <Image

@@ -18,6 +18,11 @@ export function Header() {
       label: 'Categories',
       active: pathname.startsWith(AdminRoutes.CATEGORIES),
     },
+    {
+      href: AdminRoutes.COLLECTIONS,
+      label: 'Collections',
+      active: pathname.startsWith(AdminRoutes.COLLECTIONS),
+    },
   ];
 
   return (

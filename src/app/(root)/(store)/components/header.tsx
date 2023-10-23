@@ -14,7 +14,12 @@ import {
 import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
 import { products } from '@/utils/mockData';
-import { TBrandItem, TCategoryItem, TProductItem } from '@/utils/types';
+import {
+  TBrandItem,
+  TCategoryItem,
+  TCollectionItem,
+  TProductItem,
+} from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -36,7 +41,7 @@ import {
 } from './category';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
-  const [bike, men, women, brand] = useQueries([
+  const [bike, men, women, brand, collection] = useQueries([
     {
       queryKey: [QueryKeys.CATEGORY, 'bike'],
       queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=bike`),
@@ -53,6 +58,10 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
     {
       queryKey: [QueryKeys.BRANDS],
       queryFn: async () => await axios.get(`${PublicApi.BRANDS}`),
+    },
+    {
+      queryKey: [QueryKeys.COLLECTIONS],
+      queryFn: async () => await axios.get(`${PublicApi.COLLECTIONS}`),
     },
   ]);
 
@@ -76,6 +85,7 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
             women: women.data?.data,
             brand: brand.data?.data,
           }}
+          collection={collection.data?.data}
         />
         <div className='flex items-center'>
           <SearchBar />
@@ -100,14 +110,27 @@ interface ICategoriesProps {
     women: TCategoryItem;
     brand: TBrandItem[];
   };
+  collection: TCollectionItem[];
 }
 
-function Categories({ categoryList }: ICategoriesProps) {
+function Categories({ categoryList, collection }: ICategoriesProps) {
   return (
     <div className='flex self-stretch'>
-      <CategoryItem category={categoryList.bike} title={'bike'} />
-      <CategoryItem category={categoryList.men} title={'men'} />
-      <CategoryItem category={categoryList.women} title={'women'} />
+      <CategoryItem
+        collection={collection}
+        category={categoryList.bike}
+        title={'bike'}
+      />
+      <CategoryItem
+        collection={collection}
+        category={categoryList.men}
+        title={'men'}
+      />
+      <CategoryItem
+        collection={collection}
+        category={categoryList.women}
+        title={'women'}
+      />
       <Brands brandList={categoryList.brand} title={'brand'} />
       {pages.map(({ label, link }, index) => (
         <Link
@@ -125,9 +148,11 @@ function Categories({ categoryList }: ICategoriesProps) {
 function CategoryItem({
   title,
   category,
+  collection,
 }: {
   title: string;
   category: TCategoryItem;
+  collection: TCollectionItem[];
 }) {
   return (
     <CategoryWrapper>
@@ -153,11 +178,14 @@ function CategoryItem({
           </div>
           <div>
             <SubCategoryTitle>Collections</SubCategoryTitle>
-            <SubCategoryItem
-              url={`${Routes.SEARCH}?category=${title}&collection=MAAP`}
-            >
-              New Arrivals
-            </SubCategoryItem>
+            {collection?.map((item) => (
+              <SubCategoryItem
+                url={`${Routes.SEARCH}?collection=${item.id}`}
+                key={item.id}
+              >
+                {item.name}
+              </SubCategoryItem>
+            ))}
           </div>
         </div>
         <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
@@ -184,7 +212,7 @@ function Brands({
           <div>
             <SubCategoryTitle>Brands</SubCategoryTitle>
             {brandList?.map(({ id, name }) => (
-              <SubCategoryItem url={`${Routes.SEARCH}?brand=${name}`} key={id}>
+              <SubCategoryItem url={`${Routes.SEARCH}?brand=${id}`} key={id}>
                 {capitalizeFirstLetter(name)}
               </SubCategoryItem>
             ))}
