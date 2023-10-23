@@ -21,11 +21,7 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(res);
     } else {
-      const res = await prismadb.category.findMany({
-        orderBy: {
-          value: 'asc',
-        },
-      });
+      const res = await prismadb.category.findMany();
       return NextResponse.json(res);
     }
   } catch (error) {

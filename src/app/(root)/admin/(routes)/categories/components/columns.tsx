@@ -9,7 +9,7 @@ import {
 } from '@/components';
 import { AdminRoutes } from '@/utils/constant';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
+import { ArrowDownAZ, ArrowUpAZ, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -36,10 +36,10 @@ export const columns: ColumnDef<TCategoryColumn>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Value
-            {column.getIsSorted() === 'asc' ? (
-              <MoveDown className='ml-2 h-4 w-4' />
+            {column.getIsSorted() !== 'asc' ? (
+              <ArrowUpAZ className='ml-2 h-4 w-4' />
             ) : (
-              <MoveUp className='ml-2 h-4 w-4' />
+              <ArrowDownAZ className='ml-2 h-4 w-4' />
             )}
           </Button>
         </div>

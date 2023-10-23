@@ -38,7 +38,13 @@ export default function Page() {
           </Link>
         </div>
         <Separator />
-        {data && <DataTable columns={columns} data={data?.data} />}
+        {data && (
+          <DataTable
+            columns={columns}
+            data={data?.data}
+            sortingState={[{ id: 'value', desc: false }]}
+          />
+        )}
       </div>
     </main>
   );
