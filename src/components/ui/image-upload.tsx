@@ -3,12 +3,13 @@
 import { AlertModal, Button } from '@/components';
 import { PrivateApi } from '@/utils/constant';
 import { cn, getPublicIdFromUrl } from '@/utils/fn';
+import { UploadButton } from '@/utils/uploadthing';
 import axios from 'axios';
-import { ImagePlus, Trash, ZoomIn } from 'lucide-react';
-import { CldUploadWidget } from 'next-cloudinary';
+import { Trash, ZoomIn } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -17,27 +18,27 @@ interface ImageUploadProps {
   value: string[];
 }
 
+interface IUploadedImage {
+  key: string;
+  name: string;
+  size: number;
+  url: string;
+}
+
 const ImageUpload: React.FC<ImageUploadProps> = ({
-  disabled,
   onChange,
   onRemove,
   value,
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const onUpload = (result: any) => {
-    onChange(result.info.secure_url);
-  };
+  const [uploadedImages, setUploadedImages] = useState<IUploadedImage[]>([]);
 
   const onDelete = async (url: string) => {
-    // Remove URL from object
+    // Remove URL from form
     onRemove(url);
+
+    // need fileKey or extract from URL using regex
+    // await utapi.deleteFiles()
 
     // Clean up on Cloudinary
     const publicId = getPublicIdFromUrl(url);
@@ -45,10 +46,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       await axios.post(`${PrivateApi.DELETE_CLOUDINARY_IMAGE}?id=${publicId}`);
     }
   };
-
-  if (!isMounted) {
-    return null;
-  }
 
   return (
     <div>
@@ -99,7 +96,28 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
       </div>
-      <CldUploadWidget onUpload={onUpload} uploadPreset='chin_pho_cycle'>
+      <UploadButton
+        endpoint='imageUploader'
+        onClientUploadComplete={(res) => {
+          console.log('Files: ', res);
+          if (res) {
+            setUploadedImages(
+              [...res].map((object) => {
+                return {
+                  ...object,
+                };
+              })
+            );
+            onChange(res[0].url);
+            toast.success('Image uploaded!');
+            console.log(uploadedImages);
+          }
+        }}
+        onUploadError={(error: Error) => {
+          toast.error(`Upload failed! ${error.message}`);
+        }}
+      />
+      {/* <CldUploadWidget onUpload={onUpload} uploadPreset='chin_pho_cycle'>
         {({ open }) => {
           const onClick = () => {
             open();
@@ -117,7 +135,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             </Button>
           );
         }}
-      </CldUploadWidget>
+      </CldUploadWidget> */}
     </div>
   );
 };

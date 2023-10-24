@@ -17,6 +17,9 @@ const nextConfig = {
       {
         hostname: 'file.hstatic.net',
       },
+      {
+        hostname: 'utfs.io',
+      },
     ],
   },
 };
