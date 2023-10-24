@@ -11,14 +11,13 @@ import { AdminRoutes } from '@/utils/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowDownAZ, ArrowUpAZ, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
 
-export type TCategoryColumn = {
+type TCollectionColumn = {
   id: string;
-  value: string;
+  name: string;
 };
 
-export const columns: ColumnDef<TCategoryColumn>[] = [
+export const columns: ColumnDef<TCollectionColumn>[] = [
   {
     id: 'no',
     header: () => {
@@ -27,26 +26,24 @@ export const columns: ColumnDef<TCategoryColumn>[] = [
     cell: ({ row }) => <p>{row.index + 1}</p>,
   },
   {
-    accessorKey: 'value',
-    header: ({ column }) => {
-      return (
-        <div className='flex justify-start'>
-          <Button
-            variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Value
-            {column.getIsSorted() !== 'asc' ? (
-              <ArrowUpAZ className='ml-2 h-4 w-4' />
-            ) : (
-              <ArrowDownAZ className='ml-2 h-4 w-4' />
-            )}
-          </Button>
-        </div>
-      );
-    },
+    accessorKey: 'name',
+    header: ({ column }) => (
+      <div className='flex justify-start'>
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          {column.getIsSorted() !== 'asc' ? (
+            <ArrowUpAZ className='ml-2 h-4 w-4' />
+          ) : (
+            <ArrowDownAZ className='ml-2 h-4 w-4' />
+          )}
+        </Button>
+      </div>
+    ),
     cell: ({ row }) => {
-      return <div className='px-4'>{row.original.value}</div>;
+      return <div className='px-4'>{row.original.name}</div>;
     },
   },
   {
@@ -69,15 +66,12 @@ function CellAction({ id }: { id: string }) {
       <DropdownMenuContent align='end'>
         <DropdownMenuItem
           className='cursor-pointer'
-          onClick={() => {
-            toast.success('Category ID copied to clipboard!');
-            navigator.clipboard.writeText(id);
-          }}
+          onClick={() => navigator.clipboard.writeText(id)}
         >
           Copy ID
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={`${AdminRoutes.CATEGORIES}/${id}`}>Edit</Link>
+          <Link href={`${AdminRoutes.COLLECTIONS}/${id}`}>Edit</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

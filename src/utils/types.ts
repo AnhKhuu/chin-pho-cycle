@@ -15,6 +15,13 @@ export type TBrandItem = {
   imageUrl: string;
 };
 
+export type TCollectionItem = {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+};
+
 export type TCategoryItem = {
   id: string;
   value: string;

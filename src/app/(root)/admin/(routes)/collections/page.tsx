@@ -12,10 +12,10 @@ import { useQuery } from 'react-query';
 import { columns } from './components/columns';
 
 export default function Page() {
-  const { data, error } = useQuery(QueryKeys.CATEGORIES, getCategories);
+  const { data, error } = useQuery(QueryKeys.COLLECTIONS, getCollections);
 
-  async function getCategories() {
-    return await axios.get(PublicApi.CATEGORIES);
+  async function getCollections() {
+    return await axios.get(PublicApi.COLLECTIONS);
   }
 
   if (error) {
@@ -27,10 +27,10 @@ export default function Page() {
       <div className='flex-1 space-y-4 p-8 pt-6'>
         <div className='flex items-center justify-between'>
           <Heading
-            title={`Categories ${data ? `(${data.data.length})` : ''}`}
-            description='Manage categories for your store'
+            title={`Collections ${data ? `(${data.data.length})` : ''}`}
+            description='Manage collections for your store'
           />
-          <Link href={`${AdminRoutes.CATEGORIES}/create`}>
+          <Link href={`${AdminRoutes.COLLECTIONS}/create`}>
             <Button>
               <Plus className='mr-2 h-4 w-4' />
               Add New
@@ -42,7 +42,7 @@ export default function Page() {
           <DataTable
             columns={columns}
             data={data?.data}
-            sortingState={[{ id: 'value', desc: false }]}
+            sortingState={[{ id: 'name', desc: false }]}
           />
         )}
       </div>

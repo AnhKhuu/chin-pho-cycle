@@ -187,6 +187,7 @@ export default function CategoryForm({
                       subCategoryId: item.id,
                     }),
                 }))}
+                sortingState={[{ id: 'value', desc: false }]}
                 isSearchEnabled={false}
               />
             </>

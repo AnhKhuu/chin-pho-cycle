@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components';
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, MoveDown, MoveUp } from 'lucide-react';
+import { ArrowDownAZ, ArrowUpAZ, MoreHorizontal } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type TSubCategory = {
@@ -42,10 +42,10 @@ export const columns: ColumnDef<TSubCategoryColumn>[] = [
             }}
           >
             Value
-            {column.getIsSorted() === 'asc' ? (
-              <MoveDown className='ml-2 h-4 w-4' />
+            {column.getIsSorted() !== 'asc' ? (
+              <ArrowUpAZ className='ml-2 h-4 w-4' />
             ) : (
-              <MoveUp className='ml-2 h-4 w-4' />
+              <ArrowDownAZ className='ml-2 h-4 w-4' />
             )}
           </Button>
         </div>
