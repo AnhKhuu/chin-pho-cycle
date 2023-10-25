@@ -26,7 +26,7 @@ export enum PrivateApi {
   CATEGORIES = '/api/categories',
   COLLECTIONS = '/api/collections',
   SUB_CATEGORIES = '/api/sub-categories',
-  DELETE_CLOUDINARY_IMAGE = '/api/cloudinary',
+  DELETE_UPLOADTHING_IMAGE = '/api/uploadthing/delete',
 }
 
 export enum PublicApi {

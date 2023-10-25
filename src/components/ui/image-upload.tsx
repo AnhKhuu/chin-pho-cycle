@@ -2,7 +2,7 @@
 
 import { AlertModal, Button } from '@/components';
 import { PrivateApi } from '@/utils/constant';
-import { cn, getPublicIdFromUrl } from '@/utils/fn';
+import { cn } from '@/utils/fn';
 import { UploadButton } from '@/utils/uploadthing';
 import axios from 'axios';
 import { Trash, ZoomIn } from 'lucide-react';
@@ -12,17 +12,9 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface ImageUploadProps {
-  disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
-}
-
-interface IUploadedImage {
-  key: string;
-  name: string;
-  size: number;
-  url: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -31,19 +23,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   value,
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState<IUploadedImage[]>([]);
 
   const onDelete = async (url: string) => {
-    // Remove URL from form
     onRemove(url);
 
-    // need fileKey or extract from URL using regex
-    // await utapi.deleteFiles()
-
-    // Clean up on Cloudinary
-    const publicId = getPublicIdFromUrl(url);
-    if (publicId) {
-      await axios.post(`${PrivateApi.DELETE_CLOUDINARY_IMAGE}?id=${publicId}`);
+    const key = url.split('https://utfs.io/f/')[1];
+    const res = await axios.post(
+      `${PrivateApi.DELETE_UPLOADTHING_IMAGE}?key=${key}`
+    );
+    if (res.status === 200) {
+      toast.success('Image deleted!');
+    } else {
+      toast.error('Something went wrong');
     }
   };
 
@@ -84,7 +75,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 />
               </div>
             </div>
-
             <Image
               fill
               className='object-cover'
@@ -97,45 +87,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         ))}
       </div>
       <UploadButton
-        endpoint='imageUploader'
+        className='w-max ut-button:bg-black ut-button:ring-0 ut-button:after:bg-gray-600 ut-button:ut-uploading:bg-gray-800'
+        endpoint='productImages'
         onClientUploadComplete={(res) => {
-          console.log('Files: ', res);
           if (res) {
-            setUploadedImages(
-              [...res].map((object) => {
-                return {
-                  ...object,
-                };
-              })
-            );
+            console.log('Uploaded: ', res);
             onChange(res[0].url);
             toast.success('Image uploaded!');
-            console.log(uploadedImages);
           }
         }}
         onUploadError={(error: Error) => {
           toast.error(`Upload failed! ${error.message}`);
         }}
       />
-      {/* <CldUploadWidget onUpload={onUpload} uploadPreset='chin_pho_cycle'>
-        {({ open }) => {
-          const onClick = () => {
-            open();
-          };
-
-          return (
-            <Button
-              type='button'
-              disabled={disabled}
-              variant='secondary'
-              onClick={onClick}
-            >
-              <ImagePlus className='mr-2 h-4 w-4' />
-              Upload Image
-            </Button>
-          );
-        }}
-      </CldUploadWidget> */}
     </div>
   );
 };
