@@ -1,38 +1,19 @@
+import { I18nTermsFooter } from '@/utils/constant';
+import { capitalizeFirstLetter } from '@/utils/fn';
 import { Facebook, MoveUp, Youtube } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React from 'react';
 
-const pages = [
-  {
-    link: '',
-    label: 'Shipping',
-  },
-  {
-    link: '',
-    label: 'Returns',
-  },
-  {
-    link: '',
-    label: 'Crash Replacement',
-  },
-  {
-    link: '',
-    label: 'Partners',
-  },
-  {
-    link: '',
-    label: 'FAQ',
-  },
-];
-
 export default function Footer() {
+  const t = useTranslations('Footer');
   return (
     <footer className='relative bg-black px-44 py-24'>
       <div className='grid grid-cols-2 gap-24 text-white'>
         <div>
           <h1 className='text-2xl font-extrabold'>Chin Pho Cycle Vietnam</h1>
           <p className='mb-20 max-w-xs'>
-            933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City
+            {capitalizeFirstLetter(t(I18nTermsFooter.COMPANY_ADDRESS))}
           </p>
           <Link
             href='tel: 0905188344'
@@ -50,15 +31,30 @@ export default function Footer() {
         <div>
           <div className='grid grid-cols-3 gap-4'>
             <div className='mb-7'>
-              {pages.map((page, index) => (
-                <Link
-                  href={page.link}
-                  key={index}
-                  className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
-                >
-                  {page.label}
-                </Link>
-              ))}
+              <Link
+                href={'/'}
+                className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
+              >
+                {capitalizeFirstLetter(t(I18nTermsFooter.SHIPPING))}
+              </Link>
+              <Link
+                href={'/'}
+                className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
+              >
+                {capitalizeFirstLetter(t(I18nTermsFooter.RETURNS))}
+              </Link>
+              <Link
+                href={'/'}
+                className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
+              >
+                {capitalizeFirstLetter(t(I18nTermsFooter.CRASH_REPLACEMENT))}
+              </Link>
+              <Link
+                href={'/'}
+                className='mb-5 block text-xs font-light underline-offset-4 hover:underline'
+              >
+                {capitalizeFirstLetter(t(I18nTermsFooter.PARTNERS))}
+              </Link>
             </div>
             <div>
               <Link

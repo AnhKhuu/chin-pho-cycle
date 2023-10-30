@@ -11,7 +11,12 @@ import {
   FormItem,
   Input,
 } from '@/components';
-import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
+import {
+  I18nTermsHeader,
+  PublicApi,
+  QueryKeys,
+  Routes,
+} from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
 import { products } from '@/utils/mockData';
 import {
@@ -24,10 +29,10 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next-intl/client';
+import Link from 'next-intl/link';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueries } from 'react-query';
 import { z } from 'zod';
@@ -98,11 +103,6 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
   );
 }
 
-const pages = [
-  { label: 'Events', link: '/events' },
-  { label: 'Bike Fit', link: '/bike-fit' },
-];
-
 interface ICategoriesProps {
   categoryList: {
     bike: TCategoryItem;
@@ -114,33 +114,38 @@ interface ICategoriesProps {
 }
 
 function Categories({ categoryList, collection }: ICategoriesProps) {
+  const t = useTranslations('Header');
+
   return (
     <div className='flex self-stretch'>
       <CategoryItem
         collection={collection}
         category={categoryList.bike}
-        title={'bike'}
+        title={t(I18nTermsHeader.BIKE)}
       />
       <CategoryItem
         collection={collection}
         category={categoryList.men}
-        title={'men'}
+        title={t(I18nTermsHeader.MEN)}
       />
       <CategoryItem
         collection={collection}
         category={categoryList.women}
-        title={'women'}
+        title={t(I18nTermsHeader.WOMEN)}
       />
-      <Brands brandList={categoryList.brand} title={'brand'} />
-      {pages.map(({ label, link }, index) => (
-        <Link
-          href={link}
-          className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
-          key={index}
-        >
-          {label}
-        </Link>
-      ))}
+      <Brands brandList={categoryList.brand} title={t(I18nTermsHeader.BRAND)} />
+      <Link
+        href={'/events'}
+        className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
+      >
+        {capitalizeFirstLetter(t(I18nTermsHeader.EVENT))}
+      </Link>
+      <Link
+        href={'/bike-fit'}
+        className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
+      >
+        {capitalizeFirstLetter(t(I18nTermsHeader.BIKE_FIT))}
+      </Link>
     </div>
   );
 }
@@ -154,19 +159,24 @@ function CategoryItem({
   category: TCategoryItem;
   collection: TCollectionItem[];
 }) {
+  const t = useTranslations('Header');
   return (
     <CategoryWrapper>
       <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>
       <CategoryMenu>
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
-            <SubCategoryTitle>Featured</SubCategoryTitle>
+            <SubCategoryTitle>
+              {capitalizeFirstLetter(t(I18nTermsHeader.FEATURED))}
+            </SubCategoryTitle>
             <SubCategoryItem url={`${Routes.SEARCH}?category=${category?.id}`}>
-              New Arrivals
+              {capitalizeFirstLetter(t(I18nTermsHeader.NEW_ARRIVAL))}
             </SubCategoryItem>
           </div>
           <div>
-            <SubCategoryTitle>Products</SubCategoryTitle>
+            <SubCategoryTitle>
+              {capitalizeFirstLetter(t(I18nTermsHeader.PRODUCTS))}
+            </SubCategoryTitle>
             {category?.subCategories?.map(({ id, value }) => (
               <SubCategoryItem
                 url={`${Routes.SEARCH}?category=${title}&subCategory=${id}`}
@@ -177,13 +187,15 @@ function CategoryItem({
             ))}
           </div>
           <div>
-            <SubCategoryTitle>Collections</SubCategoryTitle>
+            <SubCategoryTitle>
+              {capitalizeFirstLetter(t(I18nTermsHeader.COLLECTIONS))}
+            </SubCategoryTitle>
             {collection?.map((item) => (
               <SubCategoryItem
                 url={`${Routes.SEARCH}?collection=${item.id}`}
                 key={item.id}
               >
-                {item.name}
+                {capitalizeFirstLetter(item.name)}
               </SubCategoryItem>
             ))}
           </div>
@@ -204,13 +216,17 @@ function Brands({
   title: string;
   brandList: TBrandItem[];
 }) {
+  const t = useTranslations('Header');
+
   return (
     <CategoryWrapper>
       <CategoryTitle>{capitalizeFirstLetter(title)}</CategoryTitle>
       <CategoryMenu>
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
-            <SubCategoryTitle>Brands</SubCategoryTitle>
+            <SubCategoryTitle>
+              {capitalizeFirstLetter(t(I18nTermsHeader.BRAND))}
+            </SubCategoryTitle>
             {brandList?.map(({ id, name }) => (
               <SubCategoryItem url={`${Routes.SEARCH}?brand=${id}`} key={id}>
                 {capitalizeFirstLetter(name)}
@@ -240,7 +256,7 @@ function ProductImage({ product }: { product: TProductItem }) {
           className='h-64 w-full object-cover object-center'
         />
         <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
-          {product.productName}
+          {capitalizeFirstLetter(product.productName)}
         </div>
       </div>
     </Link>
@@ -249,6 +265,7 @@ function ProductImage({ product }: { product: TProductItem }) {
 
 function SearchBar() {
   const { push } = useRouter();
+  const t = useTranslations('Header');
 
   const formSchema = z.object({
     productName: z.string(),
@@ -290,7 +307,7 @@ function SearchBar() {
                   </svg>
                   <Input
                     type='text'
-                    placeholder='Search'
+                    placeholder={t(I18nTermsHeader.SEARCH)}
                     className='rounded-[100px] border-none bg-white_1 pl-12 pr-4'
                     {...field}
                   />
@@ -305,27 +322,38 @@ function SearchBar() {
 }
 
 function LanguageOptions() {
-  const [language, setLanguage] = useState('uk');
+  const t = useTranslations('Header');
+  const locale = useLocale();
+  const pathname = usePathname();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='ml-6'>
-        {language === 'uk' ? <UKFlag /> : <VNFlag />}
+        {locale === 'vi' ? <VNFlag /> : <UKFlag />}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
-          <DropdownMenuRadioItem
-            value='uk'
-            className='flex cursor-pointer items-center'
-          >
-            <UKFlag />
-            <p className='ml-3'>English</p>
+        <DropdownMenuRadioGroup>
+          <DropdownMenuRadioItem value={locale}>
+            <Link href={pathname} locale='en'>
+              <div className='flex cursor-pointer items-center'>
+                <UKFlag />
+                <p className='ml-3'>
+                  {capitalizeFirstLetter(t(I18nTermsHeader.ENGLISH))}
+                </p>
+              </div>
+            </Link>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
-            value='vn'
+            value='vi'
             className='flex cursor-pointer items-center'
           >
-            <VNFlag />
-            <p className='ml-3'>Vietnamese</p>
+            <Link href={pathname} locale='vi'>
+              <div className='flex cursor-pointer items-center'>
+                <VNFlag />
+                <p className='ml-3'>
+                  {capitalizeFirstLetter(t(I18nTermsHeader.VIETNAMESE))}
+                </p>
+              </div>
+            </Link>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

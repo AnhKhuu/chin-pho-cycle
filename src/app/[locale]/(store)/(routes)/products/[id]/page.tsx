@@ -12,6 +12,9 @@ import { useState } from 'react';
 
 import ProductPicker from './components/product-picker';
 import RelativeProducts from './components/relative-products';
+import { useTranslations } from 'next-intl';
+import { capitalizeFirstLetter } from '../../../../../../utils/fn';
+import { I18nTermsProductDetails } from '../../../../../../utils/constant';
 
 const images = Array(8).fill('/images/bike.jpg');
 const colors = [
@@ -65,6 +68,7 @@ function ProductImages({ imageList }: { imageList: string[] }) {
 
 function ProductInfo({ id }: { id: string }) {
   const [isFullText, setFullText] = useState(false);
+  const t = useTranslations('ProductDetails')
 
   return (
     <section className='sticky top-16 h-min py-6 pr-6'>
@@ -76,7 +80,7 @@ function ProductInfo({ id }: { id: string }) {
             className='ml-2 inline-block underline underline-offset-4'
             onClick={() => setFullText(true)}
           >
-            Read More &gt;&gt;
+            {capitalizeFirstLetter(t(I18nTermsProductDetails.READ_MORE))} &gt;&gt;
           </button>
         </span>
       )}
@@ -87,7 +91,7 @@ function ProductInfo({ id }: { id: string }) {
             className='ml-2 inline-block underline underline-offset-4'
             onClick={() => setFullText(false)}
           >
-            &lt;&lt; Read Less
+            &lt;&lt; {capitalizeFirstLetter(t(I18nTermsProductDetails.READ_LESS))}
           </button>
         </span>
       )}
@@ -95,13 +99,13 @@ function ProductInfo({ id }: { id: string }) {
       <ProductPicker colorList={colors} id={id} sizeList={sizes} />
       <Accordion type='multiple'>
         <AccordionItem value='details' className='underline-offset-4'>
-          <AccordionTrigger>Details</AccordionTrigger>
+          <AccordionTrigger>{capitalizeFirstLetter(t(I18nTermsProductDetails.DETAILS))}</AccordionTrigger>
           <AccordionContent>
             Yes. It adheres to the WAI-ARIA design pattern.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value='free-shipping' className='underline-offset-4'>
-          <AccordionTrigger>Free Shipping & Returns</AccordionTrigger>
+          <AccordionTrigger>{capitalizeFirstLetter(t(I18nTermsProductDetails.FREE_SHIPPING_AND_RETURNS))}</AccordionTrigger>
           <AccordionContent>
             Yes. It adheres to the WAI-ARIA design pattern.
           </AccordionContent>

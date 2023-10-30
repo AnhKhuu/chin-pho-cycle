@@ -9,12 +9,15 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/components';
-import { Routes } from '@/utils/constant';
+import { I18nTermsProductDetails, Routes } from '@/utils/constant';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { capitalizeFirstLetter } from '../../../../../../../utils/fn';
 
 const FormSchema = z.object({
   size: z.enum(['S', 'M', 'L'], {
@@ -38,6 +41,7 @@ export default function ProductPicker({
   id,
   sizeList,
 }: IProductPickerProps) {
+  const t = useTranslations('ProductDetails');
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -108,10 +112,10 @@ export default function ProductPicker({
           )}
         />
         <Button type='submit' className='text-bold mt-10 w-full text-white'>
-          Buy Now
+          {capitalizeFirstLetter(t(I18nTermsProductDetails.BUY_NOW))}
         </Button>
         <Button variant='secondary' type='submit' className='mt-4 w-full'>
-          Add to Cart
+          {capitalizeFirstLetter(t(I18nTermsProductDetails.ADD_TO_CART))}
         </Button>
       </form>
     </Form>

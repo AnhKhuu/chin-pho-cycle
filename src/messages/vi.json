@@ -1,0 +1,62 @@
+{
+  "PreHeader": {
+    "title": "Miễn phí giao hàng cho đơn hàng trên 1,000,000 đ"
+  },
+  "Header": {
+    "bike": "Xe đạp",
+    "bike_fit": "Bike fit",
+    "brand": "Thương hiệu",
+    "collections": "Bộ sưu tập",
+    "event": "Sự kiện",
+    "english": "Tiếng Anh",
+    "featured": "Sản phẩm nổi bật",
+    "men": "Nam",
+    "new_arrival": "Sản phẩm mới nhất",
+    "products": "Sản phẩm",
+    "women": "Nữ",
+    "search": "Tìm kiếm sản phẩm",
+    "vietnamese": "Tiếng Việt"
+  },
+  "Home": {
+    "banner": {
+      "explore_collection": "Khám phá bộ sưu tập"
+    },
+    "latest_products": {
+      "title": "Sản phẩm mới nhất",
+      "view_more": "Xem thêm"
+    },
+    "categories": {
+      "title": "Danh mục sản phẩm",
+      "shop_now": "Khám phá ngay"
+    }
+  },
+  "Search": {
+    "type": "Danh mục",
+    "gender": "Giới tính",
+    "brand": "Thương hiệu",
+    "size": "Kích thước",
+    "results": "Kết quả",
+    "sort_by": "Sắp xếp theo",
+    "newest": "Mới nhất",
+    "price_high_to_low": "Giá: Cao - Thấp",
+    "price_low_to_high": "Giá: Thấp - Cao",
+    "previous": "Trước",
+    "next": "Sau"
+  },
+  "ProductDetails": {
+    "read_more": "Xem thêm",
+    "read_less": "Thu gọn",
+    "buy_now": "Mua ngay",
+    "add_to_cart": "Thêm vào giỏ hàng",
+    "details": "Chi tiết sản phẩm",
+    "free_shipping_and_returns": "Giao hàng và trả hàng",
+    "you_may_also_like": "Có thể bạn quan tâm"
+  },
+  "Footer": {
+    "company_address": "933 Hoang Sa, Phường 11, Quận 3, TP. Hồ Chí Minh",
+    "shipping": "Giao hàng",
+    "returns": "Đổi trả hàng",
+    "crash_replacement": "Xử lý sự cố sản phẩm",
+    "partners": "Đối tác"
+  }
+}
