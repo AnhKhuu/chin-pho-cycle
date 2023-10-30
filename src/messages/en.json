@@ -1,0 +1,62 @@
+{
+  "PreHeader": {
+    "title": "Free shipping for orders over 1,000,000 đ"
+  },
+  "Header": {
+    "bike": "Bike",
+    "bike_fit": "Bike fit",
+    "brand": "Brand",
+    "collections": "Collections",
+    "event": "Event",
+    "english": "English",
+    "featured": "Featured",
+    "men": "Men",
+    "new_arrival": "New arrivals",
+    "products": "Products",
+    "women": "Women",
+    "search": "Search",
+    "vietnamese": "Vietnamese"
+  },
+  "Home": {
+    "banner": {
+      "explore_collection": "Explore collection"
+    },
+    "latest_products": {
+      "title": "Latest products",
+      "view_more": "View more"
+    },
+    "categories": {
+      "title": "Categories",
+      "shop_now": "Shop now"
+    }
+  },
+  "Search": {
+    "type": "Type",
+    "gender": "Gender",
+    "brand": "Brand",
+    "size": "Size",
+    "results": "results",
+    "sort_by": "Sort by",
+    "newest": "Newest",
+    "price_high_to_low": "Price: High - Low",
+    "price_low_to_high": "Price: Low - High",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "ProductDetails": {
+    "read_more": "Read more",
+    "read_less": "Read less",
+    "buy_now": "Buy now",
+    "add_to_cart": "Add to cart",
+    "details": "Details",
+    "free_shipping_and_returns": "Free shipping & returns",
+    "you_may_also_like": "You may also like"
+  },
+  "Footer": {
+    "company_address": "933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City",
+    "shipping": "Delivery",
+    "returns": "Returns",
+    "crash_replacement": "Crash replacement",
+    "partners": "Partners"
+  }
+}

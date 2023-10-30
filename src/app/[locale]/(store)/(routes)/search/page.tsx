@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductCard } from '@/(root)/(store)/components';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,12 +7,16 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components';
-import { filters, products } from '@/utils/mockData';
+import { products } from '@/utils/mockData';
 import { MoveLeft, MoveRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Pagination } from 'react-headless-pagination';
 
+import { I18nTermsSearch } from '../../../../../utils/constant';
+import { capitalizeFirstLetter } from '../../../../../utils/fn';
+import ProductCard from '../../components/product-card';
 import { FilterList } from './components/filter-list';
 
 type TSort = {
@@ -21,40 +24,16 @@ type TSort = {
   label: string;
 };
 
-const sortList = [
-  {
-    value: 'newest',
-    label: 'Newest',
-  },
-  {
-    value: 'a-z',
-    label: 'A - Z',
-  },
-  {
-    value: 'z-a',
-    label: 'Z - A',
-  },
-  {
-    value: 'price:low-high',
-    label: 'Price: Low - High',
-  },
-  {
-    value: 'price:high-low',
-    label: 'Price: High - Low',
-  },
-];
-
 export default function Page() {
+  const t = useTranslations('Search');
   const [sortBy, setSortBy] = useState<TSort | undefined>({
     value: 'newest',
-    label: 'Newest',
+    label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
   });
   const [page, setPage] = useState<number>(0);
   const searchParams = useSearchParams();
 
   const search = searchParams.get('name');
-
-  console.log({ search });
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
@@ -68,6 +47,100 @@ export default function Page() {
     truncableClassName: 'w-10 px-0.5 text-center',
   };
 
+  const sortList = [
+    {
+      value: 'newest',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
+    },
+    {
+      value: 'a-z',
+      label: 'A-Z',
+    },
+    {
+      value: 'z-a',
+      label: 'Z-A',
+    },
+    {
+      value: 'price:low-high',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_LOW_TO_HIGH)),
+    },
+    {
+      value: 'price:high-low',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_HIGH_TO_LOW)),
+    },
+  ];
+
+  const filters = [
+    {
+      filterType: capitalizeFirstLetter(t(I18nTermsSearch.TYPE)),
+      fields: [
+        {
+          value: 'bikes',
+          label: 'Bikes',
+        },
+        {
+          value: 'shirt',
+          label: 'Shirts',
+        },
+        {
+          value: 'pants',
+          label: 'Pants',
+        },
+      ],
+    },
+    {
+      filterType: capitalizeFirstLetter(t(I18nTermsSearch.SIZE)),
+      fields: [
+        {
+          value: 'S',
+          label: 'S',
+        },
+        {
+          value: 'M',
+          label: 'M',
+        },
+        {
+          value: 'L',
+          label: 'L',
+        },
+      ],
+    },
+    {
+      filterType: capitalizeFirstLetter(t(I18nTermsSearch.GENDER)),
+      fields: [
+        {
+          value: 'male',
+          label: 'Male',
+        },
+        {
+          value: 'female',
+          label: 'Female',
+        },
+        {
+          value: 'unisex',
+          label: 'Unisex',
+        },
+      ],
+    },
+    {
+      filterType: capitalizeFirstLetter(t(I18nTermsSearch.BRAND)),
+      fields: [
+        {
+          value: 'factor',
+          label: 'Factor',
+        },
+        {
+          value: 'sram',
+          label: 'Sram',
+        },
+        {
+          value: 'cervelo',
+          label: 'Cervelo',
+        },
+      ],
+    },
+  ];
+
   return (
     <div className='my-10 grid grid-cols-4 gap-5 px-6'>
       <div className='col-span-1 pt-5'>
@@ -75,9 +148,12 @@ export default function Page() {
       </div>
       <div className='col-span-3'>
         <div className='mb-5 flex items-center justify-between'>
-          <p>{products.length} results</p>
+          <p>
+            {products.length}{' '}
+            {capitalizeFirstLetter(t(I18nTermsSearch.RESULTS))}
+          </p>
           <div>
-            <span>Sort By </span>
+            <span>{capitalizeFirstLetter(t(I18nTermsSearch.SORT_BY))} </span>
             <DropdownMenu>
               <DropdownMenuTrigger className='text-gray-500 underline-offset-4 hover:underline'>
                 {sortBy?.label}
@@ -121,7 +197,9 @@ export default function Page() {
           >
             <Pagination.PrevButton className='flex cursor-pointer items-center hover:text-gray-500'>
               <MoveLeft strokeWidth={1} />
-              <p className='ml-2'>Previous</p>
+              <p className='ml-2'>
+                {capitalizeFirstLetter(t(I18nTermsSearch.PREVIOUS))}
+              </p>
             </Pagination.PrevButton>
             <nav className='flex flex-grow justify-center'>
               <ul className='flex items-center'>
@@ -133,7 +211,9 @@ export default function Page() {
               </ul>
             </nav>
             <Pagination.NextButton className='flex cursor-pointer items-center hover:text-gray-500'>
-              <p className='mr-2'>Next</p>
+              <p className='mr-2'>
+                {capitalizeFirstLetter(t(I18nTermsSearch.NEXT))}
+              </p>
               <MoveRight strokeWidth={1} />
             </Pagination.NextButton>
           </Pagination>

@@ -1,10 +1,11 @@
 'use client';
 
 import { Button } from '@/components';
-import { PublicApi, QueryKeys, Routes } from '@/utils/constant';
+import { I18nTermsHome, PublicApi, QueryKeys, Routes } from '@/utils/constant';
 import { categories, products } from '@/utils/mockData';
 import { TBrandItem, TCollectionItem, TProductItem } from '@/utils/types';
 import axios from 'axios';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -40,6 +41,8 @@ export default function Page() {
 }
 
 function Banner({ collectionList }: { collectionList: TCollectionItem[] }) {
+  const t = useTranslations('Home');
+
   return (
     <Swiper pagination={true} modules={[Pagination]}>
       {collectionList?.map((item) => (
@@ -62,7 +65,8 @@ function Banner({ collectionList }: { collectionList: TCollectionItem[] }) {
               {item.description}
             </p>
             <p className='cursor-pointer font-light text-white underline'>
-              Explore collection &gt;&gt;
+              {capitalizeFirstLetter(t(I18nTermsHome.EXPLORE_COLLECTION))}{' '}
+              &gt;&gt;
             </p>
           </div>
         </SwiperSlide>
@@ -72,9 +76,13 @@ function Banner({ collectionList }: { collectionList: TCollectionItem[] }) {
 }
 
 function LatestProducts({ productList }: { productList: TProductItem[] }) {
+  const t = useTranslations('Home');
+
   return (
     <div className='mx-6 my-12'>
-      <h1 className='pb-8 text-xl font-semibold'>Latest Products</h1>
+      <h1 className='pb-8 text-xl font-semibold'>
+        {capitalizeFirstLetter(t(I18nTermsHome.LATEST_PRODUCTS))}
+      </h1>
       <div className='grid grid-cols-4 gap-4'>
         {productList.map((product) => (
           <ProductCard product={product} key={product.id} />
@@ -82,7 +90,9 @@ function LatestProducts({ productList }: { productList: TProductItem[] }) {
       </div>
       <div className='flex justify-center'>
         <Link href={''}>
-          <Button className='text-white'>View More</Button>
+          <Button className='text-white'>
+            {capitalizeFirstLetter(t(I18nTermsHome.VIEW_MORE))}
+          </Button>
         </Link>
       </div>
     </div>
@@ -127,9 +137,13 @@ interface ICategoryItem {
 }
 
 function CategoryGallery({ categoryList }: { categoryList: ICategoryItem[] }) {
+  const t = useTranslations('Home');
+
   return (
     <div className='mb-12'>
-      <h1 className='mx-6 pb-8 text-xl font-semibold'>Categories</h1>
+      <h1 className='mx-6 pb-8 text-xl font-semibold'>
+        {capitalizeFirstLetter(t(I18nTermsHome.CATEGORIES))}
+      </h1>
       <div className='grid grid-cols-3 gap-4'>
         {categoryList.map((category) => (
           <CategoryCard category={category} key={category.id} />
@@ -140,6 +154,8 @@ function CategoryGallery({ categoryList }: { categoryList: ICategoryItem[] }) {
 }
 
 function CategoryCard({ category }: { category: ICategoryItem }) {
+  const t = useTranslations('Home');
+
   return (
     <Link href={'/'} className='relative block h-[600px] w-full'>
       <Image
@@ -154,7 +170,7 @@ function CategoryCard({ category }: { category: ICategoryItem }) {
       <div className='absolute bottom-28 left-0 flex w-full flex-col items-center'>
         <p className='text-xl font-bold text-white'>{category.title}</p>
         <Button className='bg-white text-black hover:bg-grey_1'>
-          Shop Now
+          {capitalizeFirstLetter(t(I18nTermsHome.SHOP_NOW))}
         </Button>
       </div>
     </Link>
@@ -198,7 +214,6 @@ function VideoPlayer({ url, youtubeId }: { url?: string; youtubeId?: string }) {
               height: '100%',
             }}
             src={`https://www.youtube.com/embed/${youtubeId}`}
-            frameBorder='0'
           />
         </div>
       )}
