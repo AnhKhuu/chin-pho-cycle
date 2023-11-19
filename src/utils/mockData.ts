@@ -1,3 +1,10 @@
+import {
+  TBrandItem,
+  TCategoryCardItem,
+  TCategoryItem,
+  TCollectionItem,
+} from './types';
+
 export const images = [
   {
     title: 'ALT_ROAD',
@@ -95,76 +102,138 @@ export const products = [
   },
 ];
 
-export const brands = [
+export const brands: TBrandItem[] = [
   {
     id: '1',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '2',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '3',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '4',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '5',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '6',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '7',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
   {
     id: '8',
-    brandName: 'Factor',
+    name: 'Factor',
+    description: '',
     imageUrl:
       'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
   },
 ];
 
-export const categories = [
+export const categories: TCategoryItem[] = [
   {
     id: '1',
-    title: 'Bikes',
-    imageUrl:
-      'https://images.prismic.io/maap/541acdd1-d189-4e19-a54e-a8a10c53517e_New+Season+Road_Collection_Ads_Evolve+3D+Woman.jpg?auto=compress,format',
+    value: 'Bike',
+    subCategories: [
+      {
+        id: '1',
+        value: 'Frame',
+      },
+      {
+        id: '2',
+        value: 'Chain',
+      },
+    ],
   },
   {
     id: '2',
-    title: 'Bikes',
-    imageUrl:
-      'https://images.prismic.io/maap/541acdd1-d189-4e19-a54e-a8a10c53517e_New+Season+Road_Collection_Ads_Evolve+3D+Woman.jpg?auto=compress,format',
+    value: 'Men',
+    subCategories: [
+      {
+        id: '1',
+        value: 'Shirt',
+      },
+      {
+        id: '2',
+        value: 'T-shirt',
+      },
+    ],
   },
   {
     id: '3',
-    title: 'Bikes',
-    imageUrl:
-      'https://images.prismic.io/maap/541acdd1-d189-4e19-a54e-a8a10c53517e_New+Season+Road_Collection_Ads_Evolve+3D+Woman.jpg?auto=compress,format',
+    value: 'Women',
+    subCategories: [
+      {
+        id: '1',
+        value: 'Skirt',
+      },
+      {
+        id: '2',
+        value: 'Cap',
+      },
+    ],
   },
 ];
 
+export const collections: TCollectionItem[] = [
+  {
+    id: '1',
+    description:
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+    name: 'Training',
+    imageUrl:
+      'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2F7bf4fc07-269f-4a91-9021-2b6678a39e08_Alt_Road_CLP_EXPORTS.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
+  },
+];
 
+export const categoryCards: TCategoryCardItem[] = [
+  {
+    id: '1',
+    title: 'Bike',
+    imageUrl:
+      'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2Fa9295791-3bbe-4f37-933d-b7dc8b348f15_Alt_Road_CLP_EXPORTS8.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
+  },
+  {
+    id: '2',
+    title: 'Fashion',
+    imageUrl:
+      'https://maap.cc/_next/image?url=https%3A%2F%2Fimages.prismic.io%2Fmaap%2F457ad616-7d72-49dc-b469-f1b8cec3fdea_Training%2BGrounds%2BAustin_Blog4.jpg%3Fauto%3Dcompress%2Cformat&w=1920&q=75',
+  },
+  {
+    id: '3',
+    title: 'Bike fit',
+    imageUrl:
+      'https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/398536805_318313764277256_4120139352074511132_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ziqtZRHQ7CoAX-I09l9&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfAkFH_1eceFf-Yhbfj-woa2uSllA0X1mFUUrpBMNWYkOA&oe=654FCCD4',
+  },
+];

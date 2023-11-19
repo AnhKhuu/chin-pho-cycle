@@ -17,8 +17,10 @@ export enum QueryKeys {
   CATEGORY = 'category',
   COLLECTIONS = 'collections',
   COLLECTION = 'collection',
-  SUB_CATEGORIES = 'sub-categories',
   SUB_CATEGORY = 'sub-category',
+  TYPES = 'types',
+  PRODUCTS = 'products',
+  PRODUCT = 'product',
 }
 
 export enum PrivateApi {
@@ -49,7 +51,7 @@ export enum I18nTermsHeader {
   PRODUCTS = 'products',
   WOMEN = 'women',
   SEARCH = 'search',
-  VIETNAMESE = 'vietnamese'
+  VIETNAMESE = 'vietnamese',
 }
 
 export enum I18nTermsHome {
@@ -57,7 +59,7 @@ export enum I18nTermsHome {
   LATEST_PRODUCTS = 'latest_products.title',
   VIEW_MORE = 'latest_products.view_more',
   CATEGORIES = 'categories.title',
-  SHOP_NOW = 'categories.shop_now'
+  SHOP_NOW = 'categories.shop_now',
 }
 
 export enum I18nTermsSearch {
@@ -71,7 +73,10 @@ export enum I18nTermsSearch {
   PRICE_HIGH_TO_LOW = 'price_high_to_low',
   PRICE_LOW_TO_HIGH = 'price_low_to_high',
   PREVIOUS = 'previous',
-  NEXT = 'next'
+  NEXT = 'next',
+  MALE = 'male',
+  FEMALE = 'female',
+  UNISEX = 'unisex',
 }
 
 export enum I18nTermsProductDetails {
@@ -81,7 +86,8 @@ export enum I18nTermsProductDetails {
   ADD_TO_CART = 'add_to_cart',
   DETAILS = 'details',
   FREE_SHIPPING_AND_RETURNS = 'free_shipping_and_returns',
-  YOU_MAY_ALSO_LIKE = 'you_may_also_like'
+  YOU_MAY_ALSO_LIKE = 'you_may_also_like',
+  VIEW_MORE = 'view_more',
 }
 
 export enum I18nTermsFooter {
@@ -89,5 +95,20 @@ export enum I18nTermsFooter {
   SHIPPING = 'shipping',
   RETURNS = 'returns',
   CRASH_REPLACEMENT = 'crash_replacement',
-  PARTNERS = 'partners'
+  PARTNERS = 'partners',
+}
+
+export enum I18nTermsProductCard {
+  COLORS = 'colors',
+  COLOR = 'color',
+}
+
+export const PAGE_SIZE = 4;
+
+export enum QueryParam {
+  TYPES = 'types',
+  BRANDS = 'brands',
+  GENDERS = 'genders',
+  CATEGORY = 'category',
+  NAME = 'name',
 }

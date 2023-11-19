@@ -3,11 +3,11 @@
     "title": "Free shipping for orders over 1,000,000 đ"
   },
   "Header": {
-    "bike": "Bike",
+    "bike": "Bikes",
     "bike_fit": "Bike fit",
-    "brand": "Brand",
+    "brand": "Brands",
     "collections": "Collections",
-    "event": "Event",
+    "event": "Events",
     "english": "English",
     "featured": "Featured",
     "men": "Men",
@@ -41,7 +41,10 @@
     "price_high_to_low": "Price: High - Low",
     "price_low_to_high": "Price: Low - High",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex"
   },
   "ProductDetails": {
     "read_more": "Read more",
@@ -50,7 +53,8 @@
     "add_to_cart": "Add to cart",
     "details": "Details",
     "free_shipping_and_returns": "Free shipping & returns",
-    "you_may_also_like": "You may also like"
+    "you_may_also_like": "You may also like",
+    "view_more": "View more"
   },
   "Footer": {
     "company_address": "933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City",
@@ -58,5 +62,9 @@
     "returns": "Returns",
     "crash_replacement": "Crash replacement",
     "partners": "Partners"
+  },
+  "ProductCard": {
+    "colors": "Colors",
+    "color": "Color"
   }
 }

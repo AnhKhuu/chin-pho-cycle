@@ -64,6 +64,8 @@ export { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 export { Separator } from './ui/separator';
 
+export { Skeleton } from './ui/skeleton';
+
 export {
   Table,
   TableHeader,

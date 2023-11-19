@@ -21,7 +21,7 @@ function CategoryMenu({ children }: { children: ReactNode }) {
   );
 }
 
-function SubCategoryTitle({ children }: { children: ReactNode }) {
+function TypeTitle({ children }: { children: ReactNode }) {
   return (
     <p className='mb-2 font-semibold underline underline-offset-4'>
       {children}
@@ -29,13 +29,7 @@ function SubCategoryTitle({ children }: { children: ReactNode }) {
   );
 }
 
-function SubCategoryItem({
-  children,
-  url,
-}: {
-  children: ReactNode;
-  url: string;
-}) {
+function TypeItem({ children, url }: { children: ReactNode; url: string }) {
   return (
     <Link
       href={url}
@@ -46,10 +40,4 @@ function SubCategoryItem({
   );
 }
 
-export {
-  CategoryWrapper,
-  CategoryTitle,
-  CategoryMenu,
-  SubCategoryTitle,
-  SubCategoryItem,
-};
+export { CategoryWrapper, CategoryTitle, CategoryMenu, TypeTitle, TypeItem };

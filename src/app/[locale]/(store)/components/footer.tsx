@@ -8,11 +8,11 @@ import React from 'react';
 export default function Footer() {
   const t = useTranslations('Footer');
   return (
-    <footer className='relative bg-black px-44 py-24'>
-      <div className='grid grid-cols-2 gap-24 text-white'>
+    <footer className='relative bg-black px-6 py-16 lg:px-44 lg:py-24'>
+      <div className='grid grid-cols-1 gap-24 text-white md:grid-cols-2'>
         <div>
           <h1 className='text-2xl font-extrabold'>Chin Pho Cycle Vietnam</h1>
-          <p className='mb-20 max-w-xs'>
+          <p className='mb-10 max-w-xs lg:mb-20'>
             {capitalizeFirstLetter(t(I18nTermsFooter.COMPANY_ADDRESS))}
           </p>
           <Link

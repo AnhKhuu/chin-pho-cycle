@@ -81,3 +81,35 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+.category-slide {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+
+.category-slide .swiper {
+  overflow: visible;
+}
+
+.category-slide .swiper .swiper-wrapper {
+  padding-bottom: 2rem;
+}
+
+.category-slide .swiper.swiper-horizontal > .swiper-scrollbar {
+  border-radius: 0;
+  height: 1px;
+  left: 50%;
+  margin: auto;
+  transform: translate(-50%);
+  width: 100px;
+}
+
+.category-slide
+  .swiper.swiper-horizontal
+  > .swiper-scrollbar
+  .swiper-scrollbar-drag {
+  background-color: black;
+  border-radius: 0;
+  height: 3px;
+  top: -1px;
+}

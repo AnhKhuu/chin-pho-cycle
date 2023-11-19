@@ -41,7 +41,10 @@
     "price_high_to_low": "Giá: Cao - Thấp",
     "price_low_to_high": "Giá: Thấp - Cao",
     "previous": "Trước",
-    "next": "Sau"
+    "next": "Sau",
+    "male": "Nam",
+    "female": "Nữ",
+    "unisex": "Unisex"
   },
   "ProductDetails": {
     "read_more": "Xem thêm",
@@ -50,7 +53,8 @@
     "add_to_cart": "Thêm vào giỏ hàng",
     "details": "Chi tiết sản phẩm",
     "free_shipping_and_returns": "Giao hàng và trả hàng",
-    "you_may_also_like": "Có thể bạn quan tâm"
+    "you_may_also_like": "Có thể bạn quan tâm",
+    "view_more": "Xem thêm"
   },
   "Footer": {
     "company_address": "933 Hoang Sa, Phường 11, Quận 3, TP. Hồ Chí Minh",
@@ -58,5 +62,9 @@
     "returns": "Đổi trả hàng",
     "crash_replacement": "Xử lý sự cố sản phẩm",
     "partners": "Đối tác"
+  },
+  "ProductCard": {
+    "colors": "Màu",
+    "color": "Màu"
   }
 }

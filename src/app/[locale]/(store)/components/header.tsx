@@ -1,4 +1,7 @@
 import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -13,26 +16,27 @@ import {
 } from '@/components';
 import {
   I18nTermsHeader,
-  PublicApi,
   QueryKeys,
+  QueryParam,
   Routes,
 } from '@/utils/constant';
-import { capitalizeFirstLetter } from '@/utils/fn';
-import { products } from '@/utils/mockData';
+import { capitalizeFirstLetter, parseSearchParams } from '@/utils/fn';
 import {
   TBrandItem,
   TCategoryItem,
   TCollectionItem,
-  TProductItem,
+  TVariantItem,
 } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AccordionContent } from '@radix-ui/react-accordion';
 import axios from 'axios';
-import { ShoppingCart } from 'lucide-react';
+import { Menu, ShoppingCart, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next-intl/client';
 import Link from 'next-intl/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueries } from 'react-query';
 import { z } from 'zod';
@@ -41,108 +45,386 @@ import {
   CategoryMenu,
   CategoryTitle,
   CategoryWrapper,
-  SubCategoryItem,
-  SubCategoryTitle,
+  TypeItem,
+  TypeTitle,
 } from './category';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
-  const [bike, men, women, brand, collection] = useQueries([
-    {
-      queryKey: [QueryKeys.CATEGORY, 'bike'],
-      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=bike`),
+  const { offset, limit, column, order } = parseSearchParams({
+    searchParams: {
+      page: '1',
+      perPage: '2',
     },
-    {
-      queryKey: [QueryKeys.CATEGORY, 'men'],
-      queryFn: async () => await axios.get(`${PublicApi.CATEGORIES}?name=men`),
-    },
-    {
-      queryKey: [QueryKeys.CATEGORY, 'women'],
-      queryFn: async () =>
-        await axios.get(`${PublicApi.CATEGORIES}?name=women`),
-    },
+  });
+
+  const [brands, collections, categories, products] = useQueries([
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${PublicApi.BRANDS}`),
+      queryFn: async () => await axios.get(`${process.env.BASE_URL}/brands`),
     },
     {
       queryKey: [QueryKeys.COLLECTIONS],
-      queryFn: async () => await axios.get(`${PublicApi.COLLECTIONS}`),
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/collections`),
+    },
+    {
+      queryKey: [QueryKeys.CATEGORIES],
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/categories`),
+    },
+    {
+      queryKey: [QueryKeys.PRODUCTS, 'header'],
+      queryFn: async () =>
+        await axios.post(`${process.env.BASE_URL}/variants/search`, {
+          offset,
+          limit,
+          column,
+          order,
+          typeIds: [],
+          brandIds: [],
+          genders: [],
+        }),
     },
   ]);
 
   return (
     <header className='sticky left-0 right-0 top-0 z-50'>
-      <nav className='relative flex w-full items-center justify-between bg-white px-6'>
-        <Link href={'/'}>
-          <Image
-            src='/images/logo.webp'
-            width={150}
-            height={50}
-            sizes='(max-width: 992) 80vw, 150px'
-            style={{ width: '100%', height: 'auto' }}
-            alt='logo'
-          />
-        </Link>
-        <Categories
-          categoryList={{
-            bike: bike.data?.data,
-            men: men.data?.data,
-            women: women.data?.data,
-            brand: brand.data?.data,
-          }}
-          collection={collection.data?.data}
-        />
-        <div className='flex items-center'>
-          <SearchBar />
-          <LanguageOptions />
-          <ShoppingCart className='mx-6 cursor-pointer text-muted-foreground hover:text-black' />
-          <AuthButton />
-        </div>
-      </nav>
+      <DesktopHeader
+        brands={brands.data?.data}
+        collections={collections.data?.data}
+        categories={categories.data?.data}
+        products={products.data?.data.variants}
+      />
+      <MobileHeader
+        brands={brands.data?.data}
+        collections={collections.data?.data}
+        categories={categories.data?.data}
+      />
     </header>
   );
 }
 
-interface ICategoriesProps {
-  categoryList: {
-    bike: TCategoryItem;
-    men: TCategoryItem;
-    women: TCategoryItem;
-    brand: TBrandItem[];
-  };
-  collection: TCollectionItem[];
+function DesktopHeader({
+  brands,
+  collections,
+  categories,
+  products,
+}: {
+  brands: TBrandItem[];
+  collections: TCollectionItem[];
+  categories: TCategoryItem[];
+  products: TVariantItem[];
+}) {
+  const [isShowShadow, setShowShadow] = useState(false);
+  useEffect(() => {
+    const scrollHandler = () => {
+      window.scrollY > 10 ? setShowShadow(true) : setShowShadow(false);
+    };
+    window.addEventListener('scroll', scrollHandler);
+    return () => window.removeEventListener('scroll', scrollHandler);
+  }, [isShowShadow]);
+
+  return (
+    <nav
+      className={`relative hidden w-full items-center justify-between bg-white px-6 xl:flex ${
+        isShowShadow ? 'shadow-md' : ''
+      }`}
+    >
+      <Link href={Routes.HOME}>
+        <Image
+          src='/images/logo.webp'
+          width={150}
+          height={50}
+          sizes='(max-width: 992) 80vw, 150px'
+          style={{ width: '100%', height: 'auto' }}
+          alt='logo'
+        />
+      </Link>
+      <Categories
+        categories={categories}
+        brands={brands}
+        collections={collections}
+        products={products}
+      />
+      <div className='flex items-center'>
+        <DesktopSearchBar />
+        <LanguageOptions />
+        <ShoppingCart className='mx-6 cursor-pointer text-muted-foreground hover:text-black' />
+        <AuthButton />
+      </div>
+    </nav>
+  );
 }
 
-function Categories({ categoryList, collection }: ICategoriesProps) {
+function MobileHeader({
+  brands,
+  collections,
+  categories,
+}: {
+  brands: TBrandItem[];
+  collections: TCollectionItem[];
+  categories: TCategoryItem[];
+}) {
+  const [isShowMenu, setShowMenu] = useState(false);
+  const [isShowSearchBox, setShowSearchBox] = useState(false);
+  const [isShowShadow, setShowShadow] = useState(false);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      window.scrollY > 10 ? setShowShadow(true) : setShowShadow(false);
+    };
+    window.addEventListener('scroll', scrollHandler);
+    return () => window.removeEventListener('scroll', scrollHandler);
+  }, [isShowShadow]);
+
+  return (
+    <nav
+      className={`relative flex w-full items-center justify-between bg-white px-2 py-4 xl:hidden ${
+        isShowShadow ? 'shadow-md' : ''
+      }`}
+    >
+      <div className='flex items-center'>
+        <Menu
+          className='h-8 w-8 pr-2 text-muted-foreground'
+          onClick={() => setShowMenu((prev) => !prev)}
+        />
+        <div
+          className={`fixed inset-0 top-24 z-10 h-full w-screen ${
+            isShowMenu ? '' : 'invisible'
+          }`}
+        >
+          <div
+            className={`absolute -top-24 left-0 h-full w-full overflow-y-scroll bg-white transition-all duration-300 ease-out ${
+              isShowMenu ? '' : '-translate-x-full'
+            }`}
+          >
+            <div className='mx-7 mt-4 flex items-center justify-between'>
+              <X className='text-white' />
+              <Link href={Routes.HOME}>
+                <Image
+                  src='/images/logo.webp'
+                  width={90}
+                  height={50}
+                  sizes='(max-width: 992) 80vw, 90px'
+                  style={{ width: '100%', height: 'auto' }}
+                  alt='logo'
+                />
+              </Link>
+              <X
+                className='text-muted-foreground'
+                onClick={() => setShowMenu((prev) => !prev)}
+              />
+            </div>
+            <div className='mx-7 flex items-center'>
+              <LanguageOptions />
+            </div>
+            <MobileMenu
+              brands={brands}
+              collections={collections}
+              categories={categories}
+            />
+          </div>
+        </div>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='h-6 w-6 text-muted-foreground'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+          onClick={() => setShowSearchBox((prev) => !prev)}
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth={2}
+            d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+          />
+        </svg>
+        <div
+          className={`absolute left-0 right-0 top-14 flex h-fit flex-1 items-center justify-between bg-white_1 px-4 ${
+            isShowSearchBox ? '' : 'invisible'
+          }`}
+        >
+          <MobileSearchBar />
+          <X
+            className='text-muted-foreground'
+            onClick={() => setShowSearchBox((prev) => !prev)}
+          />
+        </div>
+      </div>
+      <Link href={Routes.HOME}>
+        <Image
+          src='/images/logo.webp'
+          width={90}
+          height={50}
+          sizes='(max-width: 992) 80vw, 90px'
+          style={{ width: '100%', height: 'auto' }}
+          alt='logo'
+        />
+      </Link>
+      <div className='flex items-center'>
+        <ShoppingCart className='mx-2 text-muted-foreground hover:text-black' />
+        <AuthButton />
+      </div>
+    </nav>
+  );
+}
+
+function MobileMenu({
+  brands,
+  collections,
+  categories,
+}: {
+  brands: TBrandItem[];
+  collections: TCollectionItem[];
+  categories: TCategoryItem[];
+}) {
+  const locale = useLocale();
+  const t = useTranslations('Header');
+  return (
+    <Accordion type='single' collapsible className='px-7'>
+      <>
+        {categories?.map((category) => (
+          <AccordionItem value={category[`name_${locale}`]} key={category.id}>
+            <AccordionTrigger className='underline-offset-4'>
+              {category[`name_${locale}`]}
+            </AccordionTrigger>
+            <AccordionContent className='pl-4'>
+              <Accordion type='single' collapsible>
+                <FeaturedAccordion />
+                <TypeAccordion category={category} />
+                <CollectionAccordion collections={collections} />
+              </Accordion>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+        <AccordionItem value={'brands'}>
+          <AccordionTrigger className='underline-offset-4'>
+            {capitalizeFirstLetter(t(I18nTermsHeader.BRAND))}
+          </AccordionTrigger>
+          {brands?.map((brand) => (
+            <AccordionContent key={brand.id} className='pb-4 pl-4'>
+              <Link href={`${Routes.SEARCH}?${QueryParam.BRANDS}=${brand.id}`}>
+                {capitalizeFirstLetter(brand[`name_${locale}`])}
+              </Link>
+            </AccordionContent>
+          ))}
+        </AccordionItem>
+        <Link
+          href={'/events'}
+          className='block w-full border-b py-4 font-medium'
+        >
+          {capitalizeFirstLetter(t(I18nTermsHeader.EVENT))}
+        </Link>
+        <Link
+          href={'/bike-fit'}
+          className='block w-full border-b py-4 font-medium'
+        >
+          {capitalizeFirstLetter(t(I18nTermsHeader.BIKE_FIT))}
+        </Link>
+      </>
+    </Accordion>
+  );
+}
+
+function FeaturedAccordion() {
+  const t = useTranslations('Header');
+
+  return (
+    <AccordionItem value={'featured'}>
+      <AccordionTrigger className='pt-0 underline-offset-4'>
+        {capitalizeFirstLetter(t(I18nTermsHeader.FEATURED))}
+      </AccordionTrigger>
+      <AccordionContent className='pb-4 pl-4'>
+        {capitalizeFirstLetter(t(I18nTermsHeader.NEW_ARRIVAL))}
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
+
+function TypeAccordion({ category }: { category: TCategoryItem }) {
+  const locale = useLocale();
+  const t = useTranslations('Header');
+
+  return (
+    <AccordionItem value={'product'}>
+      <AccordionTrigger className='underline-offset-4'>
+        {capitalizeFirstLetter(t(I18nTermsHeader.PRODUCTS))}
+      </AccordionTrigger>
+      {category.types?.map((type) => (
+        <AccordionContent key={type.id} className='pb-4 pl-4'>
+          <Link
+            href={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${category.id}&${QueryParam.TYPES}=${type.id}`}
+          >
+            {capitalizeFirstLetter(type[`name_${locale}`])}
+          </Link>
+        </AccordionContent>
+      ))}
+    </AccordionItem>
+  );
+}
+
+function CollectionAccordion({
+  collections,
+}: {
+  collections: TCollectionItem[];
+}) {
+  const locale = useLocale();
+  const t = useTranslations('Header');
+
+  return (
+    <AccordionItem value={'collection'}>
+      <AccordionTrigger className='underline-offset-4'>
+        {capitalizeFirstLetter(t(I18nTermsHeader.COLLECTIONS))}
+      </AccordionTrigger>
+      {collections?.map((collection) => (
+        <AccordionContent key={collection.id} className='pb-4 pl-4'>
+          <Link href={`${Routes.SEARCH}?collection=${collection.id}`}>
+            {capitalizeFirstLetter(collection[`name_${locale}`])}
+          </Link>
+        </AccordionContent>
+      ))}
+    </AccordionItem>
+  );
+}
+
+interface ICategoriesProps {
+  categories: TCategoryItem[];
+  brands: TBrandItem[];
+  collections: TCollectionItem[];
+  products: TVariantItem[];
+}
+
+function Categories({
+  categories,
+  collections,
+  brands,
+  products,
+}: ICategoriesProps) {
+  const locale = useLocale();
   const t = useTranslations('Header');
 
   return (
     <div className='flex self-stretch'>
-      <CategoryItem
-        collection={collection}
-        category={categoryList.bike}
-        title={t(I18nTermsHeader.BIKE)}
-      />
-      <CategoryItem
-        collection={collection}
-        category={categoryList.men}
-        title={t(I18nTermsHeader.MEN)}
-      />
-      <CategoryItem
-        collection={collection}
-        category={categoryList.women}
-        title={t(I18nTermsHeader.WOMEN)}
-      />
-      <Brands brandList={categoryList.brand} title={t(I18nTermsHeader.BRAND)} />
+      {categories?.map((category, index) => (
+        <CategoryItem
+          key={index}
+          collections={collections}
+          category={category}
+          title={capitalizeFirstLetter(category[`name_${locale}`])}
+          products={products}
+        />
+      ))}
+      <Brands brands={brands} title={t(I18nTermsHeader.BRAND)} />
       <Link
         href={'/events'}
-        className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
+        className='flex h-16 items-center border-b-2 border-white text-sm transition duration-100 ease-in-out hover:border-black lg:px-4 xl:px-6'
       >
         {capitalizeFirstLetter(t(I18nTermsHeader.EVENT))}
       </Link>
       <Link
         href={'/bike-fit'}
-        className='flex h-16 items-center border-b-2 border-white px-6 text-sm transition duration-100 ease-in-out hover:border-black'
+        className='flex h-16 items-center border-b-2 border-white text-sm transition duration-100 ease-in-out hover:border-black lg:px-4 xl:px-6'
       >
         {capitalizeFirstLetter(t(I18nTermsHeader.BIKE_FIT))}
       </Link>
@@ -153,12 +435,15 @@ function Categories({ categoryList, collection }: ICategoriesProps) {
 function CategoryItem({
   title,
   category,
-  collection,
+  collections,
+  products,
 }: {
   title: string;
   category: TCategoryItem;
-  collection: TCollectionItem[];
+  collections: TCollectionItem[];
+  products: TVariantItem[];
 }) {
+  const locale = useLocale();
   const t = useTranslations('Header');
   return (
     <CategoryWrapper>
@@ -166,56 +451,52 @@ function CategoryItem({
       <CategoryMenu>
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
-            <SubCategoryTitle>
+            <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.FEATURED))}
-            </SubCategoryTitle>
-            <SubCategoryItem url={`${Routes.SEARCH}?category=${category?.id}`}>
+            </TypeTitle>
+            <TypeItem url={`${Routes.SEARCH}?category=${category?.id}`}>
               {capitalizeFirstLetter(t(I18nTermsHeader.NEW_ARRIVAL))}
-            </SubCategoryItem>
+            </TypeItem>
           </div>
           <div>
-            <SubCategoryTitle>
+            <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.PRODUCTS))}
-            </SubCategoryTitle>
-            {category?.subCategories?.map(({ id, value }) => (
-              <SubCategoryItem
-                url={`${Routes.SEARCH}?category=${title}&subCategory=${id}`}
-                key={id}
+            </TypeTitle>
+            {category?.types?.map((type) => (
+              <TypeItem
+                url={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${category.id}&${QueryParam.TYPES}=${type.id}`}
+                key={type.id}
               >
-                {capitalizeFirstLetter(value)}
-              </SubCategoryItem>
+                {capitalizeFirstLetter(type[`name_${locale}`])}
+              </TypeItem>
             ))}
           </div>
           <div>
-            <SubCategoryTitle>
+            <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.COLLECTIONS))}
-            </SubCategoryTitle>
-            {collection?.map((item) => (
-              <SubCategoryItem
-                url={`${Routes.SEARCH}?collection=${item.id}`}
-                key={item.id}
+            </TypeTitle>
+            {collections?.map((collection) => (
+              <TypeItem
+                url={`${Routes.SEARCH}?collection=${collection.id}`}
+                key={collection.id}
               >
-                {capitalizeFirstLetter(item.name)}
-              </SubCategoryItem>
+                {capitalizeFirstLetter(collection[`name_${locale}`])}
+              </TypeItem>
             ))}
           </div>
         </div>
         <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-          <ProductImage product={products[0]} />
-          <ProductImage product={products[0]} />
+          {products?.map((product) => (
+            <ProductImage product={product} key={product.id} />
+          ))}
         </div>
       </CategoryMenu>
     </CategoryWrapper>
   );
 }
 
-function Brands({
-  title,
-  brandList,
-}: {
-  title: string;
-  brandList: TBrandItem[];
-}) {
+function Brands({ title, brands }: { title: string; brands: TBrandItem[] }) {
+  const locale = useLocale();
   const t = useTranslations('Header');
 
   return (
@@ -224,31 +505,39 @@ function Brands({
       <CategoryMenu>
         <div className='grid w-3/5 grid-cols-3 gap-4 py-10 pl-10'>
           <div>
-            <SubCategoryTitle>
+            <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.BRAND))}
-            </SubCategoryTitle>
-            {brandList?.map(({ id, name }) => (
-              <SubCategoryItem url={`${Routes.SEARCH}?brand=${id}`} key={id}>
-                {capitalizeFirstLetter(name)}
-              </SubCategoryItem>
+            </TypeTitle>
+            {brands?.map((brand) => (
+              <TypeItem
+                url={`${Routes.SEARCH}?${QueryParam.BRANDS}=${brand.id}`}
+                key={brand.id}
+              >
+                {capitalizeFirstLetter(brand[`name_${locale}`])}
+              </TypeItem>
             ))}
           </div>
         </div>
         <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-          <ProductImage product={products[0]} />
-          <ProductImage product={products[0]} />
+          {brands
+            ?.slice(0, 2)
+            .map((brand) => <BrandImage brand={brand} key={brand.id} />)}
         </div>
       </CategoryMenu>
     </CategoryWrapper>
   );
 }
 
-function ProductImage({ product }: { product: TProductItem }) {
+function ProductImage({ product }: { product: TVariantItem }) {
+  const locale = useLocale();
   return (
-    <Link href={'/'} className='mb-4'>
+    <Link
+      href={`${Routes.PRODUCT}/${product.id}?${QueryParam.TYPES}=${product.product.typeId}&${QueryParam.BRANDS}=${product.product.brandId}`}
+      className='mb-4'
+    >
       <div className='relative'>
         <Image
-          src={product.imageUrl}
+          src={product?.images[0]}
           alt='test'
           width={500}
           height={510}
@@ -256,14 +545,38 @@ function ProductImage({ product }: { product: TProductItem }) {
           className='h-64 w-full object-cover object-center'
         />
         <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
-          {capitalizeFirstLetter(product.productName)}
+          {capitalizeFirstLetter(product?.product[`name_${locale}`])}
         </div>
       </div>
     </Link>
   );
 }
 
-function SearchBar() {
+function BrandImage({ brand }: { brand: TBrandItem }) {
+  const locale = useLocale();
+  return (
+    <Link
+      href={`${Routes.SEARCH}?${QueryParam.BRANDS}=${brand.id}`}
+      className='mb-4'
+    >
+      <div className='relative'>
+        <Image
+          src={brand?.imageUrl}
+          alt='test'
+          width={500}
+          height={510}
+          sizes='(max-width: 768px), 50vw, 25vw'
+          className='h-64 w-full object-cover object-center'
+        />
+        <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
+          {capitalizeFirstLetter(brand[`name_${locale}`])}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function DesktopSearchBar() {
   const { push } = useRouter();
   const t = useTranslations('Header');
 
@@ -279,7 +592,7 @@ function SearchBar() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    push(`${Routes.SEARCH}?name=${values.productName}`);
+    push(`${Routes.SEARCH}?${QueryParam.NAME}=${values.productName}`);
   };
   return (
     <Form {...form}>
@@ -289,7 +602,7 @@ function SearchBar() {
           name='productName'
           render={({ field }) => (
             <FormItem>
-              <FormControl>
+              <FormControl className='hidden lg:block'>
                 <div className='relative w-60'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -308,10 +621,51 @@ function SearchBar() {
                   <Input
                     type='text'
                     placeholder={t(I18nTermsHeader.SEARCH)}
-                    className='rounded-[100px] border-none bg-white_1 pl-12 pr-4'
+                    className='rounded-full border-none bg-white_1 pl-12 pr-4'
                     {...field}
                   />
                 </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+function MobileSearchBar() {
+  const { push } = useRouter();
+  const t = useTranslations('Header');
+
+  const formSchema = z.object({
+    productName: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      productName: '',
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    push(`${Routes.SEARCH}?${QueryParam.NAME}=${values.productName}`);
+  };
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
+        <FormField
+          control={form.control}
+          name='productName'
+          render={({ field }) => (
+            <FormItem>
+              <FormControl className='lg:hidden'>
+                <Input
+                  type='text'
+                  placeholder={t(I18nTermsHeader.SEARCH)}
+                  className='w-full rounded-none border-none bg-white_1 px-0 lg:hidden'
+                  {...field}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -327,8 +681,21 @@ function LanguageOptions() {
   const pathname = usePathname();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className='ml-6'>
-        {locale === 'vi' ? <VNFlag /> : <UKFlag />}
+      <DropdownMenuTrigger className='ml-lg-6'>
+        <div className='ml-6 hidden xl:block'>
+          {locale === 'vi' ? <VNFlag /> : <UKFlag />}
+        </div>
+        <div className='xl:hidden'>
+          {locale === 'vi' ? (
+            <p className='text-muted-foreground'>
+              {capitalizeFirstLetter(t(I18nTermsHeader.VIETNAMESE))}
+            </p>
+          ) : (
+            <p className='text-muted-foreground'>
+              {capitalizeFirstLetter(t(I18nTermsHeader.ENGLISH))}
+            </p>
+          )}
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuRadioGroup>
