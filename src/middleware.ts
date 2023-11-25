@@ -31,7 +31,7 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url });
     }
   },
-  publicRoutes: ['/', '/vi', '/vi/(.*)', '/api/public/(.*)']
+  publicRoutes: ['/', '/(.*)', '/vi', '/vi/(.*)', '/api/public/(.*)'],
 });
 
 export const config = {

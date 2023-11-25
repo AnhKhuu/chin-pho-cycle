@@ -1,23 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        hostname: 'maap.cc',
-      },
-      {
-        hostname: 'cdn.shopify.com',
-      },
-      {
-        hostname: 'images.prismic.io',
-      },
-      {
-        hostname: 'file.hstatic.net',
-      },
+    domains: [
+      'utfs.io',
+      'cdn.shopify.com',
+      'maap.cc',
+      'scontent.fsgn2-4.fna.fbcdn.net',
     ],
+  },
+  env: {
+    BASE_URL: 'http://localhost:3001/api',
   },
 };
 
