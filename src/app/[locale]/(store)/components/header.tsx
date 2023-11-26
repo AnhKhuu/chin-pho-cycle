@@ -132,11 +132,10 @@ function DesktopHeader({
     >
       <Link href={Routes.HOME}>
         <Image
-          src='/images/logo.webp'
-          width={150}
-          height={50}
-          sizes='(max-width: 992) 80vw, 150px'
-          style={{ width: '100%', height: 'auto' }}
+          src='/images/CPC.png'
+          width={127}
+          height={51}
+          sizes='100vw'
           alt='logo'
         />
       </Link>
@@ -314,7 +313,7 @@ function MobileMenu({
           href={'/events'}
           className='block w-full border-b py-4 font-medium'
         >
-          {capitalizeFirstLetter(t(I18nTermsHeader.EVENT))}
+          {capitalizeFirstLetter(t(I18nTermsHeader.COMMUNITY))}
         </Link>
         <Link
           href={'/bike-fit'}
@@ -420,7 +419,7 @@ function Categories({
         href={'/events'}
         className='flex h-16 items-center border-b-2 border-white text-sm transition duration-100 ease-in-out hover:border-black lg:px-4 xl:px-6'
       >
-        {capitalizeFirstLetter(t(I18nTermsHeader.EVENT))}
+        {capitalizeFirstLetter(t(I18nTermsHeader.COMMUNITY))}
       </Link>
       <Link
         href={'/bike-fit'}

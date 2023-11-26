@@ -7,7 +7,7 @@
     "bike_fit": "Bike fit",
     "brand": "Thương hiệu",
     "collections": "Bộ sưu tập",
-    "event": "Sự kiện",
+    "community": "Cộng đồng",
     "english": "Tiếng Anh",
     "featured": "Sản phẩm nổi bật",
     "men": "Nam",
@@ -19,15 +19,35 @@
   },
   "Home": {
     "banner": {
-      "explore_collection": "Khám phá bộ sưu tập"
+      "explore_collection": "KHÁM PHÁ BỘ SƯU TẬP"
     },
     "latest_products": {
       "title": "Sản phẩm mới nhất",
       "view_more": "Xem thêm"
     },
+    "static_categories": {
+      "men": "Nam",
+      "women": "Nữ"
+    },
     "categories": {
-      "title": "Danh mục sản phẩm",
-      "shop_now": "Khám phá ngay"
+      "title": "Danh mục sản phẩm"
+    },
+    "video": {
+      "sign_up": "Trải nghiệm Bike Fit",
+      "find_out_more": "Khám phá ngay"
+    },
+    "side_pages": {
+      "event": "Sự kiện",
+      "community": "Cộng đồng",
+      "store": "Cửa hàng"
+    },
+    "commitment": {
+      "free_shipping": "Giao Hàng Miễn Phí",
+      "free_shipping_desc": "Với đơn hàng trên $50 USD.*",
+      "free_return": "Đổi trả miễn phí",
+      "free_return_desc": "Với các mặt hàng có giá đầy đủ.*",
+      "crash_replacement": "Xử lý sự cố sản phẩm",
+      "crash_replacement_desc": "Giảm giá 40% với sản phẩm mua mới.*"
     }
   },
   "Search": {
@@ -61,7 +81,18 @@
     "shipping": "Giao hàng",
     "returns": "Đổi trả hàng",
     "crash_replacement": "Xử lý sự cố sản phẩm",
-    "partners": "Đối tác"
+    "care_guide": "Hướng dẫn chăm sóc",
+    "partners": "Đối tác",
+    "keep_up": "Theo dõi các bộ sưu tập, khuyến mãi mới nhất của chúng tôi và hơn thế nữa.",
+    "enter_email": "Nhập địa chỉ email của bạn",
+    "customer_service": "Dịch vụ khách hàng",
+    "faq": "FAQ",
+    "about_us": "Về chúng tôi",
+    "about": "Giới thiệu",
+    "store": "Cửa hàng",
+    "our_community": "Cộng đồng",
+    "policy": "Chính sách",
+    "term_and_condition": "Điều khoản và Điều kiện"
   },
   "ProductCard": {
     "colors": "Màu",

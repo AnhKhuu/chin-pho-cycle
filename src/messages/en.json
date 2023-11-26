@@ -7,7 +7,7 @@
     "bike_fit": "Bike fit",
     "brand": "Brands",
     "collections": "Collections",
-    "event": "Events",
+    "community": "Community",
     "english": "English",
     "featured": "Featured",
     "men": "Men",
@@ -19,15 +19,35 @@
   },
   "Home": {
     "banner": {
-      "explore_collection": "Explore collection"
+      "explore_collection": "EXPLORE COLLECTION"
     },
     "latest_products": {
-      "title": "Latest products",
+      "title": "What's new",
       "view_more": "View more"
     },
+    "static_categories": {
+      "men": "Men",
+      "women": "Women"
+    },
     "categories": {
-      "title": "Categories",
-      "shop_now": "Shop now"
+      "title": "Categories"
+    },
+    "video": {
+      "sign_up": "Sign up for Bike Fit",
+      "find_out_more": "Find out more"
+    },
+    "side_pages": {
+      "event": "Events",
+      "community": "Community",
+      "store": "Store"
+    },
+    "commitment": {
+      "free_shipping": "Free Shipping",
+      "free_shipping_desc": "On orders over $50 USD.*",
+      "free_return": "Free Return",
+      "free_return_desc": "On full priced items only.*",
+      "crash_replacement": "Crash Replacement",
+      "crash_replacement_desc": "40% Off your new kit.*"
     }
   },
   "Search": {
@@ -58,10 +78,21 @@
   },
   "Footer": {
     "company_address": "933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City",
-    "shipping": "Delivery",
-    "returns": "Returns",
-    "crash_replacement": "Crash replacement",
-    "partners": "Partners"
+    "shipping": "Shipping",
+    "returns": "Return",
+    "crash_replacement": "Crash Replacement",
+    "care_guide": "Care Guide",
+    "partners": "Partners",
+    "keep_up": "Keep up with our newest collections, promos and more.",
+    "enter_email": "Enter your email address",
+    "customer_service": "Customer service",
+    "faq": "FAQ",
+    "about_us": "About us",
+    "about": "About",
+    "store": "Store",
+    "our_community": "Our Community",
+    "policy": "Policy",
+    "term_and_condition": "Term and Condition"
   },
   "ProductCard": {
     "colors": "Colors",
