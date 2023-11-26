@@ -23,7 +23,7 @@ module.exports = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: '#0F2939',
           foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
@@ -55,6 +55,9 @@ module.exports = {
         grey_1: '#CCCCCC',
         grey_2: '#DBDBDB',
         black_1: '#292828',
+        blue_1: {
+          DEFAULT: '#1A4762',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

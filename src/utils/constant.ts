@@ -1,3 +1,9 @@
+import { Big_Shoulders_Display } from 'next/font/google';
+
+export const bigShouldersDisplay = Big_Shoulders_Display({
+  subsets: ['latin'],
+});
+
 export enum Routes {
   HOME = '/',
   SEARCH = '/search',
@@ -43,7 +49,7 @@ export enum I18nTermsHeader {
   BIKE_FIT = 'bike_fit',
   BRAND = 'brand',
   COLLECTIONS = 'collections',
-  EVENT = 'event',
+  COMMUNITY = 'community',
   ENGLISH = 'english',
   FEATURED = 'featured',
   MEN = 'men',
@@ -59,7 +65,19 @@ export enum I18nTermsHome {
   LATEST_PRODUCTS = 'latest_products.title',
   VIEW_MORE = 'latest_products.view_more',
   CATEGORIES = 'categories.title',
-  SHOP_NOW = 'categories.shop_now',
+  SIGN_UP_FOR_BIKE_FIT = 'video.sign_up',
+  MEN = 'static_categories.men',
+  WOMEN = 'static_categories.women',
+  FIND_OUT_MORE = 'video.find_out_more',
+  EVENT = 'side_pages.event',
+  COMMUNITY = 'side_pages.community',
+  STORE = 'side_pages.store',
+  FREE_SHIPPING = 'commitment.free_shipping',
+  FREE_SHIPPING_DESC = 'commitment.free_shipping_desc',
+  FREE_RETURN = 'commitment.free_return',
+  FREE_RETURN_DESC = 'commitment.free_return_desc',
+  CRASH_REPLACEMENT = 'commitment.crash_replacement',
+  CRASH_REPLACEMENT_DESC = 'commitment.crash_replace_desc',
 }
 
 export enum I18nTermsSearch {
@@ -96,6 +114,17 @@ export enum I18nTermsFooter {
   RETURNS = 'returns',
   CRASH_REPLACEMENT = 'crash_replacement',
   PARTNERS = 'partners',
+  KEEP_UP = 'keep_up',
+  ENTER_EMAIL = 'enter_email',
+  CARE_GUIDE = 'care_guide',
+  CUSTOMER_SERVICE = 'customer_service',
+  FAQ = 'faq',
+  ABOUT_US = 'about_us',
+  ABOUT = 'about',
+  STORE = 'store',
+  OUR_COMMUNITY = 'our_community',
+  POLICY = 'policy',
+  TERM_AND_CONDITION = 'term_and_condition',
 }
 
 export enum I18nTermsProductCard {

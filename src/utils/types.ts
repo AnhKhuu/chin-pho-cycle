@@ -23,6 +23,10 @@ export type TQueryParamsList = {
 export type TProductItem = {
   allSizes: string[];
   brandId: number;
+  brand: {
+    name_vi: string;
+    name_en: string;
+  };
   collectionId: number;
   description_en: string;
   description_vi: string;
@@ -71,12 +75,7 @@ export type TTypeItem = {
   id: string;
   name_en: string;
   name_vi: string;
-};
-
-export type TCategoryCardItem = {
-  id: string;
   imageUrl: string;
-  title: string;
 };
 
 export enum TFilterType {
