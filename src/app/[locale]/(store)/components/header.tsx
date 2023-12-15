@@ -16,16 +16,17 @@ import {
 } from '@/components';
 import {
   I18nTermsHeader,
+  PublicApi,
   QueryKeys,
   QueryParam,
   Routes,
 } from '@/utils/constant';
-import { capitalizeFirstLetter, parseSearchParams } from '@/utils/fn';
+import { capitalizeFirstLetter } from '@/utils/fn';
 import {
   TBrandItem,
   TCategoryItem,
   TCollectionItem,
-  TVariantItem,
+  TProductItem,
 } from '@/utils/types';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -50,40 +51,16 @@ import {
 } from './category';
 
 export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
-  const { offset, limit, column, order } = parseSearchParams({
-    searchParams: {
-      page: '1',
-      perPage: '2',
-    },
-  });
-
-  const [brands, collections, categories, products] = useQueries([
+  const [brands, categories] = useQueries([
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${process.env.BASE_URL}/brands`),
-    },
-    {
-      queryKey: [QueryKeys.COLLECTIONS],
       queryFn: async () =>
-        await axios.get(`${process.env.BASE_URL}/collections`),
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.BRANDS}`),
     },
     {
       queryKey: [QueryKeys.CATEGORIES],
       queryFn: async () =>
-        await axios.get(`${process.env.BASE_URL}/categories`),
-    },
-    {
-      queryKey: [QueryKeys.PRODUCTS, 'header'],
-      queryFn: async () =>
-        await axios.post(`${process.env.BASE_URL}/variants/search`, {
-          offset,
-          limit,
-          column,
-          order,
-          typeIds: [],
-          brandIds: [],
-          genders: [],
-        }),
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.CATEGORIES}`),
     },
   ]);
 
@@ -91,13 +68,10 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
     <header className='sticky left-0 right-0 top-0 z-50'>
       <DesktopHeader
         brands={brands.data?.data}
-        collections={collections.data?.data}
         categories={categories.data?.data}
-        products={products.data?.data.variants}
       />
       <MobileHeader
         brands={brands.data?.data}
-        collections={collections.data?.data}
         categories={categories.data?.data}
       />
     </header>
@@ -106,14 +80,10 @@ export default function Header({}: React.HtmlHTMLAttributes<HTMLElement>) {
 
 function DesktopHeader({
   brands,
-  collections,
   categories,
-  products,
 }: {
   brands: TBrandItem[];
-  collections: TCollectionItem[];
   categories: TCategoryItem[];
-  products: TVariantItem[];
 }) {
   const [isShowShadow, setShowShadow] = useState(false);
   useEffect(() => {
@@ -126,7 +96,7 @@ function DesktopHeader({
 
   return (
     <nav
-      className={`relative hidden w-full items-center justify-between bg-white px-6 xl:flex ${
+      className={`relative hidden w-full items-center justify-between bg-white px-12 xl:flex ${
         isShowShadow ? 'shadow-md' : ''
       }`}
     >
@@ -139,12 +109,7 @@ function DesktopHeader({
           alt='logo'
         />
       </Link>
-      <Categories
-        categories={categories}
-        brands={brands}
-        collections={collections}
-        products={products}
-      />
+      <Categories categories={categories} brands={brands} />
       <div className='flex items-center'>
         <DesktopSearchBar />
         <LanguageOptions />
@@ -157,11 +122,9 @@ function DesktopHeader({
 
 function MobileHeader({
   brands,
-  collections,
   categories,
 }: {
   brands: TBrandItem[];
-  collections: TCollectionItem[];
   categories: TCategoryItem[];
 }) {
   const [isShowMenu, setShowMenu] = useState(false);
@@ -217,11 +180,11 @@ function MobileHeader({
             <div className='mx-7 flex items-center'>
               <LanguageOptions />
             </div>
-            <MobileMenu
+            {/* <MobileMenu
               brands={brands}
               collections={collections}
               categories={categories}
-            />
+            /> */}
           </div>
         </div>
         <svg
@@ -390,28 +353,18 @@ function CollectionAccordion({
 interface ICategoriesProps {
   categories: TCategoryItem[];
   brands: TBrandItem[];
-  collections: TCollectionItem[];
-  products: TVariantItem[];
 }
 
-function Categories({
-  categories,
-  collections,
-  brands,
-  products,
-}: ICategoriesProps) {
+function Categories({ categories, brands }: ICategoriesProps) {
   const locale = useLocale();
   const t = useTranslations('Header');
-
   return (
     <div className='flex self-stretch'>
       {categories?.map((category, index) => (
         <CategoryItem
           key={index}
-          collections={collections}
           category={category}
           title={capitalizeFirstLetter(category[`name_${locale}`])}
-          products={products}
         />
       ))}
       <Brands brands={brands} title={t(I18nTermsHeader.BRAND)} />
@@ -434,13 +387,9 @@ function Categories({
 function CategoryItem({
   title,
   category,
-  collections,
-  products,
 }: {
   title: string;
   category: TCategoryItem;
-  collections: TCollectionItem[];
-  products: TVariantItem[];
 }) {
   const locale = useLocale();
   const t = useTranslations('Header');
@@ -453,7 +402,7 @@ function CategoryItem({
             <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.FEATURED))}
             </TypeTitle>
-            <TypeItem url={`${Routes.SEARCH}?category=${category?.id}`}>
+            <TypeItem url={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${category?.id}`}>
               {capitalizeFirstLetter(t(I18nTermsHeader.NEW_ARRIVAL))}
             </TypeItem>
           </div>
@@ -474,9 +423,9 @@ function CategoryItem({
             <TypeTitle>
               {capitalizeFirstLetter(t(I18nTermsHeader.COLLECTIONS))}
             </TypeTitle>
-            {collections?.map((collection) => (
+            {category.featuredCollections?.map((collection) => (
               <TypeItem
-                url={`${Routes.SEARCH}?collection=${collection.id}`}
+                url={`${Routes.SEARCH}?${QueryParam.COLLECTIONS}=${collection.id}`}
                 key={collection.id}
               >
                 {capitalizeFirstLetter(collection[`name_${locale}`])}
@@ -485,7 +434,7 @@ function CategoryItem({
           </div>
         </div>
         <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-          {products?.map((product) => (
+          {category?.products.map((product) => (
             <ProductImage product={product} key={product.id} />
           ))}
         </div>
@@ -517,36 +466,33 @@ function Brands({ title, brands }: { title: string; brands: TBrandItem[] }) {
             ))}
           </div>
         </div>
-        <div className='grid w-2/5 grid-cols-2 gap-4 py-10 pr-10'>
-          {brands
-            ?.slice(0, 2)
-            .map((brand) => <BrandImage brand={brand} key={brand.id} />)}
-        </div>
       </CategoryMenu>
     </CategoryWrapper>
   );
 }
 
-function ProductImage({ product }: { product: TVariantItem }) {
+function ProductImage({ product }: { product: TProductItem }) {
   const locale = useLocale();
   return (
     <Link
-      href={`${Routes.PRODUCT}/${product.id}?${QueryParam.TYPES}=${product.product.typeId}&${QueryParam.BRANDS}=${product.product.brandId}`}
+      href={`${Routes.PRODUCT}/${product.id}?${QueryParam.TYPES}=${product.typeId}&${QueryParam.BRANDS}=${product.brandId}`}
       className='mb-4'
     >
-      <div className='relative'>
-        <Image
-          src={product?.images[0]}
-          alt='test'
-          width={500}
-          height={510}
-          sizes='(max-width: 768px), 50vw, 25vw'
-          className='h-64 w-full object-cover object-center'
-        />
-        <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
-          {capitalizeFirstLetter(product?.product[`name_${locale}`])}
+      {product.variants.map((prod) => (
+        <div className='relative' key={prod.id}>
+          <Image
+            src={prod.images[0]}
+            alt='test'
+            width={500}
+            height={510}
+            sizes='(max-width: 768px), 50vw, 25vw'
+            className='h-64 w-full object-cover object-center'
+          />
+          <div className='absolute bottom-0 right-0 flex w-full bg-white pl-2 transition duration-300 ease-in-out'>
+            {capitalizeFirstLetter(prod[`name_${locale}`])}
+          </div>
         </div>
-      </div>
+      ))}
     </Link>
   );
 }
@@ -744,55 +690,10 @@ function AuthButton() {
 
 function UKFlag() {
   return (
-    <svg
-      width='40'
-      height='30'
-      viewBox='0 0 40 30'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-    >
-      <g clipPath='url(#clip0_108_262)'>
-        <path d='M0 0H40V30H0V0Z' fill='#012169' />
-        <path
-          d='M4.6875 0L19.9375 11.3125L35.125 0H40V3.875L25 15.0625L40 26.1875V30H35L20 18.8125L5.0625 30H0V26.25L14.9375 15.125L0 4V0H4.6875Z'
-          fill='white'
-        />
-        <path
-          d='M26.5 17.5625L40 27.5V30L23.0625 17.5625H26.5ZM15 18.8125L15.375 21L3.375 30H0L15 18.8125ZM40 0V0.1875L24.4375 11.9375L24.5625 9.1875L36.875 0H40ZM0 0L14.9375 11H11.1875L0 2.625V0Z'
-          fill='#C8102E'
-        />
-        <path
-          d='M15.0625 0V30H25.0625V0H15.0625ZM0 10V20H40V10H0Z'
-          fill='white'
-        />
-        <path
-          d='M0 12.0625V18.0625H40V12.0625H0ZM17.0625 0V30H23.0625V0H17.0625Z'
-          fill='#C8102E'
-        />
-      </g>
-      <defs>
-        <clipPath id='clip0_108_262'>
-          <rect width='40' height='30' fill='white' />
-        </clipPath>
-      </defs>
-    </svg>
+    <Image alt='vn' src={'/images/uk.png'} width={24} height={24} sizes='100vw'/>
   );
 }
 
 function VNFlag() {
-  return (
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      width='40'
-      height='30'
-      viewBox='0 0 40 30'
-      fill='none'
-    >
-      <path d='M15.3626 0H0V30H40V0H15.3626Z' fill='#D80027' />
-      <path
-        d='M20 6L22.1247 12.8753H29L23.4376 17.1245L25.5624 24L20 19.7507L14.4376 24L16.5624 17.1245L11 12.8753H17.8753L20 6Z'
-        fill='#FFDA44'
-      />
-    </svg>
-  );
+  return <Image alt='vn' src={'/images/vn.png'} width={24} height={24} sizes='100vw'/>;
 }

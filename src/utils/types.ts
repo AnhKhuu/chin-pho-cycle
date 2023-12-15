@@ -12,6 +12,8 @@ export type TInitialFilters = {
   types: string[] | undefined;
   brands: string[] | undefined;
   genders: string[] | undefined;
+  sizes: string[] | undefined;
+  sortBy: string | undefined;
 };
 
 export type TQueryParamsList = {
@@ -21,17 +23,19 @@ export type TQueryParamsList = {
 };
 
 export type TProductItem = {
-  allSizes: string[];
+  availableSizes: string[];
   brandId: number;
+  categoryId: number;
+  createdAt: string;
+  updatedAt: string;
   brand: {
     name_vi: string;
     name_en: string;
   };
-  collectionId: number;
   description_en: string;
   description_vi: string;
   gender: string;
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
   price: number;
@@ -52,7 +56,7 @@ export type TBrandItem = {
   name_en: string;
   description_en: string;
   description_vi: string;
-  imageUrl: string;
+  images: string[];
 };
 
 export type TCollectionItem = {
@@ -61,7 +65,7 @@ export type TCollectionItem = {
   name_en: string;
   description_en: string;
   description_vi: string;
-  imageUrl: string;
+  images: string;
 };
 
 export type TCategoryItem = {
@@ -69,19 +73,24 @@ export type TCategoryItem = {
   name_en: string;
   name_vi: string;
   types: TTypeItem[];
+  featuredBrands: TBrandItem[];
+  featuredCollections: TCollectionItem[];
+  images: string[];
+  products: TProductItem[];
 };
 
 export type TTypeItem = {
   id: string;
   name_en: string;
   name_vi: string;
-  imageUrl: string;
+  images: string[];
 };
 
 export enum TFilterType {
   TYPES = 'types',
   BRANDS = 'brands',
   GENDERS = 'genders',
+  SIZES = 'sizes'
 }
 
 export type TFilterItem = {
@@ -96,22 +105,35 @@ export type TFilterItem = {
 export type TSortAndPaginationValues = {
   offset: number;
   limit: number;
-  column?: string;
-  order?: 'asc' | 'desc';
+  column: string;
+  order: 'asc' | 'desc';
 };
 
 export type TProductVariantFilters = TSortAndPaginationValues & {
   name_en?: string;
   name_vi?: string;
-  price_from?: number;
-  price_to?: number;
   genders?: Gender[];
+  sizes?: Size[];
+  isFeatured?: boolean;
   typeIds?: number[];
   brandIds?: number[];
+  collectionIds?: number[];
+  categoryId?: number;
+  productId?: number;
 };
 
 export enum Gender {
   Male = 'M',
   Female = 'F',
   Unisex = 'U',
+}
+
+export enum Size {
+  XXS = 'XXS',
+  XS = 'XS',
+  S = 'S',
+  M = 'M',
+  L = 'L',
+  XL = 'XL',
+  XXL = 'XXL',
 }

@@ -1,5 +1,5 @@
 import { I18nTermsProductCard, QueryParam, Routes } from '@/utils/constant';
-import { capitalizeFirstLetter } from '@/utils/fn';
+import { capitalizeFirstLetter, formatPrice } from '@/utils/fn';
 import { TVariantItem } from '@/utils/types';
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -25,12 +25,17 @@ export default function ProductCard({
       <div className='relative'>
         {isLatest && (
           <div className='absolute right-0 top-0 bg-primary px-3 py-1 font-semibold text-white'>
-            NEW!
+            {t(I18nTermsProductCard.NEW).toUpperCase()}!
+          </div>
+        )}
+        {sizes.length <= 0 && (
+          <div className='absolute right-0 top-0 bg-red-600 px-3 py-1 font-semibold text-white'>
+            {t(I18nTermsProductCard.SOLD_OUT).toUpperCase()}!
           </div>
         )}
         <Image
           src={product.images[0]}
-          alt='test'
+          alt='product'
           width={354}
           height={500}
           sizes='(max-width: 768px), 50vw, 25vw'
@@ -38,7 +43,7 @@ export default function ProductCard({
         />
         <Image
           src={product.images[1]}
-          alt='test'
+          alt='product'
           width={354}
           height={500}
           sizes='(max-width: 768px), 50vw, 25vw'
@@ -46,9 +51,12 @@ export default function ProductCard({
             'hidden h-52 w-full object-cover object-center group-hover:block sm:h-80 lg:h-80 xl:h-96'
           }
         />
-        <div className='absolute bottom-0 right-0 ml-auto flex bg-white font-light transition duration-300 ease-in-out group-hover:opacity-100 xl:left-0 xl:opacity-0'>
-          {sizes.map((size, index) => (
-            <p className='mx-2' key={index}>
+        <div className='absolute bottom-0 right-0 ml-auto flex text-xs bg-white py-1 font-light transition duration-300 ease-in-out group-hover:opacity-100 xl:left-0 xl:opacity-0'>
+          {product.stocks.map((size, index) => (
+            <p
+              className={`mx-2 ${size.quantity <= 0 ? 'line-through text-gray-400' : ''}`}
+              key={index}
+            >
               {size.size}
             </p>
           ))}
@@ -71,7 +79,7 @@ export default function ProductCard({
             )}`}
       </p>
       <p className='text-sm font-normal lg:text-base'>
-        {product.product.price.toString()} VND
+        {formatPrice(product.product.price).toString()} VND
       </p>
     </Link>
   );

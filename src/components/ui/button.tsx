@@ -8,10 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'transition ease-in-out duration-300 bg-primary text-white',
+        default: 'transition ease-in-out duration-300 bg-primary text-white hover:bg-opacity-90',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'border border-white text-white px-16 py-5 font-semibold',
+        outline: 'border border-white text-white px-16 py-5 font-semibold hover:bg-white hover:text-primary',
         secondary:
           'bg-white text-black-foreground hover:bg-gray-200 transition ease-in-out duration-300 ',
         ghost: 'hover:bg-accent hover:text-accent-foreground',

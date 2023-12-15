@@ -64,7 +64,9 @@
     "next": "Next",
     "male": "Male",
     "female": "Female",
-    "unisex": "Unisex"
+    "unisex": "Unisex",
+    "clear_filters": "Clear filters",
+    "apply": "Apply"
   },
   "ProductDetails": {
     "read_more": "Read more",
@@ -96,6 +98,8 @@
   },
   "ProductCard": {
     "colors": "Colors",
-    "color": "Color"
+    "color": "Color",
+    "new": "New",
+    "sold_out": "Sold out"
   }
 }

@@ -10,10 +10,12 @@ export enum Routes {
   PRODUCT = '/products',
 }
 
-export enum AdminRoutes {
-  BRANDS = '/admin/brands',
-  CATEGORIES = '/admin/categories',
-  COLLECTIONS = '/admin/collections',
+export enum PublicApi {
+  BRANDS = 'brands',
+  COLLECTIONS = 'collections',
+  CATEGORIES = 'categories',
+  TYPES = 'types',
+  PRODUCTS = 'variants/search',
 }
 
 export enum QueryKeys {
@@ -27,21 +29,6 @@ export enum QueryKeys {
   TYPES = 'types',
   PRODUCTS = 'products',
   PRODUCT = 'product',
-}
-
-export enum PrivateApi {
-  BRANDS = '/api/brands',
-  CATEGORIES = '/api/categories',
-  COLLECTIONS = '/api/collections',
-  SUB_CATEGORIES = '/api/sub-categories',
-  DELETE_CLOUDINARY_IMAGE = '/api/cloudinary',
-}
-
-export enum PublicApi {
-  BRANDS = '/api/public/brands',
-  CATEGORIES = '/api/public/categories',
-  COLLECTIONS = '/api/public/collections',
-  SUB_CATEGORIES = '/api/public/sub-categories',
 }
 
 export enum I18nTermsHeader {
@@ -95,6 +82,8 @@ export enum I18nTermsSearch {
   MALE = 'male',
   FEMALE = 'female',
   UNISEX = 'unisex',
+  CLEAR_FILTERS = 'clear_filters',
+  APPLY = 'apply'
 }
 
 export enum I18nTermsProductDetails {
@@ -130,6 +119,8 @@ export enum I18nTermsFooter {
 export enum I18nTermsProductCard {
   COLORS = 'colors',
   COLOR = 'color',
+  NEW = 'new',
+  SOLD_OUT = 'sold_out'
 }
 
 export const PAGE_SIZE = 4;
@@ -137,7 +128,9 @@ export const PAGE_SIZE = 4;
 export enum QueryParam {
   TYPES = 'types',
   BRANDS = 'brands',
+  COLLECTIONS = 'collections',
   GENDERS = 'genders',
   CATEGORY = 'category',
   NAME = 'name',
+  SIZES = 'sizes'
 }

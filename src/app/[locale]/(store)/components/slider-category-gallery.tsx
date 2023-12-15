@@ -20,7 +20,7 @@ export function SliderCategoryGallery({
   const t = useTranslations('Home');
 
   return (
-    <div className='category-slide lg:my-16'>
+    <div className='category-slide mx-12 lg:my-16'>
       <h1 className='mb-6 text-xl font-semibold lg:mb-12'>
         {capitalizeFirstLetter(t(I18nTermsHome.CATEGORIES))}
       </h1>
@@ -63,8 +63,8 @@ function TypeCard({ type }: { type: TTypeItem }) {
       className='relative block h-96 w-full lg:h-[450px] xl:h-[600px]'
     >
       <Image
-        src={'/images/bike.jpg'}
-        alt='test'
+        src={type.images?.[0]}
+        alt={type[`name_${locale}`].toUpperCase()}
         fill
         style={{
           objectFit: 'cover',

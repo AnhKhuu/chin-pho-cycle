@@ -64,7 +64,9 @@
     "next": "Sau",
     "male": "Nam",
     "female": "Nữ",
-    "unisex": "Unisex"
+    "unisex": "Unisex",
+    "clear_filters": "Xoá lọc",
+    "apply": "Lọc"
   },
   "ProductDetails": {
     "read_more": "Xem thêm",
@@ -96,6 +98,8 @@
   },
   "ProductCard": {
     "colors": "Màu",
-    "color": "Màu"
+    "color": "Màu",
+    "new": "Mới nhất",
+    "sold_out": "Cháy hàng"
   }
 }

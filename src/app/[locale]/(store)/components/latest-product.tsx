@@ -16,7 +16,7 @@ export function LatestProduct({
   const t = useTranslations('Home');
 
   return (
-    <div className='m-6 lg:my-16'>
+    <div className='m-6 lg:my-16 lg:mx-12'>
       <div className='mb-12 flex justify-between'>
         <h1 className='text-base font-semibold lg:text-xl'>
           {t(I18nTermsHome.LATEST_PRODUCTS)}

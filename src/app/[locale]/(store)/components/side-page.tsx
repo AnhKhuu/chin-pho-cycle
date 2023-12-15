@@ -11,17 +11,17 @@ export default function SidePage() {
     {
       title: t(I18nTermsHome.EVENT).toUpperCase(),
       url: '/',
-      imageUrl: '/images/bike.jpg',
+      imageUrl: '/images/event.png',
     },
     {
       title: t(I18nTermsHome.STORE).toUpperCase(),
       url: '/',
-      imageUrl: '/images/bike.jpg',
+      imageUrl: '/images/store.png',
     },
     {
       title: t(I18nTermsHome.COMMUNITY).toUpperCase(),
       url: '/',
-      imageUrl: '/images/bike.jpg',
+      imageUrl: '/images/community.png',
     },
   ];
 

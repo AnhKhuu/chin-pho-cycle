@@ -1,19 +1,14 @@
 'use client';
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components';
+import { Button } from '@/components';
 import {
   I18nTermsSearch,
   PAGE_SIZE,
+  PublicApi,
   QueryKeys,
   QueryParam,
   Routes,
+  bigShouldersDisplay,
 } from '@/utils/constant';
 import {
   calculatePages,
@@ -23,12 +18,13 @@ import {
 } from '@/utils/fn';
 import {
   Gender,
+  Size,
   TFilterItem,
   TFilterType,
   TProductVariantFilters,
 } from '@/utils/types';
 import axios from 'axios';
-import { MoveLeft, MoveRight, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -41,30 +37,22 @@ import ProductCard from '../../components/product-card';
 import ProductCardSkeleton from '../../components/product-card-skeleton';
 import { FilterList } from './components/filter-list';
 
-type TSort = {
-  value: string;
-  label: string;
+type TDescription = {
+  banner: string;
+  title: string;
 };
 
 export default function Page() {
   const locale = useLocale();
   const t = useTranslations('Search');
-  const { push } = useRouter();
+  const router = useRouter();
 
   //sort and pagination
-  const [sortBy, setSortBy] = useState<TSort | undefined>({
-    value: 'productId.desc',
+  const [sortBy, setSortBy] = useState<TSort>({
+    value: 'createdAt.desc',
     label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
   });
   const [page, setPage] = useState<number>(0);
-
-  //filter
-  const searchParams = useSearchParams();
-  const name = searchParams.get(QueryParam.NAME);
-  const categoryId = searchParams.get(QueryParam.CATEGORY);
-  const typeIds = searchParams.get(QueryParam.TYPES)?.split(',');
-  const brandIds = searchParams.get(QueryParam.BRANDS)?.split(',');
-  const genders = searchParams.get(QueryParam.GENDERS)?.split(',');
 
   const { offset, limit, column, order } = parseSearchParams({
     searchParams: {
@@ -74,39 +62,76 @@ export default function Page() {
     },
   });
 
+  //filter
+  const searchParams = useSearchParams();
+  const name = searchParams.get(QueryParam.NAME);
+  const categoryId = searchParams.get(QueryParam.CATEGORY);
+  const typeIds = searchParams.get(QueryParam.TYPES)?.split(',');
+  const brandIds = searchParams.get(QueryParam.BRANDS)?.split(',');
+  const genders = searchParams.get(QueryParam.GENDERS)?.split(',') as Gender[];
+  const sizes = searchParams.get(QueryParam.SIZES)?.split(',') as Size[];
+  const collectionIds = searchParams.get(QueryParam.COLLECTIONS)?.split(',');
+
+  // eslint-disable-next-line complexity
   const filterParams: TProductVariantFilters = useMemo(() => {
     return {
       offset,
       limit,
-      column,
-      order,
+      column: column as string,
+      order: order as 'asc' | 'desc',
       name_en: locale === 'en' && name ? name : '',
       name_vi: locale === 'vi' && name ? name : '',
-      genders: genders ? genders : [],
-      typeIds: typeIds ? typeIds.map((typeId) => parseInt(typeId)) : [],
-      brandIds: brandIds ? brandIds.map((brandId) => parseInt(brandId)) : [],
+      genders: genders,
+      sizes: sizes,
+      typeIds: typeIds?.map((typeId) => parseInt(typeId)),
+      brandIds: brandIds?.map((brandId) => parseInt(brandId)),
+      collectionIds: collectionIds?.map((collectionId) =>
+        parseInt(collectionId)
+      ),
+      categoryId: categoryId ? parseInt(categoryId) : undefined,
     };
-  }, [typeIds, brandIds, offset, limit, column, order, name, locale, genders]);
+  }, [
+    offset,
+    limit,
+    column,
+    order,
+    locale,
+    name,
+    genders,
+    sizes,
+    typeIds,
+    brandIds,
+    collectionIds,
+    categoryId,
+  ]);
 
   const [category, types, brands, productData] = useQueries([
     {
       queryKey: [QueryKeys.CATEGORY, categoryId],
       queryFn: async () =>
-        await axios.get(`${process.env.BASE_URL}/categories/${categoryId}`),
+        await axios.get(
+          `${process.env.BASE_URL}/${PublicApi.CATEGORIES}/${categoryId}`
+        ),
     },
     {
-      queryKey: [QueryKeys.TYPES],
-      queryFn: async () => await axios.get(`${process.env.BASE_URL}/types`),
+      queryKey: [QueryKeys.TYPES, typeIds],
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.TYPES}`, {
+          headers: {
+            // Locale: 'en'
+          },
+        }),
     },
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${process.env.BASE_URL}/brands`),
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.BRANDS}`),
     },
     {
       queryKey: [QueryKeys.PRODUCTS, filterParams],
       queryFn: async () =>
         await axios.post(
-          `${process.env.BASE_URL}/variants/search`,
+          `${process.env.BASE_URL}/${PublicApi.PRODUCTS}`,
           filterParams
         ),
     },
@@ -114,63 +139,57 @@ export default function Page() {
 
   const typeList = useMemo(() => {
     return (
-      category.data?.data?.types.map((type) => ({
-        value: type.id.toString(),
-        label: capitalizeFirstLetter(type[`name_${locale}`]),
-      })) ||
-      types.data?.data?.types.map((type) => ({
-        value: type.id.toString(),
-        label: capitalizeFirstLetter(type[`name_${locale}`]),
-      })) ||
+      category.data?.data?.types.map((type) => {
+        const total = type.products
+          ?.map((product) => product?.variants?.length)
+          .reduce((prev, next) => prev + next, 0);
+        return {
+          value: type.id.toString(),
+          label: `${capitalizeFirstLetter(type[`name_${locale}`])} (${total})`,
+        };
+      }) ||
+      types.data?.data?.map((type) => {
+        const total = type.products
+          ?.map((product) => product?.variants?.length)
+          .reduce((prev, next) => prev + next, 0);
+        return {
+          value: type.id.toString(),
+          label: `${capitalizeFirstLetter(type[`name_${locale}`])} ${
+            total ? `(${total})` : '(0)'
+          }`,
+        };
+      }) ||
       []
     );
-  }, [category, types, locale]);
+  }, [category.data?.data?.types, locale, types.data?.data]);
 
   const brandList = useMemo(() => {
     return (
-      brands.data?.data.map((brand) => ({
-        value: brand.id.toString(),
-        label: capitalizeFirstLetter(brand[`name_${locale}`]),
-      })) || []
+      category.data?.data?.featuredBrands.map((brand) => {
+        const total = brand.products
+          ?.map((product) => product?.variants?.length)
+          .reduce((prev, next) => prev + next, 0);
+        return {
+          value: brand.id.toString(),
+          label: `${capitalizeFirstLetter(brand[`name_${locale}`])} ${
+            total ? `(${total})` : '(0)'
+          }`,
+        };
+      }) ||
+      brands.data?.data.map((brand) => {
+        const total = brand.products
+          ?.map((product) => product?.variants?.length)
+          .reduce((prev, next) => prev + next, 0);
+        return {
+          value: brand.id.toString(),
+          label: `${capitalizeFirstLetter(brand[`name_${locale}`])} ${
+            total ? `(${total})` : '(0)'
+          }`,
+        };
+      }) ||
+      []
     );
-  }, [brands, locale]);
-
-  const handlePageChange = (pageNumber: number) => {
-    setPage(pageNumber);
-  };
-
-  const args = useMemo(() => {
-    return {
-      totalPages: calculatePages(productData.data?.data?.allVariants),
-      edgePageCount: 3,
-      middlePagesSiblingCount: 1,
-      truncableText: '...',
-      truncableClassName: 'w-10 px-0.5 text-center',
-    };
-  }, [productData]);
-
-  const sortList = [
-    {
-      value: 'productId.desc',
-      label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
-    },
-    {
-      value: 'name.asc',
-      label: 'A-Z',
-    },
-    {
-      value: 'name.desc',
-      label: 'Z-A',
-    },
-    {
-      value: 'price.asc',
-      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_LOW_TO_HIGH)),
-    },
-    {
-      value: 'price.desc',
-      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_HIGH_TO_LOW)),
-    },
-  ];
+  }, [brands.data?.data, category.data?.data?.featuredBrands, locale]);
 
   const filters: TFilterItem[] = [
     {
@@ -197,127 +216,201 @@ export default function Page() {
       ],
     },
     {
+      filterType: TFilterType.SIZES,
+      title: capitalizeFirstLetter(t(I18nTermsSearch.SIZE)),
+      fields: Object.keys(Size).map((size) => ({
+        label: size,
+        value: Size[size],
+      })),
+    },
+    {
       filterType: TFilterType.BRANDS,
       title: capitalizeFirstLetter(t(I18nTermsSearch.BRAND)),
       fields: brandList,
     },
   ];
 
-  if (productData) {
-    console.log({ productData });
-  }
-
-  const handleSubmit = (fields) => {
-    const params = prepareQueryString(fields);
-    push(`${Routes.SEARCH}?${params}`);
-  };
-
   const initialFilters = useMemo(() => {
     return {
       types: typeIds ? typeIds : [],
       brands: brandIds ? brandIds : [],
       genders: genders ? genders : [],
+      sizes: sizes ? sizes : [],
+      sortBy: 'createdAt.desc',
     };
-  }, [typeIds, brandIds, genders]);
+  }, [typeIds, brandIds, genders, sizes]);
+
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
+  };
+
+  const args = useMemo(() => {
+    return {
+      totalPages: calculatePages(productData.data?.data?.totalVariants),
+      edgePageCount: 3,
+      middlePagesSiblingCount: 1,
+      truncableText: '...',
+      truncableClassName: 'w-10 px-0.5 text-center',
+    };
+  }, [productData]);
+
+  const sorts = [
+    {
+      value: 'createdAt.desc',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
+    },
+    {
+      value: 'name.asc',
+      label: 'A-Z',
+    },
+    {
+      value: 'name.desc',
+      label: 'Z-A',
+    },
+    {
+      value: 'price.asc',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_LOW_TO_HIGH)),
+    },
+    {
+      value: 'price.desc',
+      label: capitalizeFirstLetter(t(I18nTermsSearch.PRICE_HIGH_TO_LOW)),
+    },
+  ];
+
+  const handleSubmit = (fields) => {
+    setPage(0);
+    const params = prepareQueryString(fields);
+    router.push(
+      categoryId
+        ? `${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${params}`
+        : `${Routes.SEARCH}?${params}`
+    );
+  };
 
   return (
-    <div className='my-10 grid grid-cols-2 gap-5 px-6 lg:grid-cols-4'>
-      <div className='col-span-1 hidden pt-5 lg:block'>
-        <FilterList
-          handleSubmit={handleSubmit}
-          filterList={filters}
-          initialFilters={initialFilters}
-        />
+    <div>
+      <div className='bg-white_1 px-12 py-6 text-sm font-normal'>
+        <div className='flex'>
+          <p>Home</p>
+          <span className='mx-1'>/</span>
+          <p>Men</p>
+          <span className='mx-1'>/</span>
+          <p>Gillet & Jacket </p>
+        </div>
       </div>
-      <div className='col-span-2 lg:col-span-3'>
-        <div className='mb-5 flex items-center justify-between'>
+      <div className='relative'>
+        <Image
+          src={'/images/search-page-banner.png'}
+          alt={'banner'}
+          width={1400}
+          height={1080}
+          sizes='100vw'
+          className='w-screen object-cover'
+        />
+        <div
+          className={`${bigShouldersDisplay.className} absolute bottom-12 left-12 text-6xl text-white`}
+        >
+          MENS GILLET & JACKET
+        </div>
+      </div>
+      <div className='my-10 px-12'>
+        <div className='mb-5 flex items-center justify-end'>
           <p>
-            {productData.data?.data?.allVariants}{' '}
+            {productData.data?.data?.totalVariants || 0}{' '}
             {capitalizeFirstLetter(t(I18nTermsSearch.RESULTS))}
           </p>
-          <div className='hidden lg:block'>
-            <span>{capitalizeFirstLetter(t(I18nTermsSearch.SORT_BY))} </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger className='text-gray-500 underline-offset-4 hover:underline'>
-                {sortBy?.label}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuRadioGroup
-                  value={sortBy?.value}
-                  onValueChange={(value: string) =>
-                    setSortBy(sortList.find((sort) => sort.value === value))
-                  }
-                >
-                  {sortList.map(({ value, label }) => (
-                    <DropdownMenuRadioItem
-                      key={value}
-                      value={value}
-                      className={`cursor-pointer ${
-                        sortBy?.value === value ? 'bg-accent' : ''
-                      }`}
-                    >
-                      <p>{label}</p>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
           <FiltersPopup>
             <FilterList
+              sortList={sorts}
               handleSubmit={handleSubmit}
               filterList={filters}
               initialFilters={initialFilters}
             />
           </FiltersPopup>
         </div>
-        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
-          {productData.data?.data.variants.map((product) => (
-            <div key={product.id}>
-              <ProductCard product={product} />
+        <div className='grid grid-cols-2 gap-5  lg:grid-cols-4'>
+          <div className='col-span-1 hidden lg:block'>
+            <div className='hidden lg:block'>
+              <span>{capitalizeFirstLetter(t(I18nTermsSearch.SORT_BY))}: </span>
+              {/* <DropdownMenu>
+                <DropdownMenuTrigger className='text-gray-500 underline-offset-4 hover:underline'>
+                  {sortBy?.label}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuRadioGroup
+                    value={sortBy?.value}
+                    onValueChange={(value: string) =>
+                      setSortBy(
+                        sortList.find((sort) => sort.value === value) as TSort
+                      )
+                    }
+                  >
+                    {sortList.map(({ value, label }) => (
+                      <DropdownMenuRadioItem
+                        key={value}
+                        value={value}
+                        className={`cursor-pointer ${
+                          sortBy?.value === value ? 'bg-accent' : ''
+                        }`}
+                      >
+                        <p>{label}</p>
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu> */}
             </div>
-          ))}
-        </div>
-        {productData.isLoading && (
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
-            {Array(27)
-              .fill(0)
-              .map((_, index) => (
-                <ProductCardSkeleton key={index} />
-              ))}
+            <FilterList
+              sortList={sorts}
+              handleSubmit={handleSubmit}
+              filterList={filters}
+              initialFilters={initialFilters}
+            />
           </div>
-        )}
-        <div className='mt-10'>
-          {args.totalPages > 1 && (
-            <Pagination
-              {...args}
-              currentPage={page}
-              setCurrentPage={handlePageChange}
-              className='flex h-10 w-full select-none items-center text-sm'
-            >
-              <Pagination.PrevButton className='flex cursor-pointer items-center hover:text-gray-500'>
-                <MoveLeft strokeWidth={1} />
-                <p className='ml-2'>
-                  {capitalizeFirstLetter(t(I18nTermsSearch.PREVIOUS))}
-                </p>
-              </Pagination.PrevButton>
-              <nav className='flex flex-grow justify-center'>
-                <ul className='flex items-center'>
-                  <Pagination.PageButton
-                    activeClassName='border-b-2 border-black'
-                    inactiveClassName='text-gray-500 border-white hover:text-gray-500 border-b-2 hover:border-gray-300'
-                    className='flex h-10 w-10 cursor-pointer items-center justify-center'
-                  />
-                </ul>
-              </nav>
-              <Pagination.NextButton className='flex cursor-pointer items-center hover:text-gray-500'>
-                <p className='mr-2'>
-                  {capitalizeFirstLetter(t(I18nTermsSearch.NEXT))}
-                </p>
-                <MoveRight strokeWidth={1} />
-              </Pagination.NextButton>
-            </Pagination>
-          )}
+          <div className='col-span-2 lg:col-span-3'>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
+              {productData.data?.data.variants.map((product) => (
+                <div key={product.id}>
+                  <ProductCard product={product} isLatest={false} />
+                </div>
+              ))}
+            </div>
+            {productData.isLoading && (
+              <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
+                {Array(27)
+                  .fill(0)
+                  .map((_, index) => (
+                    <ProductCardSkeleton key={index} />
+                  ))}
+              </div>
+            )}
+            <div className='mt-10'>
+              {args.totalPages > 1 && (
+                <Pagination
+                  {...args}
+                  currentPage={page}
+                  setCurrentPage={handlePageChange}
+                  className='flex h-10 w-full select-none items-center text-sm'
+                >
+                  <nav className='flex flex-grow justify-center'>
+                    <Pagination.PrevButton className='flex cursor-pointer items-center hover:text-gray-500'>
+                      <ChevronLeft strokeWidth={1} />
+                    </Pagination.PrevButton>
+                    <ul className='flex items-center'>
+                      <Pagination.PageButton
+                        activeClassName='underline underline-offset-4'
+                        inactiveClassName='text-gray-500 border-white hover:text-black hover:underline hover:underline-offset-4'
+                        className='flex h-10 w-10 cursor-pointer items-center justify-center'
+                      />
+                    </ul>
+                    <Pagination.NextButton className='flex cursor-pointer items-center text-gray-500 hover:text-black'>
+                      <ChevronRight strokeWidth={1} />
+                    </Pagination.NextButton>
+                  </nav>
+                </Pagination>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

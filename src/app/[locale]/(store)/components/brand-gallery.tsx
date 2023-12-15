@@ -23,11 +23,11 @@ export function BrandGallery({
           key={brand.id}
         >
           <Image
-            src={brand.imageUrl}
+            src={brand.images[0]}
             alt={brand[`name_${locale}`]}
             fill
             sizes='100vw'
-            style={{ objectFit: 'cover' }}
+            className='object-cover'
           />
           <div className='absolute bottom-10 left-10 right-10 grid grid-cols-2'>
             <div>
