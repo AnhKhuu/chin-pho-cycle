@@ -1,6 +1,19 @@
 'use client';
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Button, Form, FormControl, FormField, FormItem, FormLabel, RadioGroup, RadioGroupItem } from '@/components';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components';
 import { Checkbox } from '@/components/ui/checkbox';
 import { I18nTermsSearch, Routes } from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
@@ -11,12 +24,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
-
-type TSort = {
-  value: string;
-  label: string;
-};
 
 const FormSchema = z.object({
   types: z.array(z.string()).optional(),
@@ -88,7 +95,7 @@ export function FilterList({
                 control={form.control}
                 name={'sortBy'}
                 render={({ field }) => {
-                  console.log(field.value)
+                  console.log(field.value);
                   return (
                     <FormItem className='my-2 flex items-start space-x-3'>
                       <FormControl className='peer'>
@@ -99,11 +106,14 @@ export function FilterList({
                               key={item.value}
                             >
                               <RadioGroupItem
-                                className='h-7 w-7 peer'
+                                className='peer h-7 w-7'
                                 value={item.value}
                                 id={item.value}
                               />
-                              <FormLabel htmlFor={item.value} className='font-normal underline-offset-4 peer-hover:cursor-pointer peer-hover:underline'>
+                              <FormLabel
+                                htmlFor={item.value}
+                                className='font-normal underline-offset-4 peer-hover:cursor-pointer peer-hover:underline'
+                              >
                                 {item.label}
                               </FormLabel>
                             </div>

@@ -22,6 +22,7 @@ import {
   TFilterItem,
   TFilterType,
   TProductVariantFilters,
+  TSort,
 } from '@/utils/types';
 import axios from 'axios';
 import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
@@ -37,17 +38,13 @@ import ProductCard from '../../components/product-card';
 import ProductCardSkeleton from '../../components/product-card-skeleton';
 import { FilterList } from './components/filter-list';
 
-type TDescription = {
-  banner: string;
-  title: string;
-};
-
 export default function Page() {
   const locale = useLocale();
   const t = useTranslations('Search');
   const router = useRouter();
 
   //sort and pagination
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sortBy, setSortBy] = useState<TSort>({
     value: 'createdAt.desc',
     label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),

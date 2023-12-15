@@ -22,6 +22,11 @@ export type TQueryParamsList = {
   gender: string | undefined;
 };
 
+export type TSort = {
+  value: string;
+  label: string;
+};
+
 export type TProductItem = {
   availableSizes: string[];
   brandId: number;
@@ -90,7 +95,7 @@ export enum TFilterType {
   TYPES = 'types',
   BRANDS = 'brands',
   GENDERS = 'genders',
-  SIZES = 'sizes'
+  SIZES = 'sizes',
 }
 
 export type TFilterItem = {
