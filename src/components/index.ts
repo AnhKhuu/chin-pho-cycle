@@ -57,7 +57,6 @@ export { Heading } from './ui/heading';
 export { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 
 export { Input } from './ui/input';
-export { ImageUpload } from './ui/image-upload';
 export { Label } from './ui/label';
 
 export { RadioGroup, RadioGroupItem } from './ui/radio-group';

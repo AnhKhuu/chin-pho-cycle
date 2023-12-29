@@ -1,5 +1,4 @@
 import { type ClassValue, clsx } from 'clsx';
-import { createHash } from 'crypto';
 import queryString from 'query-string';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
@@ -20,16 +19,23 @@ export function capitalizeFirstLetter(text: string): string {
     .join(' ');
 }
 
+export function renderLimitText({
+  text,
+  maxWords,
+}: {
+  text: string;
+  maxWords: number;
+}) {
+  if (text.length > maxWords) {
+    return text.slice(0, maxWords) + '...';
+  }
+  return text;
+}
+
 export function getPublicIdFromUrl(url: string) {
   const regex = /\/v\d+\/([^/]+)\.\w{3,4}$/;
   const match = url.match(regex);
   return match ? match[1] : null;
-}
-
-export function generateSHA1(data: string) {
-  const hash = createHash('sha1');
-  hash.update(data);
-  return hash.digest('hex');
 }
 
 export function generateSignature(publicId: string, apiSecret: string) {
@@ -60,6 +66,10 @@ export function prepareQueryString(params: TQueryParamsList) {
       arrayFormat: 'comma',
     }
   );
+}
+
+export function formatPrice(price: number) {
+  return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function getObjectKeys(obj) {

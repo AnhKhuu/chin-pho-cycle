@@ -1,19 +1,19 @@
 'use client';
 
-import { QueryKeys } from '@/utils/constant';
+import { PublicApi, QueryKeys } from '@/utils/constant';
 import { parseSearchParams } from '@/utils/fn';
 import axios from 'axios';
 import { useQueries } from 'react-query';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 
-import { Banner } from './components/banner';
 import { BrandGallery } from './components/brand-gallery';
+import { CategoryGallery } from './components/category-gallery';
 import Commitment from './components/commitment';
+import { HighlightGallery } from './components/highlight-gallery';
 import { LatestProduct } from './components/latest-product';
 import SidePage from './components/side-page';
-import { SliderCategoryGallery } from './components/slider-category-gallery';
-import { StaticCategoryGallery } from './components/static-category-gallery';
+import { TypeGallery } from './components/type-gallery';
 import { VideoPlayer } from './components/video-player';
 
 export default function Page() {
@@ -23,27 +23,25 @@ export default function Page() {
       perPage: '8',
     },
   });
-  const [brands, collections, products, categories] = useQueries([
+  const [highlights, brands, products, categories] = useQueries([
+    {
+      queryKey: [QueryKeys.HIGHLIGHTS],
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.HIGHLIGHTS}`),
+    },
     {
       queryKey: [QueryKeys.BRANDS],
-      queryFn: async () => await axios.get(`${process.env.BASE_URL}/brands`),
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.BRANDS}`),
     },
     {
-      queryKey: [QueryKeys.COLLECTIONS],
+      queryKey: [QueryKeys.PRODUCTS],
       queryFn: async () =>
-        await axios.get(`${process.env.BASE_URL}/collections`),
-    },
-    {
-      queryKey: [QueryKeys.PRODUCTS, 'homepage'],
-      queryFn: async () =>
-        await axios.post(`${process.env.BASE_URL}/variants/search`, {
+        await axios.post(`${process.env.BASE_URL}/${PublicApi.PRODUCTS}`, {
           offset,
           limit,
           column,
           order,
-          typeIds: [],
-          brandIds: [],
-          genders: [],
         }),
     },
     {
@@ -55,17 +53,17 @@ export default function Page() {
 
   return (
     <>
-      <Banner
-        collections={collections.data?.data}
-        isLoading={collections.isLoading}
-      />
+      <HighlightGallery
+        highlights={highlights.data?.data}
+        isLoading={highlights.isLoading}
+      ></HighlightGallery>
       <LatestProduct
         products={products.data?.data.variants}
         isLoading={products.isLoading}
       />
-      <StaticCategoryGallery />
+      <CategoryGallery categories={categories.data?.data} />
       <BrandGallery brands={brands.data?.data} isLoading={brands.isLoading} />
-      <SliderCategoryGallery
+      <TypeGallery
         isLoading={brands.isLoading}
         categories={categories.data?.data}
       />

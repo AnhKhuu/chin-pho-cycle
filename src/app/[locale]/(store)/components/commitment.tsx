@@ -1,6 +1,5 @@
-import { I18nTermsHome, bigShouldersDisplay } from '@/utils/constant';
+import { I18nTermsHome } from '@/utils/constant';
 import { useTranslations } from 'next-intl';
-import React from 'react';
 
 export default function Commitment() {
   const t = useTranslations('Home');
@@ -40,11 +39,7 @@ function CommitmentCard({ commitment }: { commitment: TCommitment }) {
   return (
     <div className='col-span-1'>
       <div className='mb-6 h-40 w-40 rounded bg-white'></div>
-      <p
-        className={`text-5xl font-light text-white ${bigShouldersDisplay.className}`}
-      >
-        {commitment.title}
-      </p>
+      <p className={'text-5xl font-light text-white '}>{commitment.title}</p>
       <p className='font-normal text-white'>{commitment.description}</p>
     </div>
   );

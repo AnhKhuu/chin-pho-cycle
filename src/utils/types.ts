@@ -1,5 +1,5 @@
 export type TVariantItem = {
-  id: string;
+  id: number;
   images: string[];
   name_en: string;
   name_vi: string;
@@ -12,6 +12,8 @@ export type TInitialFilters = {
   types: string[] | undefined;
   brands: string[] | undefined;
   genders: string[] | undefined;
+  sizes: string[] | undefined;
+  sortBy: string | null;
 };
 
 export type TQueryParamsList = {
@@ -20,18 +22,22 @@ export type TQueryParamsList = {
   gender: string | undefined;
 };
 
+export type TSort = {
+  value: string;
+  label: string;
+};
+
 export type TProductItem = {
-  allSizes: string[];
+  availableSizes: string[];
   brandId: number;
-  brand: {
-    name_vi: string;
-    name_en: string;
-  };
-  collectionId: number;
+  categoryId: number;
+  createdAt: string;
+  updatedAt: string;
+  brand: TBrandItem;
   description_en: string;
   description_vi: string;
   gender: string;
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
   price: number;
@@ -40,48 +46,71 @@ export type TProductItem = {
 };
 
 export type TStockItem = {
-  id: string;
+  id: number;
   size: string;
   quantity: number;
-  variantId: string;
+  variantId: number;
 };
 
 export type TBrandItem = {
-  id: string;
+  id: number;
   name_vi: string;
   name_en: string;
   description_en: string;
   description_vi: string;
-  imageUrl: string;
+  images: string[];
+  logos: string[];
+  isFeatured: boolean;
 };
 
 export type TCollectionItem = {
-  id: string;
+  id: number;
   name_vi: string;
   name_en: string;
   description_en: string;
   description_vi: string;
-  imageUrl: string;
+  images: string;
+};
+
+export type THighlightItem = {
+  id: number;
+  resourceUrl: string;
+  name_en: string;
+  name_vi: string;
+  description_en: string;
+  description_vi: string;
+  titleImages: string[];
+  bannerImages: string[];
+  bannerVideos: string[];
+  bannerVideoExternalUrl: string;
+  isBannerVideoExternal: boolean;
 };
 
 export type TCategoryItem = {
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
   types: TTypeItem[];
+  featuredBrands: TBrandItem[];
+  featuredCollections: TCollectionItem[];
+  images: string[];
+  products: TProductItem[];
+  isFeatured: boolean;
 };
 
 export type TTypeItem = {
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
-  imageUrl: string;
+  images: string[];
+  isFeatured: boolean;
 };
 
 export enum TFilterType {
   TYPES = 'types',
   BRANDS = 'brands',
   GENDERS = 'genders',
+  SIZES = 'sizes',
 }
 
 export type TFilterItem = {
@@ -96,22 +125,35 @@ export type TFilterItem = {
 export type TSortAndPaginationValues = {
   offset: number;
   limit: number;
-  column?: string;
-  order?: 'asc' | 'desc';
+  column: string;
+  order: 'asc' | 'desc';
 };
 
 export type TProductVariantFilters = TSortAndPaginationValues & {
   name_en?: string;
   name_vi?: string;
-  price_from?: number;
-  price_to?: number;
   genders?: Gender[];
+  sizes?: Size[];
+  isFeatured?: boolean;
   typeIds?: number[];
   brandIds?: number[];
+  collectionIds?: number[];
+  categoryId?: number;
+  productId?: number;
 };
 
 export enum Gender {
   Male = 'M',
   Female = 'F',
   Unisex = 'U',
+}
+
+export enum Size {
+  XXS = 'XXS',
+  XS = 'XS',
+  S = 'S',
+  M = 'M',
+  L = 'L',
+  XL = 'XL',
+  XXL = 'XXL',
 }
