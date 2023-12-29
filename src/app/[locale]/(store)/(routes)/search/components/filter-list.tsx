@@ -17,7 +17,12 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { I18nTermsSearch, Routes } from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
-import { TFilterItem, TFilterType, TInitialFilters } from '@/utils/types';
+import {
+  TFilterItem,
+  TFilterType,
+  TInitialFilters,
+  TSort,
+} from '@/utils/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
@@ -55,7 +60,7 @@ export function FilterList({
       sizes: initialFilters.sizes,
       brands: initialFilters.brands,
       genders: initialFilters.genders,
-      sortBy: 'createdAt.desc',
+      sortBy: initialFilters.sortBy as string,
     },
   });
 
@@ -65,12 +70,14 @@ export function FilterList({
       sizes: initialFilters.sizes,
       brands: initialFilters.brands,
       genders: initialFilters.genders,
+      sortBy: initialFilters.sortBy as string,
     });
   }, [
     form,
     initialFilters.brands,
     initialFilters.genders,
     initialFilters.sizes,
+    initialFilters.sortBy,
     initialFilters.types,
     pathname,
   ]);
@@ -87,19 +94,28 @@ export function FilterList({
           defaultValue={filterList.map(({ filterType }) => filterType)}
         >
           <AccordionItem value={'sort'}>
-            <AccordionTrigger className='font-semibold underline-offset-4'>
+            <AccordionTrigger className='justify-start font-semibold underline-offset-4'>
               {capitalizeFirstLetter(t(I18nTermsSearch.SORT_BY))}:
+              <span className='text-white'>a</span>
+              <span className='mr-auto font-normal'>
+                {
+                  sortList.find((field) => field.value === form.watch('sortBy'))
+                    ?.label
+                }
+              </span>
             </AccordionTrigger>
             <AccordionContent>
               <FormField
                 control={form.control}
                 name={'sortBy'}
                 render={({ field }) => {
-                  console.log(field.value);
                   return (
                     <FormItem className='my-2 flex items-start space-x-3'>
                       <FormControl className='peer'>
-                        <RadioGroup defaultValue={field.value}>
+                        <RadioGroup
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
                           {sortList.map((item) => (
                             <div
                               className='flex items-center space-x-2'

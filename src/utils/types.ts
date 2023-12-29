@@ -1,5 +1,5 @@
 export type TVariantItem = {
-  id: string;
+  id: number;
   images: string[];
   name_en: string;
   name_vi: string;
@@ -13,7 +13,7 @@ export type TInitialFilters = {
   brands: string[] | undefined;
   genders: string[] | undefined;
   sizes: string[] | undefined;
-  sortBy: string | undefined;
+  sortBy: string | null;
 };
 
 export type TQueryParamsList = {
@@ -33,10 +33,7 @@ export type TProductItem = {
   categoryId: number;
   createdAt: string;
   updatedAt: string;
-  brand: {
-    name_vi: string;
-    name_en: string;
-  };
+  brand: TBrandItem;
   description_en: string;
   description_vi: string;
   gender: string;
@@ -49,23 +46,25 @@ export type TProductItem = {
 };
 
 export type TStockItem = {
-  id: string;
+  id: number;
   size: string;
   quantity: number;
-  variantId: string;
+  variantId: number;
 };
 
 export type TBrandItem = {
-  id: string;
+  id: number;
   name_vi: string;
   name_en: string;
   description_en: string;
   description_vi: string;
   images: string[];
+  logos: string[];
+  isFeatured: boolean;
 };
 
 export type TCollectionItem = {
-  id: string;
+  id: number;
   name_vi: string;
   name_en: string;
   description_en: string;
@@ -73,8 +72,22 @@ export type TCollectionItem = {
   images: string;
 };
 
+export type THighlightItem = {
+  id: number;
+  resourceUrl: string;
+  name_en: string;
+  name_vi: string;
+  description_en: string;
+  description_vi: string;
+  titleImages: string[];
+  bannerImages: string[];
+  bannerVideos: string[];
+  bannerVideoExternalUrl: string;
+  isBannerVideoExternal: boolean;
+};
+
 export type TCategoryItem = {
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
   types: TTypeItem[];
@@ -82,13 +95,15 @@ export type TCategoryItem = {
   featuredCollections: TCollectionItem[];
   images: string[];
   products: TProductItem[];
+  isFeatured: boolean;
 };
 
 export type TTypeItem = {
-  id: string;
+  id: number;
   name_en: string;
   name_vi: string;
   images: string[];
+  isFeatured: boolean;
 };
 
 export enum TFilterType {

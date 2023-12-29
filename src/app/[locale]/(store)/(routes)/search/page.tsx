@@ -8,21 +8,23 @@ import {
   QueryKeys,
   QueryParam,
   Routes,
-  bigShouldersDisplay,
 } from '@/utils/constant';
 import {
   calculatePages,
   capitalizeFirstLetter,
   parseSearchParams,
   prepareQueryString,
+  renderLimitText,
 } from '@/utils/fn';
 import {
   Gender,
   Size,
+  TBrandItem,
+  TCollectionItem,
   TFilterItem,
   TFilterType,
   TProductVariantFilters,
-  TSort,
+  TTypeItem,
 } from '@/utils/types';
 import axios from 'axios';
 import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
@@ -33,33 +35,24 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Pagination } from 'react-headless-pagination';
 import { useQueries } from 'react-query';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import { Autoplay, Scrollbar } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import ProductCard from '../../components/product-card';
 import ProductCardSkeleton from '../../components/product-card-skeleton';
 import { FilterList } from './components/filter-list';
 
+const MAX_WORDS = 200;
+
 export default function Page() {
   const locale = useLocale();
   const t = useTranslations('Search');
   const router = useRouter();
-
-  //sort and pagination
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [sortBy, setSortBy] = useState<TSort>({
-    value: 'createdAt.desc',
-    label: capitalizeFirstLetter(t(I18nTermsSearch.NEWEST)),
-  });
   const [page, setPage] = useState<number>(0);
 
-  const { offset, limit, column, order } = parseSearchParams({
-    searchParams: {
-      page: (page + 1).toString(),
-      perPage: PAGE_SIZE.toString(),
-      sort: sortBy?.value,
-    },
-  });
-
-  //filter
+  //query params
   const searchParams = useSearchParams();
   const name = searchParams.get(QueryParam.NAME);
   const categoryId = searchParams.get(QueryParam.CATEGORY);
@@ -67,9 +60,21 @@ export default function Page() {
   const brandIds = searchParams.get(QueryParam.BRANDS)?.split(',');
   const genders = searchParams.get(QueryParam.GENDERS)?.split(',') as Gender[];
   const sizes = searchParams.get(QueryParam.SIZES)?.split(',') as Size[];
-  const collectionIds = searchParams.get(QueryParam.COLLECTIONS)?.split(',');
+  const collectionId = searchParams.get(QueryParam.COLLECTION);
+  const sortBy = searchParams.get(QueryParam.SORT_BY)
+    ? searchParams.get(QueryParam.SORT_BY)
+    : 'createdAt.desc';
 
-  // eslint-disable-next-line complexity
+  //sort and pagination
+  const { offset, limit, column, order } = parseSearchParams({
+    searchParams: {
+      page: (page + 1).toString(),
+      perPage: PAGE_SIZE.toString(),
+      sort: sortBy as string,
+    },
+  });
+
+  //filter
   const filterParams: TProductVariantFilters = useMemo(() => {
     return {
       offset,
@@ -82,9 +87,7 @@ export default function Page() {
       sizes: sizes,
       typeIds: typeIds?.map((typeId) => parseInt(typeId)),
       brandIds: brandIds?.map((brandId) => parseInt(brandId)),
-      collectionIds: collectionIds?.map((collectionId) =>
-        parseInt(collectionId)
-      ),
+      collectionIds: collectionId ? [parseInt(collectionId)] : [],
       categoryId: categoryId ? parseInt(categoryId) : undefined,
     };
   }, [
@@ -98,11 +101,11 @@ export default function Page() {
     sizes,
     typeIds,
     brandIds,
-    collectionIds,
+    collectionId,
     categoryId,
   ]);
 
-  const [category, types, brands, productData] = useQueries([
+  const [category, types, brands, productData, collection] = useQueries([
     {
       queryKey: [QueryKeys.CATEGORY, categoryId],
       queryFn: async () =>
@@ -111,13 +114,9 @@ export default function Page() {
         ),
     },
     {
-      queryKey: [QueryKeys.TYPES, typeIds],
+      queryKey: [QueryKeys.TYPES],
       queryFn: async () =>
-        await axios.get(`${process.env.BASE_URL}/${PublicApi.TYPES}`, {
-          headers: {
-            // Locale: 'en'
-          },
-        }),
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.TYPES}`),
     },
     {
       queryKey: [QueryKeys.BRANDS],
@@ -130,6 +129,13 @@ export default function Page() {
         await axios.post(
           `${process.env.BASE_URL}/${PublicApi.PRODUCTS}`,
           filterParams
+        ),
+    },
+    {
+      queryKey: [QueryKeys.COLLECTION, collectionId],
+      queryFn: async () =>
+        await axios.get(
+          `${process.env.BASE_URL}/${PublicApi.COLLECTIONS}/${collectionId}`
         ),
     },
   ]);
@@ -188,6 +194,32 @@ export default function Page() {
     );
   }, [brands.data?.data, category.data?.data?.featuredBrands, locale]);
 
+  const brandImageList = useMemo(() => {
+    if (brandIds) {
+      const originalBrandList =
+        category.data?.data?.featuredBrands || brands.data?.data || [];
+      return originalBrandList.filter((brand: TBrandItem) =>
+        brandIds
+          .map((brandId) => parseInt(brandId))
+          .some((brandId) => brandId === brand.id)
+      );
+    }
+    return [];
+  }, [brandIds, brands.data?.data, category.data?.data?.featuredBrands]);
+
+  const typeImageList = useMemo(() => {
+    if (typeIds) {
+      const originalTypeList =
+        category.data?.data?.types || types.data?.data || [];
+      return originalTypeList.filter((type: TTypeItem) =>
+        typeIds
+          .map((typeId) => parseInt(typeId))
+          .some((typeId) => typeId === type.id)
+      );
+    }
+    return [];
+  }, [category.data?.data?.types, typeIds, types.data?.data]);
+
   const filters: TFilterItem[] = [
     {
       filterType: TFilterType.TYPES,
@@ -233,9 +265,9 @@ export default function Page() {
       brands: brandIds ? brandIds : [],
       genders: genders ? genders : [],
       sizes: sizes ? sizes : [],
-      sortBy: 'createdAt.desc',
+      sortBy: sortBy,
     };
-  }, [typeIds, brandIds, genders, sizes]);
+  }, [typeIds, brandIds, genders, sizes, sortBy]);
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
@@ -277,40 +309,148 @@ export default function Page() {
   const handleSubmit = (fields) => {
     setPage(0);
     const params = prepareQueryString(fields);
-    router.push(
-      categoryId
-        ? `${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${params}`
-        : `${Routes.SEARCH}?${params}`
-    );
+    if (categoryId) {
+      return router.push(
+        `${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${params}`
+      );
+    }
+    if (collectionId) {
+      return router.push(
+        `${Routes.SEARCH}?${QueryParam.COLLECTION}=${collectionId}&${params}`
+      );
+    }
+    return router.push(`${Routes.SEARCH}?${params}`);
   };
 
   return (
     <div>
       <div className='bg-white_1 px-12 py-6 text-sm font-normal'>
         <div className='flex'>
-          <p>Home</p>
-          <span className='mx-1'>/</span>
-          <p>Men</p>
-          <span className='mx-1'>/</span>
-          <p>Gillet & Jacket </p>
+          <div>
+            <Link
+              href={Routes.HOME}
+              className='hover:underline hover:underline-offset-4'
+            >
+              {t(I18nTermsSearch.HOME)}
+            </Link>
+          </div>
+          {category.data?.data && (
+            <div className='flex'>
+              <span className='mx-1'>/</span>
+              <Link
+                className='flex hover:underline hover:underline-offset-4'
+                href={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}`}
+              >
+                {category.data?.data[`name_${locale}`]}
+              </Link>
+            </div>
+          )}
+          {collection.data?.data && (
+            <div className='flex'>
+              <span className='mx-1'>/</span>
+              <Link
+                className='flex hover:underline hover:underline-offset-4'
+                href={`${Routes.SEARCH}?${QueryParam.COLLECTION}=${collectionId}`}
+              >
+                {collection.data?.data[`name_${locale}`]}
+              </Link>
+            </div>
+          )}
+          {typeImageList.map((type: TTypeItem) => (
+            <div key={type.id} className='flex'>
+              <span className='mx-1'>/</span>
+              <Link
+                key={type.id}
+                className='hover:underline hover:underline-offset-4'
+                href={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${QueryParam.TYPES}=${type.id}`}
+              >
+                {type[`name_${locale}`]}
+              </Link>
+            </div>
+          ))}
+          {brandImageList.map((brand: TTypeItem) =>
+            category.data?.data ? (
+              <div key={brand.id} className='flex'>
+                <span className='mx-1'>/</span>
+                <Link
+                  key={brand.id}
+                  className='hover:underline hover:underline-offset-4'
+                  href={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${QueryParam.BRANDS}=${brand.id}`}
+                >
+                  {brand[`name_${locale}`]}
+                </Link>
+              </div>
+            ) : (
+              <div key={brand.id} className='flex'>
+                <span className='mx-1'>/</span>
+                <Link
+                  key={brand.id}
+                  className='hover:underline hover:underline-offset-4'
+                  href={`${Routes.SEARCH}?${QueryParam.BRANDS}=${brand.id}`}
+                >
+                  {brand[`name_${locale}`]}
+                </Link>
+              </div>
+            )
+          )}
         </div>
       </div>
-      <div className='relative'>
+      {!collection.data?.data && (
+        <div className='category-slide'>
+          <Swiper
+            scrollbar={true}
+            loop={true}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            modules={[Scrollbar, Autoplay]}
+          >
+            {typeImageList.map((type: TTypeItem) => (
+              <SwiperSlide key={type.id}>
+                <ImageSlide
+                  imageUrl={type.images[0]}
+                  name={type[`name_${locale}`]}
+                />
+              </SwiperSlide>
+            ))}
+            {brandImageList.map((brand: TBrandItem) => (
+              <SwiperSlide key={brand.id}>
+                <ImageSlide
+                  imageUrl={brand.images[0]}
+                  name={brand[`name_${locale}`]}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
+      {(collection.data?.data as TCollectionItem) && (
         <Image
-          src={'/images/search-page-banner.png'}
-          alt={'banner'}
-          width={1400}
-          height={1080}
+          src={collection.data?.data.images[0]}
+          alt={collection.data?.data[`name_${locale}`]}
+          width={1441}
+          height={638}
           sizes='100vw'
-          className='w-screen object-cover'
+          className='h-[638px] w-screen object-cover'
         />
-        <div
-          className={`${bigShouldersDisplay.className} absolute bottom-12 left-12 text-6xl text-white`}
-        >
-          MENS GILLET & JACKET
+      )}
+      {collection.data?.data && (
+        <div className='mx-12 mb-10 mt-20 grid grid-cols-2 font-normal'>
+          <div className='col-span-1'>
+            <p className='mb-4 text-5xl'>
+              {collection.data?.data[`name_${locale}`]}
+            </p>
+            <p className='text-sm'>
+              {renderLimitText({
+                text: collection.data?.data[`description_${locale}`],
+                maxWords: MAX_WORDS,
+              })}
+            </p>
+          </div>
         </div>
-      </div>
-      <div className='my-10 px-12'>
+      )}
+      <div className='mx-12 my-10'>
         <div className='mb-5 flex items-center justify-end'>
           <p>
             {productData.data?.data?.totalVariants || 0}{' '}
@@ -325,38 +465,8 @@ export default function Page() {
             />
           </FiltersPopup>
         </div>
-        <div className='grid grid-cols-2 gap-5  lg:grid-cols-4'>
-          <div className='col-span-1 hidden lg:block'>
-            <div className='hidden lg:block'>
-              <span>{capitalizeFirstLetter(t(I18nTermsSearch.SORT_BY))}: </span>
-              {/* <DropdownMenu>
-                <DropdownMenuTrigger className='text-gray-500 underline-offset-4 hover:underline'>
-                  {sortBy?.label}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuRadioGroup
-                    value={sortBy?.value}
-                    onValueChange={(value: string) =>
-                      setSortBy(
-                        sortList.find((sort) => sort.value === value) as TSort
-                      )
-                    }
-                  >
-                    {sortList.map(({ value, label }) => (
-                      <DropdownMenuRadioItem
-                        key={value}
-                        value={value}
-                        className={`cursor-pointer ${
-                          sortBy?.value === value ? 'bg-accent' : ''
-                        }`}
-                      >
-                        <p>{label}</p>
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu> */}
-            </div>
+        <div className='relative grid grid-cols-2 gap-5 lg:grid-cols-4'>
+          <div className='sticky top-16 hidden h-min lg:block'>
             <FilterList
               sortList={sorts}
               handleSubmit={handleSubmit}
@@ -458,5 +568,22 @@ function FiltersPopup({ children }: { children: React.ReactElement }) {
         </div>
       </div>
     </>
+  );
+}
+
+function ImageSlide({ imageUrl, name }: { imageUrl: string; name: string }) {
+  return (
+    <div className='relative h-96 w-screen'>
+      <Image
+        src={imageUrl}
+        alt={name}
+        fill
+        sizes='100vw'
+        className='w-full object-cover'
+      />
+      <div className={'absolute bottom-12 left-12 text-6xl text-white'}>
+        {name}
+      </div>
+    </div>
   );
 }

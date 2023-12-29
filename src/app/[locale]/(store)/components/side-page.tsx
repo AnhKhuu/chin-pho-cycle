@@ -1,8 +1,7 @@
-import { I18nTermsHome, bigShouldersDisplay } from '@/utils/constant';
+import { I18nTermsHome } from '@/utils/constant';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 export default function SidePage() {
   const t = useTranslations('Home');
@@ -42,12 +41,14 @@ export default function SidePage() {
           <Image
             src={'/images/gray-background.png'}
             alt={page.title}
-            width={323}
+            width={450}
             height={120}
             className='absolute bottom-0 left-0'
           />
           <p
-            className={`absolute bottom-6 left-5 text-6xl font-light text-white ${bigShouldersDisplay.className}`}
+            className={
+              'absolute bottom-6 left-5 text-6xl font-light text-white '
+            }
           >
             {page.title}
           </p>

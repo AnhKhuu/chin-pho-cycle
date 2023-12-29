@@ -1,5 +1,5 @@
 import { Button, Skeleton } from '@/components';
-import { I18nTermsHome, bigShouldersDisplay } from '@/utils/constant';
+import { I18nTermsHome } from '@/utils/constant';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -60,11 +60,7 @@ export function VideoPlayer({
       </div>
       <div className='col-span-2 flex flex-col justify-end bg-blue_1 px-11 py-16 text-white'>
         <div>
-          <p
-            className={`mb-3 text-6xl font-light ${bigShouldersDisplay.className}`}
-          >
-            BIKE FIT
-          </p>
+          <p className={'mb-3 text-6xl font-light'}>BIKE FIT</p>
           <p className='mb-12 font-normal'>
             Idmatch Smart Bike simulator is designed to meet the needs of any
             cycling discipline thanks to its wide range of motion, easily

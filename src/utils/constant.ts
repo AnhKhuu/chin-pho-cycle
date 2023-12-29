@@ -1,9 +1,3 @@
-import { Big_Shoulders_Display } from 'next/font/google';
-
-export const bigShouldersDisplay = Big_Shoulders_Display({
-  subsets: ['latin'],
-});
-
 export enum Routes {
   HOME = '/',
   SEARCH = '/search',
@@ -12,15 +6,18 @@ export enum Routes {
 
 export enum PublicApi {
   BRANDS = 'brands',
+  HIGHLIGHTS = 'highlights',
   COLLECTIONS = 'collections',
   CATEGORIES = 'categories',
   TYPES = 'types',
   PRODUCTS = 'variants/search',
+  PRODUCT = 'variants',
 }
 
 export enum QueryKeys {
   BRANDS = 'brands',
   BRAND = 'brand',
+  HIGHLIGHTS = 'highlights',
   CATEGORIES = 'categories',
   CATEGORY = 'category',
   COLLECTIONS = 'collections',
@@ -32,7 +29,7 @@ export enum QueryKeys {
 }
 
 export enum I18nTermsHeader {
-  BIKE = 'bike',
+  BIKES = 'bikes',
   BIKE_FIT = 'bike_fit',
   BRAND = 'brand',
   COLLECTIONS = 'collections',
@@ -43,8 +40,13 @@ export enum I18nTermsHeader {
   NEW_ARRIVAL = 'new_arrival',
   PRODUCTS = 'products',
   WOMEN = 'women',
+  ACCESSORIES = 'accessories',
+  BIKE_ACCESSORIES = 'bike_accessories',
+  PERSONAL_ACCESSORIES = 'personal_accessories',
   SEARCH = 'search',
   VIETNAMESE = 'vietnamese',
+  BUNDLE = 'bundle',
+  CLEARANCE_SAVE = 'clearance_save',
 }
 
 export enum I18nTermsHome {
@@ -53,8 +55,6 @@ export enum I18nTermsHome {
   VIEW_MORE = 'latest_products.view_more',
   CATEGORIES = 'categories.title',
   SIGN_UP_FOR_BIKE_FIT = 'video.sign_up',
-  MEN = 'static_categories.men',
-  WOMEN = 'static_categories.women',
   FIND_OUT_MORE = 'video.find_out_more',
   EVENT = 'side_pages.event',
   COMMUNITY = 'side_pages.community',
@@ -83,7 +83,8 @@ export enum I18nTermsSearch {
   FEMALE = 'female',
   UNISEX = 'unisex',
   CLEAR_FILTERS = 'clear_filters',
-  APPLY = 'apply'
+  APPLY = 'apply',
+  HOME = 'home',
 }
 
 export enum I18nTermsProductDetails {
@@ -91,10 +92,19 @@ export enum I18nTermsProductDetails {
   READ_LESS = 'read_less',
   BUY_NOW = 'buy_now',
   ADD_TO_CART = 'add_to_cart',
-  DETAILS = 'details',
-  FREE_SHIPPING_AND_RETURNS = 'free_shipping_and_returns',
-  YOU_MAY_ALSO_LIKE = 'you_may_also_like',
+  PRODUCT_DETAILS = 'product_details',
+  SIZING_AND_FIT = 'sizing_and_fit',
+  CARE = 'care',
+  SHIPPING_RETURN_AND_WARRANTY = 'shipping_return_and_warranty',
+  FEATURED_PRODUCTS = 'featured_products',
   VIEW_MORE = 'view_more',
+  IN_STOCK = 'in_stock',
+  OUT_OF_STOCK = 'out_of_stock',
+  OTHER_COLLECTIONS = 'other_collections',
+  SIZE_GUIDE = 'size_guide',
+  DISCOVER_COLLECTION = 'discover_collection',
+  PLEASE_CHOOSE_SIZE = 'please_choose_size',
+  HOME = 'home',
 }
 
 export enum I18nTermsFooter {
@@ -120,17 +130,27 @@ export enum I18nTermsProductCard {
   COLORS = 'colors',
   COLOR = 'color',
   NEW = 'new',
-  SOLD_OUT = 'sold_out'
+  SOLD_OUT = 'sold_out',
 }
 
-export const PAGE_SIZE = 4;
+export const PAGE_SIZE = 10;
 
 export enum QueryParam {
   TYPES = 'types',
   BRANDS = 'brands',
-  COLLECTIONS = 'collections',
+  COLLECTION = 'collection',
   GENDERS = 'genders',
   CATEGORY = 'category',
   NAME = 'name',
-  SIZES = 'sizes'
+  SIZES = 'sizes',
+  SORT_BY = 'sortBy',
+}
+
+export enum CATEGORY {
+  BIKES = 'bikes',
+  MEN = 'men',
+  WOMEN = 'women',
+  ACCESSORIES = 'accessories',
+  BIKE_ACCESSORIES = 'bike accessories',
+  PERSONAL_ACCESSORIES = 'personal accessories',
 }

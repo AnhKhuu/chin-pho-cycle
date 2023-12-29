@@ -8,11 +8,12 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 
 import { BrandGallery } from './components/brand-gallery';
+import { CategoryGallery } from './components/category-gallery';
 import Commitment from './components/commitment';
+import { HighlightGallery } from './components/highlight-gallery';
 import { LatestProduct } from './components/latest-product';
 import SidePage from './components/side-page';
-import { SliderCategoryGallery } from './components/slider-category-gallery';
-import { StaticCategoryGallery } from './components/static-category-gallery';
+import { TypeGallery } from './components/type-gallery';
 import { VideoPlayer } from './components/video-player';
 
 export default function Page() {
@@ -22,7 +23,12 @@ export default function Page() {
       perPage: '8',
     },
   });
-  const [brands, products, categories] = useQueries([
+  const [highlights, brands, products, categories] = useQueries([
+    {
+      queryKey: [QueryKeys.HIGHLIGHTS],
+      queryFn: async () =>
+        await axios.get(`${process.env.BASE_URL}/${PublicApi.HIGHLIGHTS}`),
+    },
     {
       queryKey: [QueryKeys.BRANDS],
       queryFn: async () =>
@@ -47,17 +53,17 @@ export default function Page() {
 
   return (
     <>
-      {/* <Banner
-        collections={collections.data?.data}
-        isLoading={collections.isLoading}
-      /> */}
+      <HighlightGallery
+        highlights={highlights.data?.data}
+        isLoading={highlights.isLoading}
+      ></HighlightGallery>
       <LatestProduct
         products={products.data?.data.variants}
         isLoading={products.isLoading}
       />
-      <StaticCategoryGallery categories={categories.data?.data}/>
+      <CategoryGallery categories={categories.data?.data} />
       <BrandGallery brands={brands.data?.data} isLoading={brands.isLoading} />
-      <SliderCategoryGallery
+      <TypeGallery
         isLoading={brands.isLoading}
         categories={categories.data?.data}
       />

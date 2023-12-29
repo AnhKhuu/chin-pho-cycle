@@ -3,11 +3,8 @@ import queryString from 'query-string';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
 
-
-
 import { PAGE_SIZE } from './constant';
 import { TQueryParamsList } from './types';
-
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,6 +17,19 @@ export function capitalizeFirstLetter(text: string): string {
       return word[0].toUpperCase() + word.substring(1);
     })
     .join(' ');
+}
+
+export function renderLimitText({
+  text,
+  maxWords,
+}: {
+  text: string;
+  maxWords: number;
+}) {
+  if (text.length > maxWords) {
+    return text.slice(0, maxWords) + '...';
+  }
+  return text;
 }
 
 export function getPublicIdFromUrl(url: string) {

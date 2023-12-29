@@ -3,7 +3,7 @@
     "title": "Miễn phí giao hàng cho đơn hàng trên 1,000,000 đ"
   },
   "Header": {
-    "bike": "Xe đạp",
+    "bikes": "Xe đạp",
     "bike_fit": "Bike fit",
     "brand": "Thương hiệu",
     "collections": "Bộ sưu tập",
@@ -14,8 +14,13 @@
     "new_arrival": "Sản phẩm mới nhất",
     "products": "Sản phẩm",
     "women": "Nữ",
+    "accessories": "Phụ kiện",
+    "bike_accessories": "Phụ kiện xe đạp",
+    "personal_accessories": "Phụ kiện cá nhân",
     "search": "Tìm kiếm sản phẩm",
-    "vietnamese": "Tiếng Việt"
+    "vietnamese": "Tiếng Việt",
+    "bundle": "Gói",
+    "clearance_save": "Xả kho/Khuyến mãi"
   },
   "Home": {
     "banner": {
@@ -24,10 +29,6 @@
     "latest_products": {
       "title": "Sản phẩm mới nhất",
       "view_more": "Xem thêm"
-    },
-    "static_categories": {
-      "men": "Nam",
-      "women": "Nữ"
     },
     "categories": {
       "title": "Danh mục sản phẩm"
@@ -66,17 +67,27 @@
     "female": "Nữ",
     "unisex": "Unisex",
     "clear_filters": "Xoá lọc",
-    "apply": "Lọc"
+    "apply": "Lọc",
+    "home": "Trang chủ"
   },
   "ProductDetails": {
     "read_more": "Xem thêm",
     "read_less": "Thu gọn",
     "buy_now": "Mua ngay",
     "add_to_cart": "Thêm vào giỏ hàng",
-    "details": "Chi tiết sản phẩm",
-    "free_shipping_and_returns": "Giao hàng và trả hàng",
-    "you_may_also_like": "Có thể bạn quan tâm",
-    "view_more": "Xem thêm"
+    "product_details": "Chi tiết sản phẩm",
+    "sizing_and_fit": "Kích thước",
+    "care": "Chăm sóc",
+    "shipping_return_and_warranty": "Đổi trả hàng và bảo hành",
+    "featured_products": "Sản phẩm nổi bật",
+    "view_more": "Xem thêm",
+    "in_stock": "Còn hàng",
+    "out_of_stock": "Hết hàng",
+    "size_guide": "Bảng kích thước",
+    "discover_collection": "Khám phá bộ sưu tập",
+    "other_collections": "Bộ sưu tập khác",
+    "please_choose_size": "Vui lòng chọn kích thước",
+    "home": "Trang chủ"
   },
   "Footer": {
     "company_address": "933 Hoang Sa, Phường 11, Quận 3, TP. Hồ Chí Minh",

@@ -3,7 +3,7 @@
     "title": "Free shipping for orders over 1,000,000 đ"
   },
   "Header": {
-    "bike": "Bikes",
+    "bikes": "Bikes",
     "bike_fit": "Bike fit",
     "brand": "Brands",
     "collections": "Collections",
@@ -14,8 +14,13 @@
     "new_arrival": "New arrivals",
     "products": "Products",
     "women": "Women",
+    "accessories": "Accessories",
+    "bike_accessories": "Bike Accessories",
+    "personal_accessories": "Personal Accessories",
     "search": "Search",
-    "vietnamese": "Vietnamese"
+    "vietnamese": "Vietnamese",
+    "bundle": "Bundle",
+    "clearance_save": "Clearance/Save"
   },
   "Home": {
     "banner": {
@@ -24,10 +29,6 @@
     "latest_products": {
       "title": "What's new",
       "view_more": "View more"
-    },
-    "static_categories": {
-      "men": "Men",
-      "women": "Women"
     },
     "categories": {
       "title": "Categories"
@@ -66,17 +67,27 @@
     "female": "Female",
     "unisex": "Unisex",
     "clear_filters": "Clear filters",
-    "apply": "Apply"
+    "apply": "Apply",
+    "home": "Home"
   },
   "ProductDetails": {
     "read_more": "Read more",
     "read_less": "Read less",
     "buy_now": "Buy now",
     "add_to_cart": "Add to cart",
-    "details": "Details",
-    "free_shipping_and_returns": "Free shipping & returns",
-    "you_may_also_like": "You may also like",
-    "view_more": "View more"
+    "product_details": "Product Details",
+    "sizing_and_fit": "Sizing & Fit",
+    "care": "Care",
+    "shipping_return_and_warranty": "Shipping, Return & Warranty",
+    "featured_products": "Featured products",
+    "view_more": "View more",
+    "in_stock": "In stock",
+    "out_of_stock": "Out of stock",
+    "size_guide": "Size guide",
+    "discover_collection": "Discover collection",
+    "other_collections": "Other collections",
+    "please_choose_size": "Please choose size",
+    "home": "Home"
   },
   "Footer": {
     "company_address": "933 Hoang Sa St., Ward 11, Dist. 3, Ho Chi Minh City",

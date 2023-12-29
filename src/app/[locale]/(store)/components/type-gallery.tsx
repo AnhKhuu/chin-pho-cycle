@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components';
-import { I18nTermsHome, bigShouldersDisplay } from '@/utils/constant';
+import { I18nTermsHome, QueryParam, Routes } from '@/utils/constant';
 import { capitalizeFirstLetter } from '@/utils/fn';
 import { TCategoryItem, TTypeItem } from '@/utils/types';
 import { useLocale, useTranslations } from 'next-intl';
@@ -10,7 +10,7 @@ import 'swiper/css/scrollbar';
 import { Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-export function SliderCategoryGallery({
+export function TypeGallery({
   isLoading,
   categories,
 }: {
@@ -33,13 +33,16 @@ export function SliderCategoryGallery({
       >
         {!isLoading &&
           categories?.map((category) => (
-            <>
-              {category?.types.map((type) => (
-                <SwiperSlide key={type.id}>
-                  <TypeCard type={type} />
-                </SwiperSlide>
-              ))}
-            </>
+            <div key={category.id}>
+              {category?.types.map(
+                (type) =>
+                  type.isFeatured && (
+                    <SwiperSlide key={type.id}>
+                      <TypeCard type={type} categoryId={category.id} />
+                    </SwiperSlide>
+                  )
+              )}
+            </div>
           ))}
         {isLoading &&
           Array(3)
@@ -54,12 +57,18 @@ export function SliderCategoryGallery({
   );
 }
 
-function TypeCard({ type }: { type: TTypeItem }) {
+function TypeCard({
+  type,
+  categoryId,
+}: {
+  type: TTypeItem;
+  categoryId: number;
+}) {
   const locale = useLocale();
 
   return (
     <Link
-      href={'/'}
+      href={`${Routes.SEARCH}?${QueryParam.CATEGORY}=${categoryId}&${QueryParam.TYPES}=${type.id}`}
       className='relative block h-96 w-full lg:h-[450px] xl:h-[600px]'
     >
       <Image
@@ -72,9 +81,7 @@ function TypeCard({ type }: { type: TTypeItem }) {
         }}
       />
       <div className='absolute bottom-16 left-9'>
-        <p
-          className={`text-6xl font-light text-white ${bigShouldersDisplay.className}`}
-        >
+        <p className={'text-6xl font-light text-white'}>
           {type[`name_${locale}`].toUpperCase()}
         </p>
       </div>
